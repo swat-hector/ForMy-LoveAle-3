@@ -107,6 +107,7 @@
             z-index: 20;
             font-family: 'Georgia', serif;
             letter-spacing: 1px;
+            pointer-events: auto;
         }
 
         .clean-btn:hover {
@@ -136,7 +137,7 @@
 
         .message-section.visible {
             opacity: 1;
-            pointer-events: all;
+            pointer-events: auto;
         }
 
         .message-content {
@@ -203,6 +204,7 @@
         .carousel-track {
             display: flex;
             transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            touch-action: pan-y;
         }
 
         .carousel-slide {
@@ -214,6 +216,7 @@
             align-items: center;
             background: #2a1420;
             padding: 20px;
+            user-select: none;
         }
 
         .carousel-slide .placeholder-image {
@@ -246,7 +249,7 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: #fff;
@@ -260,11 +263,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            pointer-events: auto;
         }
 
         .carousel-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.3);
             transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 20, 147, 0.3);
         }
 
         .carousel-btn.prev { left: 12px; }
@@ -286,6 +291,11 @@
             cursor: pointer;
             transition: all 0.4s ease;
             padding: 0;
+            pointer-events: auto;
+        }
+
+        .dot:hover {
+            background: rgba(255, 255, 255, 0.4);
         }
 
         .dot.active {
@@ -773,28 +783,37 @@
         // ============================
         // 5. MENSAJE FINAL Y CARRUSEL
         // ============================
+        let carouselInitialized = false;
+
         function showFinalMessage() {
             const section = document.getElementById('messageSection');
             section.classList.add('visible');
             
-            initCarousel();
+            if (!carouselInitialized) {
+                setTimeout(() => {
+                    initCarousel();
+                    carouselInitialized = true;
+                }, 500);
+            }
+            
             createFloatingHearts();
         }
 
         // ============================
-        // 6. CARRUSEL
+        // 6. CARRUSEL (VERSIÓN CORREGIDA)
         // ============================
         let currentSlide = 0;
         let totalSlides = 0;
         let carouselInterval = null;
         let isDragging = false;
         let startX = 0;
+        let startY = 0;
 
         function initCarousel() {
             const track = document.getElementById('carouselTrack');
             const dotsContainer = document.getElementById('dotsContainer');
             
-            // Generar slides
+            // Limpiar y generar slides
             track.innerHTML = '';
             carouselImages.forEach((img, index) => {
                 const slide = document.createElement('div');
@@ -817,43 +836,66 @@
                 const dot = document.createElement('button');
                 dot.className = 'dot' + (i === 0 ? ' active' : '');
                 dot.dataset.index = i;
-                dot.addEventListener('click', () => goToSlide(i));
+                dot.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    goToSlide(parseInt(this.dataset.index));
+                });
                 dotsContainer.appendChild(dot);
             }
 
-            // Botones
-            document.getElementById('prevBtn').addEventListener('click', () => goToSlide(currentSlide - 1));
-            document.getElementById('nextBtn').addEventListener('click', () => goToSlide(currentSlide + 1));
+            // Botones - Usar event listeners directos
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            // Remover listeners antiguos clonando
+            const newPrev = prevBtn.cloneNode(true);
+            const newNext = nextBtn.cloneNode(true);
+            prevBtn.parentNode.replaceChild(newPrev, prevBtn);
+            nextBtn.parentNode.replaceChild(newNext, nextBtn);
+            
+            newPrev.addEventListener('click', function(e) {
+                e.stopPropagation();
+                goToSlide(currentSlide - 1);
+            });
+            
+            newNext.addEventListener('click', function(e) {
+                e.stopPropagation();
+                goToSlide(currentSlide + 1);
+            });
 
             // Touch / drag
             track.addEventListener('mousedown', startDrag);
-            track.addEventListener('touchstart', startDragTouch);
-            track.addEventListener('mousemove', drag);
-            track.addEventListener('touchmove', dragTouch);
-            track.addEventListener('mouseup', endDrag);
-            track.addEventListener('touchend', endDrag);
+            track.addEventListener('touchstart', startDragTouch, { passive: true });
+            
+            // Movimiento en el documento para mejor detección
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', dragTouch, { passive: true });
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
 
+            // Auto-play
             startAutoPlay();
-            track.addEventListener('mouseenter', stopAutoPlay);
-            track.addEventListener('mouseleave', startAutoPlay);
-            track.addEventListener('touchstart', stopAutoPlay);
-            track.addEventListener('touchend', startAutoPlay);
 
             updateCarousel();
         }
 
         function goToSlide(index) {
+            if (totalSlides === 0) return;
             if (index < 0) index = totalSlides - 1;
             if (index >= totalSlides) index = 0;
             currentSlide = index;
             updateCarousel();
+            resetAutoPlay();
         }
 
         function updateCarousel() {
             const track = document.getElementById('carouselTrack');
+            if (!track) return;
             track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            track.style.transition = 'transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
 
-            document.querySelectorAll('.dot').forEach((dot, i) => {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
                 dot.classList.toggle('active', i === currentSlide);
             });
         }
@@ -865,6 +907,15 @@
             }, 3500);
         }
 
+        function resetAutoPlay() {
+            if (carouselInterval) {
+                clearInterval(carouselInterval);
+                carouselInterval = setInterval(() => {
+                    goToSlide(currentSlide + 1);
+                }, 3500);
+            }
+        }
+
         function stopAutoPlay() {
             if (carouselInterval) {
                 clearInterval(carouselInterval);
@@ -872,23 +923,58 @@
             }
         }
 
-        function startDrag(e) { isDragging = true; startX = e.clientX; stopAutoPlay(); }
+        // Drag con mouse
+        function startDrag(e) {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            stopAutoPlay();
+        }
+
         function drag(e) {
             if (!isDragging) return;
-            const diff = e.clientX - startX;
-            if (Math.abs(diff) > 30) {
-                goToSlide(diff > 0 ? currentSlide - 1 : currentSlide + 1);
+            const diffX = e.clientX - startX;
+            const diffY = e.clientY - startY;
+            
+            // Solo si el movimiento es más horizontal que vertical
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
+                if (diffX > 0) {
+                    goToSlide(currentSlide - 1);
+                } else {
+                    goToSlide(currentSlide + 1);
+                }
                 isDragging = false;
             }
         }
-        function endDrag() { isDragging = false; startAutoPlay(); }
 
-        function startDragTouch(e) { isDragging = true; startX = e.touches[0].clientX; stopAutoPlay(); }
+        function endDrag() {
+            isDragging = false;
+            if (!carouselInterval) {
+                startAutoPlay();
+            }
+        }
+
+        // Drag táctil
+        function startDragTouch(e) {
+            isDragging = true;
+            const touch = e.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+            stopAutoPlay();
+        }
+
         function dragTouch(e) {
             if (!isDragging) return;
-            const diff = e.touches[0].clientX - startX;
-            if (Math.abs(diff) > 30) {
-                goToSlide(diff > 0 ? currentSlide - 1 : currentSlide + 1);
+            const touch = e.touches[0];
+            const diffX = touch.clientX - startX;
+            const diffY = touch.clientY - startY;
+            
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
+                if (diffX > 0) {
+                    goToSlide(currentSlide - 1);
+                } else {
+                    goToSlide(currentSlide + 1);
+                }
                 isDragging = false;
             }
         }
@@ -896,11 +982,15 @@
         // ============================
         // 7. CORAZONES FLOTANTES
         // ============================
+        let heartsInterval = null;
+
         function createFloatingHearts() {
             const container = document.getElementById('floatingHearts');
             const emojis = ['❤️', '💕', '💗', '💖', '💝', '💘'];
             
-            setInterval(() => {
+            if (heartsInterval) clearInterval(heartsInterval);
+            
+            heartsInterval = setInterval(() => {
                 if (!document.getElementById('messageSection').classList.contains('visible')) return;
                 
                 const heart = document.createElement('div');
@@ -933,6 +1023,9 @@
                 isComplete = false;
                 startTime = Date.now();
                 poemIndex = 0;
+                carouselInitialized = false;
+                currentSlide = 0;
+                
                 document.getElementById('messageSection').classList.remove('visible');
                 document.getElementById('poemText').classList.remove('show');
                 
@@ -940,6 +1033,19 @@
                     clearTimeout(currentPoemTimeout);
                     currentPoemTimeout = null;
                 }
+                
+                if (carouselInterval) {
+                    clearInterval(carouselInterval);
+                    carouselInterval = null;
+                }
+                
+                if (heartsInterval) {
+                    clearInterval(heartsInterval);
+                    heartsInterval = null;
+                }
+                
+                // Limpiar corazones flotantes
+                document.getElementById('floatingHearts').innerHTML = '';
                 
                 setTimeout(showNextPoem, 1000);
             }
