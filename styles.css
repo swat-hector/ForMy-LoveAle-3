@@ -1,0 +1,296 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', serif;
+    background: linear-gradient(145deg, #fce4ec, #f8e8e0, #fce4ec);
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Pétalos flotantes */
+#petals-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.petal {
+    position: absolute;
+    color: #f8bbd0;
+    font-size: 1.8rem;
+    animation: floatPetal linear infinite;
+    opacity: 0.6;
+    user-select: none;
+}
+
+@keyframes floatPetal {
+    0% {
+        transform: translateY(-10vh) rotate(0deg) scale(0.8);
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateY(110vh) rotate(720deg) scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* Secciones */
+.section {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    transition: opacity 1s ease;
+}
+
+.section.hidden {
+    display: none;
+    opacity: 0;
+}
+
+.content {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 40px;
+    padding: 2.5rem 3rem;
+    box-shadow: 0 20px 60px rgba(200, 120, 150, 0.25);
+    max-width: 750px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* Canvas lirios */
+#lilyCanvas {
+    display: block;
+    margin: 1rem auto;
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    border-radius: 24px;
+    background: radial-gradient(circle at 30% 40%, #fce8e6, #f5d6d0);
+    box-shadow: inset 0 0 40px rgba(200, 120, 150, 0.15);
+}
+
+.title {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Barra de progreso */
+.progress-bar {
+    width: 80%;
+    max-width: 400px;
+    height: 6px;
+    background: #f0d0d0;
+    border-radius: 10px;
+    margin: 1rem auto;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #f06292, #ec407a, #d81b60);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.hint {
+    color: #a07080;
+    font-style: italic;
+    font-size: 0.95rem;
+    margin-top: 0.2rem;
+}
+
+/* Mensaje de amor */
+.love-message {
+    font-size: 3.2rem;
+    background: linear-gradient(135deg, #d81b60, #f06292, #ec407a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.3rem;
+    text-shadow: none;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.04);
+    }
+}
+
+.sub-message {
+    font-size: 1.8rem;
+    color: #6d4c5a;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+}
+
+.extra-message {
+    font-size: 1.1rem;
+    color: #8a6a7a;
+    margin-bottom: 1.8rem;
+    font-style: italic;
+}
+
+/* Carrusel */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(200, 80, 120, 0.2);
+    background: #fff5f7;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    touch-action: pan-y;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    aspect-ratio: 4/3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fce8ec;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Botones del carrusel */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 2rem;
+    color: #6d4c5a;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-btn:hover {
+    background: #ffffff;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(200, 80, 120, 0.3);
+}
+
+.carousel-btn.prev {
+    left: 12px;
+}
+
+.carousel-btn.next {
+    right: 12px;
+}
+
+/* Puntos indicadores */
+.dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 1.2rem;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #e0c0c8;
+    border: none;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    padding: 0;
+}
+
+.dot.active {
+    background: #d81b60;
+    transform: scale(1.3);
+    box-shadow: 0 0 16px rgba(216, 27, 96, 0.4);
+}
+
+.carousel-hint {
+    font-size: 0.85rem;
+    color: #a08090;
+    margin-top: 0.6rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .content {
+        padding: 1.5rem 1rem;
+        border-radius: 28px;
+    }
+
+    .love-message {
+        font-size: 2.2rem;
+    }
+
+    .sub-message {
+        font-size: 1.2rem;
+    }
+
+    #lilyCanvas {
+        max-width: 100%;
+    }
+
+    .carousel-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.5rem;
+    }
+
+    .carousel-btn.prev {
+        left: 6px;
+    }
+    .carousel-btn.next {
+        right: 6px;
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+}
