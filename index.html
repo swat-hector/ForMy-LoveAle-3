@@ -11,7 +11,7 @@ content="width=device-width, initial-scale=1.0"
 
 >
 
-<title>🌸Para Alee Nuestro Jardín 🌸</title>
+<title>🌸 Para Alee Nuestro Jardín 🌸</title>
 
 <style>
 
@@ -24,7 +24,6 @@ content="width=device-width, initial-scale=1.0"
     padding:0;
     box-sizing:border-box;
 }
-
 
 html,
 body{
@@ -99,9 +98,7 @@ canvas{
         clamp(24px,4vw,48px);
 
     text-shadow:
-
         0 0 10px #ff6bb5,
-
         0 0 30px rgba(255,70,160,.6);
 
     user-select:none;
@@ -146,7 +143,6 @@ canvas{
         opacity:.75;
 
     }
-
 
     50%{
 
@@ -208,9 +204,7 @@ canvas{
         transform 1.5s ease;
 
     text-shadow:
-
         0 0 10px rgba(255,100,180,.8),
-
         0 0 30px rgba(255,80,150,.4);
 
 }
@@ -267,7 +261,6 @@ canvas{
         );
 
     box-shadow:
-
         0 0 15px #ff4f9c;
 
 }
@@ -383,9 +376,7 @@ canvas{
         clamp(38px,7vw,70px);
 
     text-shadow:
-
         0 0 20px #ff3f91,
-
         0 0 60px rgba(255,40,150,.7);
 
 }
@@ -554,7 +545,6 @@ canvas{
 
 }
 
-
 </style>
 
 </head>
@@ -569,7 +559,6 @@ canvas{
 
 ```
 <canvas id="canvas"></canvas>
-
 
 <div
     class="name"
@@ -586,7 +575,6 @@ canvas{
     </small>
 
 </div>
-
 
 
 <!-- POEMAS -->
@@ -611,7 +599,6 @@ canvas{
     </div>
 
 </div>
-
 
 
 <!-- REINICIAR -->
@@ -651,7 +638,6 @@ canvas{
     </h2>
 
 
-
     <!-- CARRUSEL -->
 
     <div class="carousel">
@@ -680,7 +666,6 @@ canvas{
 
 
     </div>
-
 
 
     <div
@@ -729,7 +714,6 @@ window.addEventListener(
 );
 
 
-
 /* =====================================================
    VARIABLES
 ===================================================== */
@@ -748,16 +732,12 @@ let currentPoem =
     -1;
 
 
-
 /* =====================================================
    DURACIÓN TOTAL
-
-   Aproximadamente 55 segundos
 ===================================================== */
 
 const EXPERIENCE_TIME =
     55000;
-
 
 
 /* =====================================================
@@ -785,35 +765,31 @@ const poemEl =
     document.getElementById("poem");
 
 
-
 function showPoem(index){
 
-
-    poemEl.classList.remove(
-        "show"
-    );
-
+    poemEl.classList.remove("show");
 
     setTimeout(()=>{
 
         poemEl.textContent =
             poems[index];
 
-
-        poemEl.classList.add(
-            "show"
-        );
+        poemEl.classList.add("show");
 
     },500);
 
 }
 
 
-
 /* =====================================================
    ELEGIR TIPO DE FLOR
 
-   65% LIRIOS
+   PROBABILIDADES:
+
+   🌸 LIRIO       50%
+   🌷 TULIPÁN     20%
+   🌼 MARGARITA   17%
+   🌺 SILVESTRE   13%
 ===================================================== */
 
 function getFlowerType(){
@@ -822,21 +798,21 @@ function getFlowerType(){
         Math.random();
 
 
-    if(random < 0.65){
+    if(random < 0.50){
 
         return "lily";
 
     }
 
 
-    if(random < 0.80){
+    if(random < 0.70){
 
         return "tulip";
 
     }
 
 
-    if(random < 0.92){
+    if(random < 0.87){
 
         return "daisy";
 
@@ -848,7 +824,6 @@ function getFlowerType(){
 }
 
 
-
 /* =====================================================
    COLORES
 ===================================================== */
@@ -857,18 +832,25 @@ function getRandomFlowerColor(type){
 
     const colors = {
 
-
         lily:[
 
             "#ffffff",
+            "#fff5fa",
 
-            "#ffe0ef",
+            "#ffd6e8",
+            "#ffb6d2",
 
-            "#ffc0dc",
+            "#f3d5ff",
+            "#d9b3ff",
 
-            "#f5d4ff",
+            "#fff0a8",
+            "#ffe08a",
 
-            "#fff4f8"
+            "#ff9db8",
+            "#ef7fa5",
+
+            "#cdb4ff",
+            "#b8c0ff"
 
         ],
 
@@ -876,11 +858,8 @@ function getRandomFlowerColor(type){
         tulip:[
 
             "#ff5c8d",
-
             "#ff709f",
-
             "#ff9abe",
-
             "#e14c7b"
 
         ],
@@ -889,9 +868,7 @@ function getRandomFlowerColor(type){
         daisy:[
 
             "#ffffff",
-
             "#fff7df",
-
             "#ffe8f0"
 
         ],
@@ -900,11 +877,8 @@ function getRandomFlowerColor(type){
         wild:[
 
             "#a980ff",
-
             "#ff7eb3",
-
             "#ffb347",
-
             "#ff6b9d"
 
         ]
@@ -925,20 +899,39 @@ function getRandomFlowerColor(type){
 }
 
 
+/* =====================================================
+   COLOR DEL CENTRO / DETALLE
+===================================================== */
 
-function getFlowerAccent(type){
+function getFlowerAccent(type,color){
+
+    if(type === "lily"){
+
+        const accents = [
+
+            "#c2185b",
+            "#a64d79",
+            "#7b2cbf",
+            "#d97706",
+            "#b91c4c",
+            "#9d4edd"
+
+        ];
+
+        return accents[
+            Math.floor(
+                Math.random()*accents.length
+            )
+        ];
+
+    }
+
 
     const accents={
 
-
-        lily:"#c2185b",
-
-
         tulip:"#a61b50",
 
-
         daisy:"#f0a500",
-
 
         wild:"#7b2cbf"
 
@@ -950,22 +943,15 @@ function getFlowerAccent(type){
 }
 
 
-
 /* =====================================================
    CREAR FLOR
 ===================================================== */
 
 function createFlower(x,y){
 
-
     if(experienceFinished)
         return;
 
-
-    /*
-       Evitar demasiadas flores exactamente
-       en el mismo lugar.
-    */
 
     let finalX=x;
 
@@ -973,7 +959,6 @@ function createFlower(x,y){
 
 
     for(const flower of flowers){
-
 
         const distance =
             Math.hypot(
@@ -985,34 +970,25 @@ function createFlower(x,y){
             );
 
 
-        /*
-           Si está demasiado cerca,
-           la movemos ligeramente.
-        */
-
-        if(distance < 45){
+        if(distance < 38){
 
             finalX +=
-                (Math.random()-.5)*55;
+                (Math.random()-.5)*45;
 
 
             finalY +=
-                (Math.random()-.5)*25;
+                (Math.random()-.5)*20;
 
         }
 
     }
 
 
-    /*
-       Evitar que se salga de pantalla.
-    */
-
     finalX =
         Math.max(
-            20,
+            15,
             Math.min(
-                canvas.width-20,
+                canvas.width-15,
                 finalX
             )
         );
@@ -1020,9 +996,9 @@ function createFlower(x,y){
 
     finalY =
         Math.max(
-            60,
+            50,
             Math.min(
-                canvas.height-20,
+                canvas.height-15,
                 finalY
             )
         );
@@ -1032,95 +1008,72 @@ function createFlower(x,y){
         getFlowerType();
 
 
-
     /*
-       TAMAÑO PEQUEÑO Y VARIABLE
+       FLORES MÁS PEQUEÑAS
 
-       Mínimo: 13px
-       Máximo: 27px
+       Mínimo: 10px
+       Máximo: 21px
 
-       Ninguna flor será gigante.
+       Esto evita flores gigantes.
     */
 
     const size =
-        13+
-        Math.random()*14;
-
+        10+
+        Math.random()*11;
 
 
     /*
        TALLOS MÁS CORTOS
 
-       Mínimo: 45px
-       Máximo: 100px
+       Mínimo: 38px
+       Máximo: 78px
     */
 
     const height =
-        45+
-        Math.random()*55;
+        38+
+        Math.random()*40;
 
+
+    const color =
+        getRandomFlowerColor(type);
 
 
     flowers.push({
-
 
         x:finalX,
 
         y:finalY,
 
-
         type:type,
-
 
         height:height,
 
-
         size:size,
-
 
         progress:0,
 
-
         speed:
-
             0.0018+
-
             Math.random()*0.0015,
 
-
-        color:
-            getRandomFlowerColor(type),
-
+        color:color,
 
         accent:
-            getFlowerAccent(type),
-
+            getFlowerAccent(type,color),
 
         wind:
             Math.random()*10
 
-
     });
 
 
-
-    /*
-       PARTÍCULAS
-    */
-
     createParticles(
-
         finalX,
-
         finalY,
-
         16
-
     );
 
-
 }
-
 
 
 /* =====================================================
@@ -1129,53 +1082,39 @@ function createFlower(x,y){
 
 function createParticles(x,y,amount){
 
-
     for(let i=0;i<amount;i++){
 
-
         particles.push({
-
 
             x:x,
 
             y:y,
 
-
             vx:
                 (Math.random()-.5)*2.5,
-
 
             vy:
                 (Math.random()-.5)*2.5-1,
 
-
             size:
                 Math.random()*3+1,
 
-
             life:1,
-
 
             decay:
                 .015+
                 Math.random()*.02
 
-
         });
 
-
     }
-
 
 }
 
 
-
 function updateParticles(){
 
-
     for(let i=particles.length-1;i>=0;i--){
-
 
         const p=
             particles[i];
@@ -1188,7 +1127,6 @@ function updateParticles(){
         p.vy+=.02;
 
         p.life-=p.decay;
-
 
 
         ctx.beginPath();
@@ -1216,7 +1154,6 @@ function updateParticles(){
         ctx.fill();
 
 
-
         if(p.life<=0){
 
             particles.splice(
@@ -1228,9 +1165,7 @@ function updateParticles(){
 
     }
 
-
 }
-
 
 
 /* =====================================================
@@ -1238,7 +1173,6 @@ function updateParticles(){
 ===================================================== */
 
 function drawStem(flower){
-
 
     const growth =
         Math.min(
@@ -1254,23 +1188,17 @@ function drawStem(flower){
     const wind =
 
         Math.sin(
-
             Date.now()/1200+
             flower.wind
-
-        )*3;
-
+        )*2.2;
 
 
     ctx.beginPath();
 
 
     ctx.moveTo(
-
         flower.x,
-
         flower.y
-
     );
 
 
@@ -1293,8 +1221,8 @@ function drawStem(flower){
 
     ctx.lineWidth=
         Math.max(
-            1.8,
-            flower.size*.11
+            1.3,
+            flower.size*.075
         );
 
 
@@ -1305,58 +1233,62 @@ function drawStem(flower){
     ctx.stroke();
 
 
-
     /* =====================================
-       HOJAS PEQUEÑAS
+       HOJAS MUCHO MÁS PEQUEÑAS
+
+       Reducidas especialmente para evitar
+       que los lirios tengan hojas enormes.
     ===================================== */
 
-    if(flower.progress>.28){
-
+    if(flower.progress>.32){
 
         const leafY=
-
-            flower.y-
-
-            height*.45;
-
+            flower.y-height*.45;
 
 
         ctx.fillStyle=
             "#4c914f";
 
 
+        /*
+           LIRIOS:
+           hojas todavía más pequeñas
+        */
+
+        const leafMultiplier =
+            flower.type === "lily"
+                ? 0.55
+                : 0.70;
+
+
+        const leafSize1 =
+            (4+flower.size*.18)
+            *leafMultiplier;
+
+
+        const leafSize2 =
+            (4+flower.size*.15)
+            *leafMultiplier;
+
 
         drawLeaf(
-
             flower.x,
-
             leafY,
-
             -1,
-
-            9+flower.size*.35
-
+            leafSize1
         );
 
 
-
         drawLeaf(
-
             flower.x,
-
-            leafY+7,
-
+            leafY+5,
             1,
-
-            8+flower.size*.3
-
+            leafSize2
         );
 
     }
 
-
 }
-
 
 
 /* =====================================================
@@ -1370,7 +1302,6 @@ function drawLeaf(
     size
 ){
 
-
     ctx.beginPath();
 
 
@@ -1382,22 +1313,22 @@ function drawLeaf(
 
     ctx.quadraticCurveTo(
 
-        x+direction*size*.6,
+        x+direction*size*.65,
 
-        y-size*.45,
+        y-size*.35,
 
         x+direction*size,
 
-        y-size*.08
+        y-size*.05
 
     );
 
 
     ctx.quadraticCurveTo(
 
-        x+direction*size*.5,
+        x+direction*size*.45,
 
-        y+size*.18,
+        y+size*.12,
 
         x,
 
@@ -1408,9 +1339,7 @@ function drawLeaf(
 
     ctx.fill();
 
-
 }
-
 
 
 /* =====================================================
@@ -1419,16 +1348,13 @@ function drawLeaf(
 
 function drawFlower(flower){
 
-
     switch(flower.type){
-
 
         case "lily":
 
             drawLily(flower);
 
         break;
-
 
 
         case "tulip":
@@ -1438,13 +1364,11 @@ function drawFlower(flower){
         break;
 
 
-
         case "daisy":
 
             drawDaisy(flower);
 
         break;
-
 
 
         case "wild":
@@ -1453,24 +1377,21 @@ function drawFlower(flower){
 
         break;
 
-
     }
-
 
 }
 
 
-
 /* =====================================================
    🌸 LIRIO
+
+   TAMAÑO REDUCIDO
 ===================================================== */
 
 function drawLily(flower){
 
-
     if(flower.progress<.4)
         return;
-
 
 
     const bloom=
@@ -1484,36 +1405,35 @@ function drawLily(flower){
         );
 
 
-
     const topY=
 
         flower.y-
-
         flower.height;
 
 
-
     /*
-       TAMAÑO CONTROLADO
+       LIRIO MUCHO MÁS PEQUEÑO
+
+       Antes podía crecer hasta aproximadamente
+       size * 1.10.
+
+       Ahora el máximo es cercano a:
+       size * 0.75
     */
 
     const size=
 
         flower.size*
 
-        (.45+bloom*.65);
-
+        (.35+bloom*.40);
 
 
     ctx.save();
 
 
     ctx.translate(
-
         flower.x,
-
         topY
-
     );
 
 
@@ -1521,72 +1441,50 @@ function drawLily(flower){
         bloom;
 
 
-
     /*
-       SEIS PÉTALOS
+       SEIS PÉTALOS PEQUEÑOS
     */
 
     for(let i=0;i<6;i++){
-
 
         ctx.save();
 
 
         ctx.rotate(
-
             i*Math.PI/3
-
         );
-
 
 
         const gradient=
 
             ctx.createLinearGradient(
-
                 0,
-
                 0,
-
                 0,
-
-                -size*1.7
-
+                -size*1.35
             );
 
 
-
         gradient.addColorStop(
-
             0,
-
             flower.accent
-
         );
 
 
         gradient.addColorStop(
-
             .55,
-
             flower.color
-
         );
 
 
         gradient.addColorStop(
-
             1,
-
             "#fffaff"
-
         );
-
 
 
         ctx.fillStyle=
             gradient;
-
 
 
         ctx.beginPath();
@@ -1595,34 +1493,32 @@ function drawLily(flower){
         ctx.moveTo(0,0);
 
 
-
         ctx.bezierCurveTo(
 
-            size*.65,
+            size*.48,
 
-            -size*.25,
+            -size*.20,
 
-            size*.58,
+            size*.45,
 
-            -size*1.25,
+            -size*.95,
 
             0,
 
-            -size*1.7
+            -size*1.35
 
         );
 
 
-
         ctx.bezierCurveTo(
 
-            -size*.58,
+            -size*.45,
 
-            -size*1.25,
+            -size*.95,
 
-            -size*.65,
+            -size*.48,
 
-            -size*.25,
+            -size*.20,
 
             0,
 
@@ -1631,14 +1527,12 @@ function drawLily(flower){
         );
 
 
-
         ctx.fill();
 
 
         ctx.restore();
 
     }
-
 
 
     /*
@@ -1654,7 +1548,7 @@ function drawLily(flower){
 
         0,
 
-        size*.16,
+        size*.13,
 
         0,
 
@@ -1670,24 +1564,18 @@ function drawLily(flower){
     ctx.fill();
 
 
-
     /*
-       ESTAMBRES
+       ESTAMBRES MÁS PEQUEÑOS
     */
 
     for(let i=0;i<6;i++){
 
-
         const angle=
-
             i*Math.PI/3;
 
 
-
         const length=
-
-            size*.72;
-
+            size*.52;
 
 
         ctx.beginPath();
@@ -1709,11 +1597,11 @@ function drawLily(flower){
             "#9b6429";
 
 
-        ctx.lineWidth=1.2;
+        ctx.lineWidth=
+            .8;
 
 
         ctx.stroke();
-
 
 
         ctx.beginPath();
@@ -1725,7 +1613,7 @@ function drawLily(flower){
 
             Math.sin(angle)*length,
 
-            1.8,
+            1.2,
 
             0,
 
@@ -1748,13 +1636,11 @@ function drawLily(flower){
 }
 
 
-
 /* =====================================================
    🌷 TULIPÁN
 ===================================================== */
 
 function drawTulip(flower){
-
 
     if(flower.progress<.42)
         return;
@@ -1774,7 +1660,6 @@ function drawTulip(flower){
     const topY=
 
         flower.y-
-
         flower.height;
 
 
@@ -1783,16 +1668,12 @@ function drawTulip(flower){
         flower.size*bloom;
 
 
-
     ctx.save();
 
 
     ctx.translate(
-
         flower.x,
-
         topY
-
     );
 
 
@@ -1802,7 +1683,6 @@ function drawTulip(flower){
 
     ctx.fillStyle=
         flower.color;
-
 
 
     ctx.beginPath();
@@ -1858,13 +1738,11 @@ function drawTulip(flower){
 }
 
 
-
 /* =====================================================
    🌼 MARGARITA
 ===================================================== */
 
 function drawDaisy(flower){
-
 
     if(flower.progress<.42)
         return;
@@ -1884,25 +1762,20 @@ function drawDaisy(flower){
     const topY=
 
         flower.y-
-
         flower.height;
 
 
     const size=
 
-        flower.size*.9*bloom;
-
+        flower.size*.85*bloom;
 
 
     ctx.save();
 
 
     ctx.translate(
-
         flower.x,
-
         topY
-
     );
 
 
@@ -1910,23 +1783,18 @@ function drawDaisy(flower){
         bloom;
 
 
-
     for(let i=0;i<10;i++){
-
 
         ctx.save();
 
 
         ctx.rotate(
-
             i*Math.PI/5
-
         );
 
 
         ctx.fillStyle=
             flower.color;
-
 
 
         ctx.beginPath();
@@ -1936,141 +1804,13 @@ function drawDaisy(flower){
 
             0,
 
-            -size*.65,
-
-            size*.26,
-
-            size*.65,
-
-            0,
-
-            0,
-
-            Math.PI*2
-
-        );
-
-
-        ctx.fill();
-
-
-        ctx.restore();
-
-    }
-
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-
-        0,
-
-        0,
-
-        size*.3,
-
-        0,
-
-        Math.PI*2
-
-    );
-
-
-    ctx.fillStyle=
-        "#ffd166";
-
-
-    ctx.fill();
-
-
-    ctx.restore();
-
-}
-
-
-
-/* =====================================================
-   🌺 FLOR SILVESTRE
-===================================================== */
-
-function drawWildFlower(flower){
-
-
-    if(flower.progress<.42)
-        return;
-
-
-    const bloom=
-
-        Math.min(
-
-            (flower.progress-.42)*2,
-
-            1
-
-        );
-
-
-    const topY=
-
-        flower.y-
-
-        flower.height;
-
-
-    const size=
-
-        flower.size*.85*bloom;
-
-
-
-    ctx.save();
-
-
-    ctx.translate(
-
-        flower.x,
-
-        topY
-
-    );
-
-
-    ctx.globalAlpha=
-        bloom;
-
-
-
-    for(let i=0;i<5;i++){
-
-
-        ctx.save();
-
-
-        ctx.rotate(
-
-            i*(Math.PI*2/5)
-
-        );
-
-
-        ctx.fillStyle=
-            flower.color;
-
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-
-            0,
-
             -size*.55,
 
-            size*.48,
+            size*.20,
+
+            size*.55,
+
+            0,
 
             0,
 
@@ -2085,7 +1825,6 @@ function drawWildFlower(flower){
         ctx.restore();
 
     }
-
 
 
     ctx.beginPath();
@@ -2107,6 +1846,121 @@ function drawWildFlower(flower){
 
 
     ctx.fillStyle=
+        "#ffd166";
+
+
+    ctx.fill();
+
+
+    ctx.restore();
+
+}
+
+
+/* =====================================================
+   🌺 FLOR SILVESTRE
+===================================================== */
+
+function drawWildFlower(flower){
+
+    if(flower.progress<.42)
+        return;
+
+
+    const bloom=
+
+        Math.min(
+
+            (flower.progress-.42)*2,
+
+            1
+
+        );
+
+
+    const topY=
+
+        flower.y-
+        flower.height;
+
+
+    const size=
+
+        flower.size*.75*bloom;
+
+
+    ctx.save();
+
+
+    ctx.translate(
+        flower.x,
+        topY
+    );
+
+
+    ctx.globalAlpha=
+        bloom;
+
+
+    for(let i=0;i<5;i++){
+
+        ctx.save();
+
+
+        ctx.rotate(
+            i*(Math.PI*2/5)
+        );
+
+
+        ctx.fillStyle=
+            flower.color;
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+
+            0,
+
+            -size*.48,
+
+            size*.40,
+
+            0,
+
+            Math.PI*2
+
+        );
+
+
+        ctx.fill();
+
+
+        ctx.restore();
+
+    }
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+
+        0,
+
+        0,
+
+        size*.22,
+
+        0,
+
+        Math.PI*2
+
+    );
+
+
+    ctx.fillStyle=
         "#ffe066";
 
 
@@ -2118,13 +1972,11 @@ function drawWildFlower(flower){
 }
 
 
-
 /* =====================================================
    FONDO DEL JARDÍN
 ===================================================== */
 
 function drawBackground(){
-
 
     const gradient=
 
@@ -2141,31 +1993,21 @@ function drawBackground(){
         );
 
 
-
     gradient.addColorStop(
-
         0,
-
         "#07111d"
-
     );
 
 
     gradient.addColorStop(
-
         .55,
-
         "#142933"
-
     );
 
 
     gradient.addColorStop(
-
         1,
-
         "#16351d"
-
     );
 
 
@@ -2186,28 +2028,22 @@ function drawBackground(){
     );
 
 
-
     /*
        ESTRELLAS
     */
 
     for(let i=0;i<45;i++){
 
-
         const x=
 
             (i*137)%
-
             canvas.width;
-
 
 
         const y=
 
             (i*73)%
-
             (canvas.height*.55);
-
 
 
         const pulse=
@@ -2215,28 +2051,19 @@ function drawBackground(){
             .3+
 
             Math.sin(
-
                 Date.now()/1000+i
-
             )*.15;
-
 
 
         ctx.beginPath();
 
 
         ctx.arc(
-
             x,
-
             y,
-
             1,
-
             0,
-
             Math.PI*2
-
         );
 
 
@@ -2249,9 +2076,7 @@ function drawBackground(){
 
     }
 
-
 }
-
 
 
 /* =====================================================
@@ -2260,11 +2085,9 @@ function drawBackground(){
 
 function updateExperience(){
 
-
     const elapsed=
 
         Date.now()-startTime;
-
 
 
     const percentage=
@@ -2272,13 +2095,11 @@ function updateExperience(){
         Math.min(
 
             elapsed/
-
             EXPERIENCE_TIME,
 
             1
 
         );
-
 
 
     document
@@ -2288,16 +2109,13 @@ function updateExperience(){
             (percentage*100)+"%";
 
 
-
     const poemIndex=
 
         Math.min(
 
             Math.floor(
-
                 percentage*
                 poems.length
-
             ),
 
             poems.length-1
@@ -2305,9 +2123,7 @@ function updateExperience(){
         );
 
 
-
     if(poemIndex!==currentPoem){
-
 
         currentPoem=
             poemIndex;
@@ -2320,7 +2136,6 @@ function updateExperience(){
     }
 
 
-
     if(
 
         percentage>=1 &&
@@ -2329,24 +2144,17 @@ function updateExperience(){
 
     ){
 
-
         experienceFinished=true;
 
 
-
         setTimeout(
-
             showFinalScreen,
-
             1200
-
         );
 
     }
 
-
 }
-
 
 
 /* =====================================================
@@ -2355,13 +2163,10 @@ function updateExperience(){
 
 function animate(){
 
-
     drawBackground();
 
 
-
     flowers.forEach(flower=>{
-
 
         flower.progress+=
             flower.speed;
@@ -2369,13 +2174,9 @@ function animate(){
 
         flower.progress=
             Math.min(
-
                 flower.progress,
-
                 1
-
             );
-
 
 
         drawStem(flower);
@@ -2383,9 +2184,7 @@ function animate(){
 
         drawFlower(flower);
 
-
     });
-
 
 
     updateParticles();
@@ -2398,7 +2197,6 @@ function animate(){
     }
 
 
-
     requestAnimationFrame(
         animate
     );
@@ -2409,11 +2207,8 @@ function animate(){
 animate();
 
 
-
 /* =====================================================
    EVENTOS
-
-   COMPUTADORA
 ===================================================== */
 
 canvas.addEventListener(
@@ -2422,25 +2217,15 @@ canvas.addEventListener(
 
     e=>{
 
-
         createFlower(
-
             e.clientX,
-
             e.clientY
-
         );
-
 
     }
 
 );
 
-
-
-/* =====================================================
-   CELULAR
-===================================================== */
 
 canvas.addEventListener(
 
@@ -2448,24 +2233,17 @@ canvas.addEventListener(
 
     e=>{
 
-
         e.preventDefault();
 
 
         const touch=
-
             e.touches[0];
 
 
-
         createFlower(
-
             touch.clientX,
-
             touch.clientY
-
         );
-
 
     },
 
@@ -2474,7 +2252,6 @@ canvas.addEventListener(
     }
 
 );
-
 
 
 /* =====================================================
@@ -2488,7 +2265,6 @@ document
         "click",
 
         ()=>{
-
 
             flowers=[];
 
@@ -2505,7 +2281,6 @@ document
 
             currentPoem=
                 -1;
-
 
 
             poemEl.classList.add(
@@ -2525,11 +2300,9 @@ document
                     "show"
                 );
 
-
         }
 
     );
-
 
 
 /* =====================================================
@@ -2544,7 +2317,6 @@ document
 
 const images=[
 
-
     {
 
         src:"images/972a18d4-5852-41a3-a29f-b39289947f4b.jpeg",
@@ -2552,7 +2324,6 @@ const images=[
         text:"❤️ Nuestro primer recuerdo"
 
     },
-
 
     {
 
@@ -2562,7 +2333,6 @@ const images=[
 
     },
 
-
     {
 
         src:"images/fe9422b3-16bf-4309-a664-3f5a6a4a280d.jpeg",
@@ -2571,7 +2341,6 @@ const images=[
 
     },
 
-
     {
 
         src:"images/262e46c9-8d04-472c-96be-9b967b57a7f2.jpeg",
@@ -2579,7 +2348,6 @@ const images=[
         text:"✨ Por muchos momentos más juntos"
 
     }
-
 
 ];
 
@@ -2597,11 +2365,9 @@ const dots=
     document.getElementById("dots");
 
 
-
 images.forEach(
 
     (image,index)=>{
-
 
         const slide=
 
@@ -2610,7 +2376,6 @@ images.forEach(
 
         slide.className=
             "slide";
-
 
 
         slide.innerHTML=`
@@ -2629,11 +2394,9 @@ images.forEach(
         `;
 
 
-
         track.appendChild(
             slide
         );
-
 
 
         const dot=
@@ -2652,7 +2415,6 @@ images.forEach(
                 : "dot";
 
 
-
         dot.addEventListener(
 
             "click",
@@ -2668,20 +2430,16 @@ images.forEach(
         );
 
 
-
         dots.appendChild(
             dot
         );
-
 
     }
 
 );
 
 
-
 function goToSlide(index){
-
 
     if(index<0){
 
@@ -2701,11 +2459,9 @@ function goToSlide(index){
     slideIndex=index;
 
 
-
     track.style.transform=
 
         `translateX(-${index*100}%)`;
-
 
 
     document
@@ -2713,7 +2469,6 @@ function goToSlide(index){
         .forEach(
 
             (dot,i)=>{
-
 
                 dot.classList.toggle(
 
@@ -2723,14 +2478,11 @@ function goToSlide(index){
 
                 );
 
-
             }
 
         );
 
-
 }
-
 
 
 /* =====================================================
@@ -2746,15 +2498,12 @@ document
         ()=>{
 
             goToSlide(
-
                 slideIndex-1
-
             );
 
         }
 
     );
-
 
 
 document
@@ -2766,9 +2515,7 @@ document
         ()=>{
 
             goToSlide(
-
                 slideIndex+1
-
             );
 
         }
@@ -2776,13 +2523,11 @@ document
     );
 
 
-
 /* =====================================================
    MOSTRAR CARRUSEL
 ===================================================== */
 
 function showFinalScreen(){
-
 
     document
         .getElementById("instruction")
@@ -2796,7 +2541,6 @@ function showFinalScreen(){
             "show"
         );
 
-
 }
 
 
@@ -2808,9 +2552,7 @@ showPoem(0);
 
 currentPoem=0;
 
-
 </script>
 
 </body>
-
 </html>
