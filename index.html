@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🌸 Para Ale - Nuestro Jardín de Amor</title>
     <style>
-        /* ===== ESTILOS COMPLETOS ===== */
         * {
             margin: 0;
             padding: 0;
@@ -25,13 +24,13 @@
             width: 100vw;
             height: 100vh;
             background: #1a0a12;
+            overflow: hidden;
         }
 
         #canvas {
             display: block;
             width: 100%;
             height: 100%;
-            cursor: pointer;
         }
 
         /* Poemas y textos */
@@ -342,7 +341,6 @@
             }
         }
 
-        /* Responsive */
         @media (max-width: 600px) {
             .love-message { font-size: 2.2rem; }
             .sub-message { font-size: 1.3rem; }
@@ -355,11 +353,9 @@
     </style>
 </head>
 <body>
-    <!-- Contenedor del canvas -->
     <div class="container">
         <canvas id="canvas"></canvas>
         
-        <!-- Textos que aparecen durante el dibujo -->
         <div id="poemContainer" class="poem-container">
             <p id="poemText" class="poem-text"></p>
             <div class="progress-bar">
@@ -368,11 +364,9 @@
             <div class="progress-percent" id="progressPercent">0%</div>
         </div>
 
-        <!-- Botón de limpiar -->
         <div class="clean-btn" id="cleanBtn">✨ Volver a empezar</div>
     </div>
 
-    <!-- Sección del mensaje final y carrusel -->
     <div id="messageSection" class="message-section">
         <div class="message-content">
             <h1 class="love-message">🌹 Te amo Ale 🌹</h1>
@@ -381,31 +375,28 @@
             
             <div class="carousel-container">
                 <button class="carousel-btn prev" id="prevBtn">‹</button>
-                <div class="carousel-track" id="carouselTrack">
-                    <!-- Las imágenes se generarán con JavaScript -->
-                </div>
+                <div class="carousel-track" id="carouselTrack"></div>
                 <button class="carousel-btn next" id="nextBtn">›</button>
             </div>
             <div class="dots" id="dotsContainer"></div>
-            
-            <div class="carousel-hint">🖱️ Desliza o usa los botones para ver más recuerdos</div>
-            
+            <div class="carousel-hint">🖱️ Desliza o usa los botones</div>
             <div class="floating-hearts" id="floatingHearts"></div>
         </div>
     </div>
 
     <script>
-        // ============================
-        // 1. CONFIGURACIÓN DE THREE.JS
-        // ============================
-        let scene, camera, renderer, material, mesh;
+        // ============================================
+        // 1. DIBUJO DE LIRIOS CON CANVAS 2D
+        // ============================================
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
         let progress = 0;
         let isComplete = false;
         let poemIndex = 0;
+        let animationFrame = null;
         let startTime = Date.now();
-        let animationId = null;
 
-        // Poemas y textos románticos
+        // Poemas
         const poems = [
             { text: '🌷 "En el jardín de mi corazón, tú eres la flor más hermosa"', delay: 2 },
             { text: '🌸 "Cada latido es un poema que escribo pensando en ti"', delay: 4 },
@@ -416,7 +407,7 @@
             { text: '💝 "6 meses de magia, infinitos más por descubrir"', delay: 14 }
         ];
 
-        // Imágenes para el carrusel (emojis y colores)
+        // Imágenes del carrusel
         const carouselImages = [
             { emoji: '🌅', color: '#ff6b6b', caption: '✨ Nuestro primer atardecer' },
             { emoji: '💖', color: '#ff1493', caption: '💖 Tu sonrisa ilumina mis días' },
@@ -425,318 +416,195 @@
             { emoji: '💝', color: '#ff6348', caption: '💝 Por siempre tú y yo' }
         ];
 
-        // ============================
-        // 2. INICIALIZAR THREE.JS
-        // ============================
-        function init() {
-            const canvas = document.getElementById('canvas');
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-
-            scene = new THREE.Scene();
-
-            camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-            camera.position.z = 1;
-
-            renderer = new THREE.WebGLRenderer({
-                canvas: canvas,
-                antialias: true,
-                alpha: true
-            });
-            renderer.setSize(width, height);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-            // Fragment Shader (definido inline)
-            const fragmentShader = `
-                #define PI 3.14159265359
-
-                uniform float u_ratio;
-                uniform vec2 u_cursor;
-                uniform float u_stop_time;
-                uniform float u_clean;
-                uniform vec2 u_stop_randomizer;
-                uniform float u_progress;
-
-                varying vec2 vUv;
-
-                // 2D noise
-                vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-                vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-                vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
-                
-                float snoise(vec2 v) {
-                    const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
-                    vec2 i = floor(v + dot(v, C.yy));
-                    vec2 x0 = v - i + dot(i, C.xx);
-                    vec2 i1;
-                    i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-                    vec4 x12 = x0.xyxy + C.xxzz;
-                    x12.xy -= i1;
-                    i = mod289(i);
-                    vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
-                    vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.0);
-                    m = m*m;
-                    m = m*m;
-                    vec3 x = 2.0 * fract(p * C.www) - 1.0;
-                    vec3 h = abs(x) - 0.5;
-                    vec3 ox = floor(x + 0.5);
-                    vec3 a0 = x - ox;
-                    m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
-                    vec3 g;
-                    g.x = a0.x * x0.x + h.x * x0.y;
-                    g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-                    return 130.0 * dot(m, g);
-                }
-
-                // Función para crear un lirio
-                float get_lily_shape(vec2 p, float petal_count, float angle, float outline) {
-                    float a = atan(p.y, p.x);
-                    float r = length(p);
-                    
-                    float ca = cos(angle);
-                    float sa = sin(angle);
-                    vec2 rotated_p = vec2(p.x * ca - p.y * sa, p.x * sa + p.y * ca);
-                    a = atan(rotated_p.y, rotated_p.x);
-                    
-                    float petal_shape = abs(cos(a * petal_count * 0.5));
-                    float petal_radius = 0.5 + 0.5 * petal_shape;
-                    
-                    float curve = 0.3 * sin(a * 3.0 + 1.2) + 0.1 * sin(a * 5.0 + 2.0);
-                    float r_petal = r / (petal_radius + curve * 0.2);
-                    
-                    float edge = 1.0 - smoothstep(0.7, 1.3, r_petal);
-                    
-                    float vein = 0.0;
-                    if (r_petal < 1.0 && r_petal > 0.1) {
-                        float vein_pattern = sin(a * petal_count * 2.0 + r * 12.0) * 0.5 + 0.5;
-                        vein = vein_pattern * (1.0 - r_petal) * 0.4;
-                        float main_vein = 1.0 - smoothstep(0.0, 0.3, abs(sin(a * petal_count * 0.5) * r * 2.0));
-                        vein += main_vein * 0.2 * (1.0 - r_petal);
-                    }
-                    
-                    float center_glow = exp(-r * 12.0) * 0.3;
-                    
-                    return max(0.0, edge + vein + center_glow);
-                }
-
-                // Función para hojas
-                float get_leaf(vec2 p, float angle, float size) {
-                    float ca = cos(angle);
-                    float sa = sin(angle);
-                    vec2 rp = vec2(p.x * ca - p.y * sa, p.x * sa + p.y * ca);
-                    
-                    float leaf_shape = 1.0 - smoothstep(0.0, size, abs(rp.x));
-                    leaf_shape *= 1.0 - smoothstep(0.0, size * 0.5, abs(rp.y));
-                    leaf_shape *= 1.0 - smoothstep(0.0, size * 0.3, abs(rp.x * 0.5 + rp.y));
-                    
-                    return max(0.0, leaf_shape);
-                }
-
-                void main() {
-                    vec2 uv = vUv;
-                    float aspect = u_ratio;
-                    vec2 center = vec2(0.5, 0.5);
-                    
-                    vec2 p = uv - center;
-                    p.x *= aspect;
-                    
-                    float progress = u_progress;
-                    float time = u_stop_time;
-                    
-                    vec3 color = vec3(0.0);
-                    vec3 bg_color = vec3(0.98, 0.92, 0.94);
-                    
-                    vec2 bg_p = uv;
-                    vec3 bg_grad = mix(
-                        vec3(0.98, 0.93, 0.95),
-                        vec3(0.95, 0.88, 0.92),
-                        length(uv - 0.5) * 0.8
-                    );
-                    color = bg_grad;
-                    
-                    float num_lilies = floor(progress * 8.0) + 1.0;
-                    
-                    for (float i = 0.0; i < 9.0; i += 1.0) {
-                        if (i >= num_lilies) break;
-                        
-                        vec2 pos;
-                        float size_offset = 0.0;
-                        
-                        if (i == 0.0) { pos = vec2(0.0, 0.0); size_offset = 0.0; }
-                        else if (i == 1.0) { pos = vec2(-0.25, 0.2); size_offset = 0.02; }
-                        else if (i == 2.0) { pos = vec2(0.25, -0.15); size_offset = -0.02; }
-                        else if (i == 3.0) { pos = vec2(-0.35, -0.2); size_offset = 0.04; }
-                        else if (i == 4.0) { pos = vec2(0.35, 0.25); size_offset = -0.01; }
-                        else if (i == 5.0) { pos = vec2(-0.15, -0.35); size_offset = 0.03; }
-                        else if (i == 6.0) { pos = vec2(0.15, 0.35); size_offset = 0.0; }
-                        else if (i == 7.0) { pos = vec2(-0.45, 0.1); size_offset = 0.05; }
-                        else if (i == 8.0) { pos = vec2(0.45, -0.1); size_offset = -0.03; }
-                        
-                        vec2 delta = p - pos;
-                        
-                        float size = 0.09 + 0.03 * sin(i * 1.3 + 2.0) + size_offset;
-                        
-                        vec3 color1, color2, color3;
-                        float petal_count = 6.0 + sin(i * 2.0 + 1.0) * 1.0;
-                        
-                        if (mod(i, 3.0) < 1.0) {
-                            color1 = vec3(0.99, 0.75, 0.85);
-                            color2 = vec3(0.95, 0.55, 0.70);
-                            color3 = vec3(1.0, 0.88, 0.92);
-                        } else if (mod(i, 3.0) < 2.0) {
-                            color1 = vec3(0.98, 0.80, 0.88);
-                            color2 = vec3(0.92, 0.60, 0.75);
-                            color3 = vec3(1.0, 0.90, 0.94);
-                        } else {
-                            color1 = vec3(0.96, 0.70, 0.80);
-                            color2 = vec3(0.90, 0.45, 0.60);
-                            color3 = vec3(0.98, 0.85, 0.90);
-                        }
-                        
-                        float lily_shape = get_lily_shape(
-                            delta / size,
-                            petal_count,
-                            i * 0.8 + time * 0.05,
-                            0.3
-                        );
-                        
-                        float bloom = 1.0 - smoothstep(0.0, 0.4, i / num_lilies);
-                        float lily_intensity = lily_shape * bloom * 0.9;
-                        
-                        vec3 lily_color = mix(color1, color2, lily_shape);
-                        lily_color = mix(lily_color, color3, 0.3 * (1.0 - lily_shape));
-                        
-                        color = mix(color, lily_color, lily_intensity);
-                        
-                        if (lily_shape > 0.05) {
-                            float shadow = 0.08 * (1.0 - lily_shape) * bloom;
-                            color -= shadow * 0.3;
-                        }
-                        
-                        if (length(delta / size) < 0.12 && lily_shape > 0.3) {
-                            vec3 center_color = vec3(1.0, 0.85, 0.2);
-                            float center_intensity = 1.0 - smoothstep(0.0, 0.12, length(delta / size));
-                            center_intensity *= 0.6 * bloom;
-                            color = mix(color, center_color, center_intensity);
-                            
-                            float pollen = sin(length(delta / size) * 50.0 + time) * 0.5 + 0.5;
-                            pollen *= (1.0 - length(delta / size) * 8.0);
-                            pollen = max(0.0, pollen) * 0.3 * bloom;
-                            color += vec3(1.0, 0.9, 0.4) * pollen;
-                        }
-                    }
-                    
-                    if (progress > 0.15) {
-                        float leaf_progress = (progress - 0.15) / 0.3;
-                        for (float i = 0.0; i < 6.0; i += 1.0) {
-                            float leaf_pos = i / 6.0;
-                            float leaf_angle = leaf_pos * 6.28 + 0.5;
-                            vec2 leaf_pos = vec2(
-                                0.08 * cos(leaf_angle + 0.3),
-                                0.08 * sin(leaf_angle * 1.2 + 0.5)
-                            );
-                            
-                            vec2 delta_leaf = p - leaf_pos;
-                            float leaf_size = 0.03 + 0.02 * sin(i * 1.7);
-                            
-                            float leaf = get_leaf(delta_leaf, leaf_angle + 0.5, leaf_size);
-                            leaf *= leaf_progress;
-                            
-                            vec3 leaf_color = mix(
-                                vec3(0.2, 0.6, 0.2),
-                                vec3(0.3, 0.7, 0.3),
-                                sin(i * 1.3) * 0.5 + 0.5
-                            );
-                            
-                            color = mix(color, leaf_color, leaf * 0.4);
-                        }
-                    }
-                    
-                    if (progress > 0.2) {
-                        float particle_intensity = min(1.0, (progress - 0.2) * 2.0);
-                        for (float i = 0.0; i < 40.0; i += 1.0) {
-                            float px = fract(sin(i * 127.1 + 311.7 + time * 0.1) * 43758.5453);
-                            float py = fract(sin(i * 269.5 + 183.3 + time * 0.07) * 43758.5453);
-                            float ps = 0.0015 + 0.003 * sin(i * 3.7 + time * 0.5);
-                            float float_offset = sin(i * 2.3 + time * 0.3) * 0.03;
-                            
-                            vec2 pp = vec2(px + float_offset * 0.5, py + float_offset * 0.3);
-                            float dist = length(uv - pp);
-                            
-                            if (dist < ps && progress > 0.2 + i * 0.015) {
-                                float brightness = 0.4 * (1.0 - dist / ps) * particle_intensity;
-                                float twinkle = sin(time * 2.0 + i * 5.0) * 0.5 + 0.5;
-                                brightness *= (0.5 + 0.5 * twinkle);
-                                color += vec3(1.0, 0.92, 0.85) * brightness * 0.6;
-                            }
-                        }
-                    }
-                    
-                    float warm_glow = 0.05 * sin(time * 0.3 + 1.0) + 0.05;
-                    color += vec3(warm_glow * 0.3, warm_glow * 0.2, warm_glow * 0.1);
-                    
-                    float vignette = 1.0 - length((uv - 0.5) * 1.3);
-                    vignette = smoothstep(0.0, 0.7, vignette);
-                    color *= (0.75 + 0.25 * vignette);
-                    
-                    vec2 cursor_pos = u_cursor;
-                    float cursor_dist = length(uv - cursor_pos);
-                    float cursor_light = exp(-cursor_dist * 6.0) * 0.15;
-                    color += vec3(1.0, 0.9, 0.85) * cursor_light;
-                    
-                    gl_FragColor = vec4(color, 1.0);
-                }
-            `;
-
-            // Uniformes
-            const uniforms = {
-                u_ratio: { value: width / height },
-                u_cursor: { value: new THREE.Vector2(0.5, 0.5) },
-                u_stop_time: { value: 0.0 },
-                u_clean: { value: 0.0 },
-                u_stop_randomizer: { value: new THREE.Vector2(0.0, 0.0) },
-                u_progress: { value: 0.0 }
-            };
-
-            material = new THREE.ShaderMaterial({
-                uniforms: uniforms,
-                vertexShader: `
-                    varying vec2 vUv;
-                    void main() {
-                        vUv = uv;
-                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                    }
-                `,
-                fragmentShader: fragmentShader
-            });
-
-            const geometry = new THREE.PlaneGeometry(2, 2);
-            mesh = new THREE.Mesh(geometry, material);
-            scene.add(mesh);
-
-            // Event listeners
-            window.addEventListener('resize', onResize);
-            canvas.addEventListener('mousemove', onMouseMove);
-            document.getElementById('cleanBtn').addEventListener('click', cleanScreen);
-
-            // Iniciar
-            animate();
-            setTimeout(showNextPoem, 1000);
+        // ============================================
+        // 2. FUNCIONES DE DIBUJO
+        // ============================================
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
         }
 
-        // ============================
-        // 3. ANIMACIÓN PRINCIPAL
-        // ============================
-        let lastTime = 0;
+        function drawLily(ctx, x, y, size, color1, color2, rotation, alpha) {
+            ctx.save();
+            ctx.globalAlpha = alpha || 1;
+            ctx.translate(x, y);
+            ctx.rotate(rotation || 0);
 
-        function animate(time = 0) {
-            animationId = requestAnimationFrame(animate);
-            
-            const delta = lastTime ? (time - lastTime) / 1000 : 0.016;
-            lastTime = time;
+            const petals = 6;
+            const petalLength = size * 0.9;
+            const petalWidth = size * 0.35;
 
-            const elapsed = (Date.now() - startTime) / 1000;
-            material.uniforms.u_stop_time.value = elapsed * 0.3;
+            for (let i = 0; i < petals; i++) {
+                const angle = (i / petals) * Math.PI * 2 - Math.PI / 2;
+                const px = Math.cos(angle) * petalLength * 0.6;
+                const py = Math.sin(angle) * petalLength * 0.6;
+
+                ctx.save();
+                ctx.translate(px, py);
+                ctx.rotate(angle);
+
+                const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, petalWidth);
+                grad.addColorStop(0, color1);
+                grad.addColorStop(0.7, color2);
+                grad.addColorStop(1, 'rgba(200,100,120,0.1)');
+
+                ctx.beginPath();
+                ctx.ellipse(0, 0, petalWidth, petalLength * 0.5, 0, 0, Math.PI * 2);
+                ctx.fillStyle = grad;
+                ctx.fill();
+
+                // Nervadura
+                ctx.strokeStyle = 'rgba(180,80,100,0.15)';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(0, -petalLength * 0.3);
+                ctx.quadraticCurveTo(petalWidth * 0.3, 0, 0, petalLength * 0.3);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            // Centro
+            const centerGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 0.15);
+            centerGrad.addColorStop(0, '#ffeb3b');
+            centerGrad.addColorStop(0.5, '#f9a825');
+            centerGrad.addColorStop(1, '#e65100');
+            ctx.beginPath();
+            ctx.arc(0, 0, size * 0.12, 0, Math.PI * 2);
+            ctx.fillStyle = centerGrad;
+            ctx.fill();
+
+            // Estambres
+            for (let i = 0; i < 8; i++) {
+                const a = (i / 8) * Math.PI * 2;
+                const r = size * 0.2;
+                const sx = Math.cos(a) * r;
+                const sy = Math.sin(a) * r;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(sx, sy);
+                ctx.strokeStyle = '#bf8f3a';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(sx, sy, 2, 0, Math.PI * 2);
+                ctx.fillStyle = '#e6a53a';
+                ctx.fill();
+            }
+
+            ctx.restore();
+        }
+
+        function drawScene(progress) {
+            const w = canvas.width;
+            const h = canvas.height;
+
+            // Fondo
+            const grad = ctx.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, w * 0.7);
+            grad.addColorStop(0, '#fce8e6');
+            grad.addColorStop(0.5, '#f5d6d0');
+            grad.addColorStop(1, '#e8c4c0');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, w, h);
+
+            // Calcular número de lirios
+            const numLilies = Math.min(8, Math.floor(progress * 8) + 1);
+
+            // Posiciones de los lirios
+            const positions = [
+                { x: 0.5, y: 0.5, size: 0.12, rot: 0 },
+                { x: 0.3, y: 0.55, size: 0.09, rot: 0.3 },
+                { x: 0.7, y: 0.4, size: 0.08, rot: -0.2 },
+                { x: 0.25, y: 0.35, size: 0.07, rot: 0.5 },
+                { x: 0.75, y: 0.6, size: 0.07, rot: -0.4 },
+                { x: 0.4, y: 0.75, size: 0.06, rot: 0.8 },
+                { x: 0.6, y: 0.25, size: 0.06, rot: -0.6 },
+                { x: 0.15, y: 0.7, size: 0.05, rot: 1.2 }
+            ];
+
+            // Colores de lirios
+            const colors = [
+                ['#f8bbd0', '#f06292'],
+                ['#f48fb1', '#ec407a'],
+                ['#fce4ec', '#e91e63'],
+                ['#f8bbd0', '#d81b60'],
+                ['#fce4ec', '#f06292'],
+                ['#f48fb1', '#ec407a'],
+                ['#f8bbd0', '#d81b60'],
+                ['#fce4ec', '#e91e63']
+            ];
+
+            // Dibujar hojas (base verde)
+            if (progress > 0.1) {
+                ctx.save();
+                ctx.globalAlpha = Math.min(1, (progress - 0.1) * 2);
+                for (let i = 0; i < 8; i++) {
+                    const lx = w * (0.1 + i * 0.1);
+                    const ly = h * (0.7 + Math.sin(i * 1.2) * 0.05);
+                    ctx.beginPath();
+                    ctx.ellipse(lx, ly, 20, 8, i * 0.4, 0, Math.PI * 2);
+                    ctx.fillStyle = i % 2 === 0 ? '#66bb6a' : '#81c784';
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+
+            // Dibujar lirios
+            for (let i = 0; i < numLilies && i < positions.length; i++) {
+                const pos = positions[i];
+                const color = colors[i % colors.length];
+                const alpha = Math.min(1, (progress - i / 8) * 3);
+                
+                drawLily(
+                    ctx,
+                    w * pos.x,
+                    h * pos.y,
+                    Math.min(w, h) * pos.size,
+                    color[0],
+                    color[1],
+                    pos.rot + Date.now() * 0.0001,
+                    alpha
+                );
+            }
+
+            // Partículas (polen)
+            if (progress > 0.2) {
+                const time = Date.now() / 1000;
+                for (let i = 0; i < 30; i++) {
+                    const px = (Math.sin(i * 127.1 + time * 0.5) * 0.5 + 0.5) * w;
+                    const py = (Math.cos(i * 269.5 + time * 0.3) * 0.5 + 0.5) * h;
+                    const size = 1 + Math.sin(i * 3.7 + time) * 1;
+                    const brightness = 0.3 + 0.3 * Math.sin(time + i);
+                    
+                    ctx.beginPath();
+                    ctx.arc(px, py, size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 220, 200, ${brightness * 0.3})`;
+                    ctx.fill();
+                }
+            }
+
+            // Brillo final
+            if (progress > 0.9) {
+                ctx.save();
+                ctx.globalAlpha = (progress - 0.9) * 5;
+                const glow = ctx.createRadialGradient(w * 0.5, h * 0.4, 0, w * 0.5, h * 0.4, w * 0.5);
+                glow.addColorStop(0, 'rgba(255,200,210,0.15)');
+                glow.addColorStop(1, 'rgba(255,200,210,0)');
+                ctx.fillStyle = glow;
+                ctx.fillRect(0, 0, w, h);
+                ctx.restore();
+            }
+        }
+
+        // ============================================
+        // 3. ANIMACIÓN
+        // ============================================
+        let lastFrameTime = 0;
+
+        function animate(time) {
+            const delta = lastFrameTime ? (time - lastFrameTime) / 1000 : 0.016;
+            lastFrameTime = time;
 
             if (!isComplete && progress < 1) {
                 progress += delta * 0.035;
@@ -745,22 +613,17 @@
                     isComplete = true;
                     setTimeout(showFinalMessage, 1500);
                 }
-                material.uniforms.u_progress.value = progress;
                 document.getElementById('progressFill').style.width = (progress * 100) + '%';
                 document.getElementById('progressPercent').textContent = Math.round(progress * 100) + '%';
             }
 
-            material.uniforms.u_stop_randomizer.value = new THREE.Vector2(
-                Math.sin(elapsed * 0.7) * 0.5 + 0.5,
-                Math.cos(elapsed * 0.5) * 0.5 + 0.5
-            );
-
-            renderer.render(scene, camera);
+            drawScene(progress);
+            animationFrame = requestAnimationFrame(animate);
         }
 
-        // ============================
+        // ============================================
         // 4. SISTEMA DE POEMAS
-        // ============================
+        // ============================================
         let currentPoemTimeout = null;
 
         function showNextPoem() {
@@ -780,40 +643,21 @@
             }, nextDelay);
         }
 
-        // ============================
-        // 5. MENSAJE FINAL Y CARRUSEL
-        // ============================
-        let carouselInitialized = false;
-
-        function showFinalMessage() {
-            const section = document.getElementById('messageSection');
-            section.classList.add('visible');
-            
-            if (!carouselInitialized) {
-                setTimeout(() => {
-                    initCarousel();
-                    carouselInitialized = true;
-                }, 500);
-            }
-            
-            createFloatingHearts();
-        }
-
-        // ============================
-        // 6. CARRUSEL (VERSIÓN CORREGIDA)
-        // ============================
+        // ============================================
+        // 5. CARRUSEL
+        // ============================================
         let currentSlide = 0;
         let totalSlides = 0;
         let carouselInterval = null;
         let isDragging = false;
         let startX = 0;
         let startY = 0;
+        let carouselInitialized = false;
 
         function initCarousel() {
             const track = document.getElementById('carouselTrack');
             const dotsContainer = document.getElementById('dotsContainer');
             
-            // Limpiar y generar slides
             track.innerHTML = '';
             carouselImages.forEach((img, index) => {
                 const slide = document.createElement('div');
@@ -830,53 +674,36 @@
 
             totalSlides = carouselImages.length;
 
-            // Crear dots
             dotsContainer.innerHTML = '';
             for (let i = 0; i < totalSlides; i++) {
                 const dot = document.createElement('button');
                 dot.className = 'dot' + (i === 0 ? ' active' : '');
                 dot.dataset.index = i;
-                dot.addEventListener('click', function(e) {
-                    e.stopPropagation();
+                dot.addEventListener('click', function() {
                     goToSlide(parseInt(this.dataset.index));
                 });
                 dotsContainer.appendChild(dot);
             }
 
-            // Botones - Usar event listeners directos
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            
-            // Remover listeners antiguos clonando
-            const newPrev = prevBtn.cloneNode(true);
-            const newNext = nextBtn.cloneNode(true);
-            prevBtn.parentNode.replaceChild(newPrev, prevBtn);
-            nextBtn.parentNode.replaceChild(newNext, nextBtn);
-            
-            newPrev.addEventListener('click', function(e) {
-                e.stopPropagation();
+            // Botones
+            document.getElementById('prevBtn').addEventListener('click', function() {
                 goToSlide(currentSlide - 1);
             });
-            
-            newNext.addEventListener('click', function(e) {
-                e.stopPropagation();
+            document.getElementById('nextBtn').addEventListener('click', function() {
                 goToSlide(currentSlide + 1);
             });
 
-            // Touch / drag
+            // Touch
             track.addEventListener('mousedown', startDrag);
             track.addEventListener('touchstart', startDragTouch, { passive: true });
-            
-            // Movimiento en el documento para mejor detección
             document.addEventListener('mousemove', drag);
             document.addEventListener('touchmove', dragTouch, { passive: true });
             document.addEventListener('mouseup', endDrag);
             document.addEventListener('touchend', endDrag);
 
-            // Auto-play
             startAutoPlay();
-
             updateCarousel();
+            carouselInitialized = true;
         }
 
         function goToSlide(index) {
@@ -890,12 +717,9 @@
 
         function updateCarousel() {
             const track = document.getElementById('carouselTrack');
-            if (!track) return;
             track.style.transform = `translateX(-${currentSlide * 100}%)`;
-            track.style.transition = 'transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
 
-            const dots = document.querySelectorAll('.dot');
-            dots.forEach((dot, i) => {
+            document.querySelectorAll('.dot').forEach((dot, i) => {
                 dot.classList.toggle('active', i === currentSlide);
             });
         }
@@ -923,11 +747,18 @@
             }
         }
 
-        // Drag con mouse
         function startDrag(e) {
             isDragging = true;
             startX = e.clientX;
             startY = e.clientY;
+            stopAutoPlay();
+        }
+
+        function startDragTouch(e) {
+            isDragging = true;
+            const touch = e.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
             stopAutoPlay();
         }
 
@@ -936,13 +767,20 @@
             const diffX = e.clientX - startX;
             const diffY = e.clientY - startY;
             
-            // Solo si el movimiento es más horizontal que vertical
             if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
-                if (diffX > 0) {
-                    goToSlide(currentSlide - 1);
-                } else {
-                    goToSlide(currentSlide + 1);
-                }
+                goToSlide(diffX > 0 ? currentSlide - 1 : currentSlide + 1);
+                isDragging = false;
+            }
+        }
+
+        function dragTouch(e) {
+            if (!isDragging) return;
+            const touch = e.touches[0];
+            const diffX = touch.clientX - startX;
+            const diffY = touch.clientY - startY;
+            
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
+                goToSlide(diffX > 0 ? currentSlide - 1 : currentSlide + 1);
                 isDragging = false;
             }
         }
@@ -954,34 +792,9 @@
             }
         }
 
-        // Drag táctil
-        function startDragTouch(e) {
-            isDragging = true;
-            const touch = e.touches[0];
-            startX = touch.clientX;
-            startY = touch.clientY;
-            stopAutoPlay();
-        }
-
-        function dragTouch(e) {
-            if (!isDragging) return;
-            const touch = e.touches[0];
-            const diffX = touch.clientX - startX;
-            const diffY = touch.clientY - startY;
-            
-            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
-                if (diffX > 0) {
-                    goToSlide(currentSlide - 1);
-                } else {
-                    goToSlide(currentSlide + 1);
-                }
-                isDragging = false;
-            }
-        }
-
-        // ============================
-        // 7. CORAZONES FLOTANTES
-        // ============================
+        // ============================================
+        // 6. CORAZONES FLOTANTES
+        // ============================================
         let heartsInterval = null;
 
         function createFloatingHearts() {
@@ -1002,21 +815,26 @@
                 heart.style.animationDelay = (Math.random() * 3) + 's';
                 
                 container.appendChild(heart);
-                
                 setTimeout(() => heart.remove(), 15000);
             }, 1000);
         }
 
-        // ============================
-        // 8. EVENTOS
-        // ============================
-        function onMouseMove(event) {
-            const rect = event.target.getBoundingClientRect();
-            const x = (event.clientX - rect.left) / rect.width;
-            const y = 1 - (event.clientY - rect.top) / rect.height;
-            material.uniforms.u_cursor.value.set(x, y);
+        // ============================================
+        // 7. MENSAJE FINAL
+        // ============================================
+        function showFinalMessage() {
+            const section = document.getElementById('messageSection');
+            section.classList.add('visible');
+            
+            if (!carouselInitialized) {
+                setTimeout(initCarousel, 500);
+            }
+            createFloatingHearts();
         }
 
+        // ============================================
+        // 8. LIMPIAR / REINICIAR
+        // ============================================
         function cleanScreen() {
             if (isComplete) {
                 progress = 0;
@@ -1044,24 +862,30 @@
                     heartsInterval = null;
                 }
                 
-                // Limpiar corazones flotantes
                 document.getElementById('floatingHearts').innerHTML = '';
+                document.getElementById('progressFill').style.width = '0%';
+                document.getElementById('progressPercent').textContent = '0%';
                 
                 setTimeout(showNextPoem, 1000);
             }
         }
 
-        function onResize() {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-            renderer.setSize(width, height);
-            material.uniforms.u_ratio.value = width / height;
+        // ============================================
+        // 9. INICIO
+        // ============================================
+        function init() {
+            resizeCanvas();
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+            });
+            document.getElementById('cleanBtn').addEventListener('click', cleanScreen);
+            
+            // Iniciar animación
+            animate(0);
+            setTimeout(showNextPoem, 1000);
         }
 
-        // ============================
-        // 9. INICIAR
-        // ============================
-        document.addEventListener('DOMContentLoaded', init);
+        window.addEventListener('load', init);
     </script>
 </body>
 </html>
