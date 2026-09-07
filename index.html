@@ -23,7 +23,7 @@
             position: relative;
             width: 100vw;
             height: 100vh;
-            background: #1a0a12;
+            background: linear-gradient(180deg, #0a0510, #1a0a12, #0a0510);
             overflow: hidden;
         }
 
@@ -33,7 +33,7 @@
             height: 100%;
         }
 
-        /* Poemas y textos */
+        /* Poemas y textos - Mejorados */
         .poem-container {
             position: absolute;
             top: 50%;
@@ -42,35 +42,57 @@
             text-align: center;
             pointer-events: none;
             z-index: 10;
-            width: 80%;
-            max-width: 600px;
+            width: 85%;
+            max-width: 650px;
+            padding: 2rem;
+            background: rgba(10, 5, 8, 0.3);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 20, 147, 0.1);
         }
 
         .poem-text {
-            font-size: 1.8rem;
+            font-size: 2rem;
             color: #fce4ec;
-            text-shadow: 0 0 30px rgba(255, 105, 180, 0.5), 0 0 60px rgba(255, 20, 147, 0.3);
+            text-shadow: 0 0 40px rgba(255, 105, 180, 0.6), 0 0 80px rgba(255, 20, 147, 0.3);
             opacity: 0;
-            transition: opacity 1.5s ease;
+            transition: opacity 1.8s ease, transform 1.8s ease;
             font-weight: 300;
             letter-spacing: 2px;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            min-height: 120px;
+            line-height: 1.8;
+            min-height: 140px;
             font-family: 'Georgia', serif;
+            transform: translateY(20px);
         }
 
         .poem-text.show {
             opacity: 1;
+            transform: translateY(0);
+        }
+
+        .poem-text .highlight {
+            color: #ff6b9d;
+            font-weight: 400;
+        }
+
+        .poem-text .heart {
+            display: inline-block;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
 
         .progress-bar {
-            width: 100%;
+            width: 80%;
+            max-width: 400px;
             height: 3px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 10px;
             overflow: hidden;
-            margin-top: 1rem;
+            margin: 1.5rem auto 0.5rem;
         }
 
         .progress-fill {
@@ -79,14 +101,14 @@
             background: linear-gradient(90deg, #ff6b9d, #ff1493, #ff6b9d);
             border-radius: 10px;
             transition: width 0.3s ease;
-            box-shadow: 0 0 20px rgba(255, 20, 147, 0.3);
+            box-shadow: 0 0 30px rgba(255, 20, 147, 0.4);
         }
 
         .progress-percent {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.4);
             font-size: 0.8rem;
-            margin-top: 0.5rem;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            font-weight: 300;
         }
 
         /* Botón limpiar */
@@ -94,26 +116,27 @@
             position: absolute;
             bottom: 30px;
             right: 30px;
-            padding: 12px 24px;
+            padding: 12px 28px;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 50px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             z-index: 20;
             font-family: 'Georgia', serif;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             pointer-events: auto;
         }
 
         .clean-btn:hover {
             background: rgba(255, 255, 255, 0.1);
             color: #fff;
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(255, 20, 147, 0.2);
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 0 40px rgba(255, 20, 147, 0.15);
+            border-color: rgba(255, 20, 147, 0.3);
         }
 
         /* Sección mensaje final */
@@ -123,15 +146,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(10, 5, 8, 0.92);
-            backdrop-filter: blur(20px);
+            background: rgba(10, 5, 8, 0.95);
+            backdrop-filter: blur(25px);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 100;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 1.5s ease;
+            transition: opacity 1.8s ease;
         }
 
         .message-section.visible {
@@ -140,44 +163,52 @@
         }
 
         .message-content {
-            max-width: 700px;
-            width: 90%;
-            padding: 2rem;
+            max-width: 750px;
+            width: 92%;
+            padding: 2rem 1.5rem;
             text-align: center;
-            animation: fadeInUp 1.5s ease;
+            animation: fadeInUp 1.8s ease;
         }
 
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(40px) scale(0.95);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
         .love-message {
-            font-size: 3.5rem;
+            font-size: 3.8rem;
             background: linear-gradient(135deg, #ff6b9d, #ff1493, #ff6b9d);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 0.3rem;
-            animation: pulse 2s ease-in-out infinite;
+            margin-bottom: 0.2rem;
+            animation: pulseGlow 2.5s ease-in-out infinite;
+            text-shadow: none;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        @keyframes pulseGlow {
+            0%, 100% { 
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(255,20,147,0.2));
+            }
+            50% { 
+                transform: scale(1.03);
+                filter: drop-shadow(0 0 40px rgba(255,20,147,0.4));
+            }
         }
 
         .sub-message {
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: #fce4ec;
             font-weight: 300;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
+            letter-spacing: 1px;
         }
 
         .extra-message {
@@ -185,24 +216,24 @@
             color: #e8c8d4;
             font-style: italic;
             margin-bottom: 2rem;
-            opacity: 0.8;
+            opacity: 0.7;
         }
 
         /* Carrusel */
         .carousel-container {
             position: relative;
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
             margin: 0 auto;
-            border-radius: 20px;
+            border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(255, 20, 147, 0.2);
-            background: #1a0a12;
+            box-shadow: 0 25px 70px rgba(255, 20, 147, 0.15);
+            background: #0a0510;
         }
 
         .carousel-track {
             display: flex;
-            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             touch-action: pan-y;
         }
 
@@ -213,79 +244,71 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #2a1420;
-            padding: 20px;
+            background: #0a0510;
+            padding: 12px;
             user-select: none;
+            position: relative;
         }
 
-        .carousel-slide .placeholder-image {
+        .carousel-slide img {
             width: 100%;
-            height: 80%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: 5rem;
-            background: linear-gradient(135deg, #2a1420, #1a0a12);
-            border-radius: 12px;
-            border: 2px solid rgba(255, 20, 147, 0.2);
-        }
-
-        .carousel-slide .placeholder-image span {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.3);
-            margin-top: 10px;
+            height: 85%;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .image-caption {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            margin-top: 8px;
             font-style: italic;
+            letter-spacing: 0.5px;
         }
 
         .carousel-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: #fff;
-            width: 44px;
-            height: 44px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
-            font-size: 1.8rem;
+            font-size: 2rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             z-index: 10;
             display: flex;
             align-items: center;
             justify-content: center;
             pointer-events: auto;
+            font-weight: 300;
         }
 
         .carousel-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-50%) scale(1.1);
-            box-shadow: 0 0 30px rgba(255, 20, 147, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-50%) scale(1.08);
+            box-shadow: 0 0 40px rgba(255, 20, 147, 0.15);
         }
 
-        .carousel-btn.prev { left: 12px; }
-        .carousel-btn.next { right: 12px; }
+        .carousel-btn.prev { left: 8px; }
+        .carousel-btn.next { right: 8px; }
 
         .dots {
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin-top: 1.5rem;
+            margin-top: 1.2rem;
         }
 
         .dot {
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             border: none;
             cursor: pointer;
             transition: all 0.4s ease;
@@ -294,19 +317,20 @@
         }
 
         .dot:hover {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .dot.active {
             background: #ff1493;
             transform: scale(1.4);
-            box-shadow: 0 0 20px rgba(255, 20, 147, 0.4);
+            box-shadow: 0 0 25px rgba(255, 20, 147, 0.5);
         }
 
         .carousel-hint {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.8rem;
-            margin-top: 1rem;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.75rem;
+            margin-top: 0.8rem;
+            letter-spacing: 1px;
         }
 
         /* Corazones flotantes */
@@ -325,12 +349,12 @@
             position: absolute;
             font-size: 1.5rem;
             animation: floatHeart linear forwards;
-            opacity: 0.4;
+            opacity: 0.3;
         }
 
         @keyframes floatHeart {
             0% {
-                transform: translateY(100vh) rotate(0deg) scale(0.5);
+                transform: translateY(100vh) rotate(0deg) scale(0.3);
                 opacity: 0;
             }
             10% { opacity: 0.4; }
@@ -342,13 +366,14 @@
         }
 
         @media (max-width: 600px) {
-            .love-message { font-size: 2.2rem; }
-            .sub-message { font-size: 1.3rem; }
+            .love-message { font-size: 2.4rem; }
+            .sub-message { font-size: 1.4rem; }
             .extra-message { font-size: 1rem; }
-            .poem-text { font-size: 1.2rem; }
-            .carousel-btn { width: 36px; height: 36px; font-size: 1.3rem; }
-            .clean-btn { padding: 8px 16px; font-size: 0.8rem; bottom: 20px; right: 20px; }
-            .carousel-slide .placeholder-image { font-size: 3rem; }
+            .poem-text { font-size: 1.3rem; min-height: 100px; }
+            .poem-container { padding: 1.2rem; width: 90%; }
+            .carousel-btn { width: 36px; height: 36px; font-size: 1.4rem; }
+            .clean-btn { padding: 8px 16px; font-size: 0.75rem; bottom: 16px; right: 16px; }
+            .carousel-slide img { height: 80%; }
         }
     </style>
 </head>
@@ -379,14 +404,14 @@
                 <button class="carousel-btn next" id="nextBtn">›</button>
             </div>
             <div class="dots" id="dotsContainer"></div>
-            <div class="carousel-hint">🖱️ Desliza o usa los botones</div>
+            <div class="carousel-hint">🖱️ Desliza o usa los botones para ver más recuerdos</div>
             <div class="floating-hearts" id="floatingHearts"></div>
         </div>
     </div>
 
     <script>
         // ============================================
-        // 1. DIBUJO DE LIRIOS CON CANVAS 2D
+        // CONFIGURACIÓN
         // ============================================
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
@@ -396,134 +421,230 @@
         let animationFrame = null;
         let startTime = Date.now();
 
-        // Poemas
+        // POEMAS MEJORADOS
         const poems = [
-            { text: '🌷 "En el jardín de mi corazón, tú eres la flor más hermosa"', delay: 2 },
-            { text: '🌸 "Cada latido es un poema que escribo pensando en ti"', delay: 4 },
-            { text: '🌺 "Tu amor es la luz que ilumina mis días más oscuros"', delay: 6 },
-            { text: '🌹 "Eres el sueño del que nunca quiero despertar"', delay: 8 },
-            { text: '💖 "Contigo, cada momento es una obra de arte"', delay: 10 },
-            { text: '✨ "Tu sonrisa es el sol que hace florecer mi alma"', delay: 12 },
-            { text: '💝 "6 meses de magia, infinitos más por descubrir"', delay: 14 }
+            { text: '🌷 "En el jardín de mi corazón, <span class="highlight">tú</span> eres la flor más hermosa"', delay: 2 },
+            { text: '🌸 "Cada latido es un poema que <span class="highlight">escribo</span> pensando en ti"', delay: 4 },
+            { text: '🌺 "Tu amor es la luz que <span class="highlight">ilumina</span> mis días más oscuros"', delay: 6 },
+            { text: '🌹 "Eres el sueño del que <span class="highlight">nunca</span> quiero despertar"', delay: 8 },
+            { text: '💖 "Contigo, cada momento es una <span class="highlight">obra de arte</span>"', delay: 10 },
+            { text: '✨ "Tu sonrisa es el sol que hace <span class="highlight">florecer</span> mi alma"', delay: 12 },
+            { text: '💝 "<span class="heart">❤️</span> 6 meses de magia, <span class="highlight">infinitos</span> más por descubrir"', delay: 14 }
         ];
 
-        // Imágenes del carrusel
+        // TUS IMÁGENES PARA EL CARRUSEL
         const carouselImages = [
-            { emoji: '🌅', color: '#ff6b6b', caption: '✨ Nuestro primer atardecer' },
-            { emoji: '💖', color: '#ff1493', caption: '💖 Tu sonrisa ilumina mis días' },
-            { emoji: '🌸', color: '#ff6b9d', caption: '🌸 Momentos que atesoro' },
-            { emoji: '🌺', color: '#ff4757', caption: '🌺 Eres mi razón para sonreír' },
-            { emoji: '💝', color: '#ff6348', caption: '💝 Por siempre tú y yo' }
+            { src: 'images/972a18d4-5852-41a3-a29f-b39289947f4b.jpeg', caption: '✨ Nuestro primer atardecer juntos' },
+            { src: 'images/b01c638a-a57c-475d-a456-5690d9ca3d2a.jpeg', caption: '💖 Tu sonrisa ilumina mis días' },
+            { src: 'images/fe9422b3-16bf-4309-a664-3f5a6a4a280d.jpeg', caption: '🌸 Momentos que atesoro en mi corazón' },
+            { src: 'images/262e46c9-8d04-472c-96be-9b967b57a7f2.jpeg', caption: '🌺 Eres mi razón para sonreír' },
+            { src: 'images/972a18d4-5852-41a3-a29f-b39289947f4b.jpeg', caption: '💝 Por siempre tú y yo' }
         ];
 
         // ============================================
-        // 2. FUNCIONES DE DIBUJO
+        // FUNCIÓN PARA DIBUJAR LIRIOS REALISTAS
         // ============================================
-        function resizeCanvas() {
-            const rect = canvas.parentElement.getBoundingClientRect();
-            canvas.width = rect.width;
-            canvas.height = rect.height;
-        }
-
-        function drawLily(ctx, x, y, size, color1, color2, rotation, alpha) {
+        function drawRealisticLily(ctx, x, y, size, color1, color2, rotation, alpha, bloom) {
             ctx.save();
             ctx.globalAlpha = alpha || 1;
             ctx.translate(x, y);
             ctx.rotate(rotation || 0);
 
-            const petals = 6;
-            const petalLength = size * 0.9;
-            const petalWidth = size * 0.35;
+            const petalCount = 6;
+            const petalLength = size * 0.95;
+            const petalWidth = size * 0.32;
 
-            for (let i = 0; i < petals; i++) {
-                const angle = (i / petals) * Math.PI * 2 - Math.PI / 2;
-                const px = Math.cos(angle) * petalLength * 0.6;
-                const py = Math.sin(angle) * petalLength * 0.6;
+            // Dibujar cada pétalo
+            for (let i = 0; i < petalCount; i++) {
+                const angle = (i / petalCount) * Math.PI * 2 - Math.PI / 2;
+                const px = Math.cos(angle) * petalLength * 0.55;
+                const py = Math.sin(angle) * petalLength * 0.55;
 
                 ctx.save();
                 ctx.translate(px, py);
                 ctx.rotate(angle);
 
-                const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, petalWidth);
+                // Gradiente del pétalo
+                const grad = ctx.createRadialGradient(0, -petalLength * 0.2, 0, 0, 0, petalWidth);
                 grad.addColorStop(0, color1);
-                grad.addColorStop(0.7, color2);
-                grad.addColorStop(1, 'rgba(200,100,120,0.1)');
+                grad.addColorStop(0.4, color2);
+                grad.addColorStop(0.7, color1);
+                grad.addColorStop(1, 'rgba(200,100,130,0.1)');
 
+                // Forma del pétalo con curvatura realista
                 ctx.beginPath();
-                ctx.ellipse(0, 0, petalWidth, petalLength * 0.5, 0, 0, Math.PI * 2);
+                ctx.moveTo(0, -petalLength * 0.6);
+                ctx.quadraticCurveTo(petalWidth * 1.1, -petalLength * 0.2, petalWidth * 0.9, petalLength * 0.3);
+                ctx.quadraticCurveTo(petalWidth * 0.3, petalLength * 0.5, 0, petalLength * 0.4);
+                ctx.quadraticCurveTo(-petalWidth * 0.3, petalLength * 0.5, -petalWidth * 0.9, petalLength * 0.3);
+                ctx.quadraticCurveTo(-petalWidth * 1.1, -petalLength * 0.2, 0, -petalLength * 0.6);
+                ctx.closePath();
+
                 ctx.fillStyle = grad;
                 ctx.fill();
 
-                // Nervadura
+                // Sombra suave en el borde
+                ctx.shadowColor = 'rgba(150,60,80,0.1)';
+                ctx.shadowBlur = 8;
+
+                // Nervaduras principales del pétalo
+                ctx.shadowBlur = 0;
                 ctx.strokeStyle = 'rgba(180,80,100,0.15)';
-                ctx.lineWidth = 0.5;
+                ctx.lineWidth = 0.8;
+
+                // Nervadura central
                 ctx.beginPath();
-                ctx.moveTo(0, -petalLength * 0.3);
-                ctx.quadraticCurveTo(petalWidth * 0.3, 0, 0, petalLength * 0.3);
+                ctx.moveTo(0, -petalLength * 0.4);
+                ctx.quadraticCurveTo(petalWidth * 0.1, 0, 0, petalLength * 0.3);
                 ctx.stroke();
+
+                // Nervaduras laterales
+                for (let j = -1; j <= 1; j += 2) {
+                    ctx.beginPath();
+                    ctx.moveTo(j * petalWidth * 0.2, -petalLength * 0.2);
+                    ctx.quadraticCurveTo(j * petalWidth * 0.6, 0, j * petalWidth * 0.3, petalLength * 0.2);
+                    ctx.stroke();
+                }
 
                 ctx.restore();
             }
 
-            // Centro
-            const centerGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 0.15);
-            centerGrad.addColorStop(0, '#ffeb3b');
-            centerGrad.addColorStop(0.5, '#f9a825');
-            centerGrad.addColorStop(1, '#e65100');
+            // Centro del lirio (estambres y pistilo)
+            // Pistilo central
+            const gradCenter = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 0.18);
+            gradCenter.addColorStop(0, '#fff9c4');
+            gradCenter.addColorStop(0.4, '#ffeb3b');
+            gradCenter.addColorStop(0.7, '#f9a825');
+            gradCenter.addColorStop(1, '#e65100');
             ctx.beginPath();
-            ctx.arc(0, 0, size * 0.12, 0, Math.PI * 2);
-            ctx.fillStyle = centerGrad;
+            ctx.arc(0, 0, size * 0.13, 0, Math.PI * 2);
+            ctx.fillStyle = gradCenter;
             ctx.fill();
+            ctx.shadowColor = 'rgba(255,200,50,0.3)';
+            ctx.shadowBlur = 15;
 
             // Estambres
+            ctx.shadowBlur = 0;
             for (let i = 0; i < 8; i++) {
-                const a = (i / 8) * Math.PI * 2;
-                const r = size * 0.2;
+                const a = (i / 8) * Math.PI * 2 + Math.random() * 0.1;
+                const r = size * 0.18 + Math.random() * 0.03;
                 const sx = Math.cos(a) * r;
                 const sy = Math.sin(a) * r;
+
+                // Filamento
                 ctx.beginPath();
                 ctx.moveTo(0, 0);
-                ctx.lineTo(sx, sy);
+                ctx.lineTo(sx * 1.2, sy * 1.2);
                 ctx.strokeStyle = '#bf8f3a';
-                ctx.lineWidth = 1;
+                ctx.lineWidth = 1.2;
                 ctx.stroke();
+
+                // Antera (punta)
+                const anteraSize = 2 + Math.random() * 2;
                 ctx.beginPath();
-                ctx.arc(sx, sy, 2, 0, Math.PI * 2);
+                ctx.arc(sx * 1.2, sy * 1.2, anteraSize, 0, Math.PI * 2);
                 ctx.fillStyle = '#e6a53a';
+                ctx.fill();
+                ctx.shadowColor = 'rgba(200,150,50,0.2)';
+                ctx.shadowBlur = 5;
+            }
+
+            // Brillo extra en el centro
+            ctx.shadowBlur = 0;
+            const glow = ctx.createRadialGradient(0, -size * 0.1, 0, 0, 0, size * 0.25);
+            glow.addColorStop(0, 'rgba(255,255,220,0.2)');
+            glow.addColorStop(1, 'rgba(255,255,220,0)');
+            ctx.beginPath();
+            ctx.arc(0, 0, size * 0.25, 0, Math.PI * 2);
+            ctx.fillStyle = glow;
+            ctx.fill();
+
+            // Efecto de brillo general (bloom)
+            if (bloom) {
+                ctx.shadowBlur = 0;
+                const bloomGrad = ctx.createRadialGradient(0, -size * 0.2, 0, 0, 0, size * 0.5);
+                bloomGrad.addColorStop(0, `rgba(255,200,210,${bloom * 0.15})`);
+                bloomGrad.addColorStop(1, 'rgba(255,200,210,0)');
+                ctx.beginPath();
+                ctx.arc(0, 0, size * 0.5, 0, Math.PI * 2);
+                ctx.fillStyle = bloomGrad;
                 ctx.fill();
             }
 
             ctx.restore();
         }
 
+        // ============================================
+        // FUNCIÓN PARA DIBUJAR HOJAS
+        // ============================================
+        function drawLeaf(ctx, x, y, angle, size, color) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+
+            ctx.beginPath();
+            ctx.moveTo(0, -size * 0.8);
+            ctx.quadraticCurveTo(size * 0.8, -size * 0.2, size * 0.6, size * 0.3);
+            ctx.quadraticCurveTo(0, size * 0.1, -size * 0.6, size * 0.3);
+            ctx.quadraticCurveTo(-size * 0.8, -size * 0.2, 0, -size * 0.8);
+            ctx.closePath();
+
+            const grad = ctx.createLinearGradient(0, -size, 0, size);
+            grad.addColorStop(0, color);
+            grad.addColorStop(0.5, color);
+            grad.addColorStop(1, 'rgba(30,80,30,0.8)');
+            ctx.fillStyle = grad;
+            ctx.fill();
+
+            // Nervadura central de la hoja
+            ctx.strokeStyle = 'rgba(30,80,30,0.3)';
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(0, -size * 0.6);
+            ctx.quadraticCurveTo(size * 0.1, 0, 0, size * 0.2);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        // ============================================
+        // DIBUJO DE LA ESCENA COMPLETA
+        // ============================================
         function drawScene(progress) {
             const w = canvas.width;
             const h = canvas.height;
 
-            // Fondo
-            const grad = ctx.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, w * 0.7);
-            grad.addColorStop(0, '#fce8e6');
-            grad.addColorStop(0.5, '#f5d6d0');
-            grad.addColorStop(1, '#e8c4c0');
-            ctx.fillStyle = grad;
+            // Fondo con gradiente suave
+            const bgGrad = ctx.createRadialGradient(w * 0.5, h * 0.3, 0, w * 0.5, h * 0.5, w * 0.8);
+            bgGrad.addColorStop(0, '#fce8e6');
+            bgGrad.addColorStop(0.4, '#f5d6d0');
+            bgGrad.addColorStop(0.7, '#e8c4c0');
+            bgGrad.addColorStop(1, '#d4b0b0');
+            ctx.fillStyle = bgGrad;
             ctx.fillRect(0, 0, w, h);
 
-            // Calcular número de lirios
-            const numLilies = Math.min(8, Math.floor(progress * 8) + 1);
+            // Efecto de luz suave
+            const lightGrad = ctx.createRadialGradient(w * 0.5, h * 0.2, 0, w * 0.5, h * 0.3, w * 0.6);
+            lightGrad.addColorStop(0, 'rgba(255,240,235,0.15)');
+            lightGrad.addColorStop(1, 'rgba(255,240,235,0)');
+            ctx.fillStyle = lightGrad;
+            ctx.fillRect(0, 0, w, h);
 
-            // Posiciones de los lirios
+            // Calcular número de lirios según progreso
+            const numLilies = Math.min(7, Math.floor(progress * 7) + 1);
+
+            // Posiciones de los lirios (más naturales)
             const positions = [
-                { x: 0.5, y: 0.5, size: 0.12, rot: 0 },
-                { x: 0.3, y: 0.55, size: 0.09, rot: 0.3 },
-                { x: 0.7, y: 0.4, size: 0.08, rot: -0.2 },
-                { x: 0.25, y: 0.35, size: 0.07, rot: 0.5 },
-                { x: 0.75, y: 0.6, size: 0.07, rot: -0.4 },
-                { x: 0.4, y: 0.75, size: 0.06, rot: 0.8 },
-                { x: 0.6, y: 0.25, size: 0.06, rot: -0.6 },
-                { x: 0.15, y: 0.7, size: 0.05, rot: 1.2 }
+                { x: 0.5, y: 0.48, size: 0.13, rot: 0.0 },
+                { x: 0.32, y: 0.55, size: 0.10, rot: 0.4 },
+                { x: 0.68, y: 0.42, size: 0.09, rot: -0.3 },
+                { x: 0.25, y: 0.35, size: 0.075, rot: 0.7 },
+                { x: 0.75, y: 0.58, size: 0.075, rot: -0.5 },
+                { x: 0.42, y: 0.75, size: 0.065, rot: 0.9 },
+                { x: 0.58, y: 0.25, size: 0.065, rot: -0.7 }
             ];
 
-            // Colores de lirios
+            // Colores de lirios (tonos rosas y blancos)
             const colors = [
                 ['#f8bbd0', '#f06292'],
                 ['#f48fb1', '#ec407a'],
@@ -531,22 +652,36 @@
                 ['#f8bbd0', '#d81b60'],
                 ['#fce4ec', '#f06292'],
                 ['#f48fb1', '#ec407a'],
-                ['#f8bbd0', '#d81b60'],
-                ['#fce4ec', '#e91e63']
+                ['#f8bbd0', '#d81b60']
             ];
 
             // Dibujar hojas (base verde)
-            if (progress > 0.1) {
+            if (progress > 0.08) {
+                const leafProgress = Math.min(1, (progress - 0.08) / 0.2);
                 ctx.save();
-                ctx.globalAlpha = Math.min(1, (progress - 0.1) * 2);
-                for (let i = 0; i < 8; i++) {
-                    const lx = w * (0.1 + i * 0.1);
-                    const ly = h * (0.7 + Math.sin(i * 1.2) * 0.05);
-                    ctx.beginPath();
-                    ctx.ellipse(lx, ly, 20, 8, i * 0.4, 0, Math.PI * 2);
-                    ctx.fillStyle = i % 2 === 0 ? '#66bb6a' : '#81c784';
-                    ctx.fill();
-                }
+                ctx.globalAlpha = leafProgress * 0.7;
+
+                const leafPositions = [
+                    { x: 0.35, y: 0.7, angle: 0.3, size: 25, color: '#66bb6a' },
+                    { x: 0.45, y: 0.75, angle: -0.5, size: 22, color: '#81c784' },
+                    { x: 0.55, y: 0.72, angle: 0.8, size: 20, color: '#66bb6a' },
+                    { x: 0.3, y: 0.5, angle: -0.2, size: 18, color: '#81c784' },
+                    { x: 0.7, y: 0.52, angle: 0.6, size: 18, color: '#66bb6a' },
+                    { x: 0.38, y: 0.3, angle: 0.1, size: 15, color: '#81c784' },
+                    { x: 0.62, y: 0.3, angle: -0.4, size: 15, color: '#66bb6a' }
+                ];
+
+                leafPositions.forEach(leaf => {
+                    drawLeaf(
+                        ctx,
+                        w * leaf.x,
+                        h * leaf.y,
+                        leaf.angle,
+                        Math.min(w, h) * 0.035,
+                        leaf.color
+                    );
+                });
+
                 ctx.restore();
             }
 
@@ -554,60 +689,83 @@
             for (let i = 0; i < numLilies && i < positions.length; i++) {
                 const pos = positions[i];
                 const color = colors[i % colors.length];
-                const alpha = Math.min(1, (progress - i / 8) * 3);
-                
-                drawLily(
+                const alpha = Math.min(1, Math.max(0, (progress - i * 0.08) * 4));
+                const bloom = Math.min(0.5, Math.max(0, (progress - 0.5) * 0.8));
+
+                drawRealisticLily(
                     ctx,
                     w * pos.x,
                     h * pos.y,
                     Math.min(w, h) * pos.size,
                     color[0],
                     color[1],
-                    pos.rot + Date.now() * 0.0001,
-                    alpha
+                    pos.rot + Math.sin(Date.now() / 10000 + i) * 0.02,
+                    alpha,
+                    bloom
                 );
             }
 
-            // Partículas (polen)
-            if (progress > 0.2) {
+            // Partículas brillantes (polen mágico)
+            if (progress > 0.15) {
                 const time = Date.now() / 1000;
-                for (let i = 0; i < 30; i++) {
-                    const px = (Math.sin(i * 127.1 + time * 0.5) * 0.5 + 0.5) * w;
-                    const py = (Math.cos(i * 269.5 + time * 0.3) * 0.5 + 0.5) * h;
-                    const size = 1 + Math.sin(i * 3.7 + time) * 1;
-                    const brightness = 0.3 + 0.3 * Math.sin(time + i);
-                    
+                const particleCount = Math.floor(20 + progress * 20);
+
+                for (let i = 0; i < particleCount; i++) {
+                    const seed = i * 127.1 + 311.7;
+                    const px = (Math.sin(seed + time * 0.3) * 0.5 + 0.5) * w;
+                    const py = (Math.cos(seed * 1.3 + time * 0.2) * 0.5 + 0.5) * h;
+                    const size = 1 + Math.sin(i * 3.7 + time) * 1.5;
+                    const brightness = 0.3 + 0.3 * Math.sin(time * 0.5 + i * 0.7);
+
                     ctx.beginPath();
                     ctx.arc(px, py, size, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(255, 220, 200, ${brightness * 0.3})`;
+                    ctx.fillStyle = `rgba(255, 230, 210, ${brightness * 0.25 * progress})`;
                     ctx.fill();
+
+                    // Brillo alrededor de la partícula
+                    if (size > 1.5) {
+                        ctx.shadowColor = 'rgba(255,200,180,0.1)';
+                        ctx.shadowBlur = 10;
+                        ctx.beginPath();
+                        ctx.arc(px, py, size * 2, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255,200,180,${brightness * 0.05})`;
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                    }
                 }
             }
 
-            // Brillo final
-            if (progress > 0.9) {
+            // Brillo final (aura mágica)
+            if (progress > 0.85) {
                 ctx.save();
-                ctx.globalAlpha = (progress - 0.9) * 5;
-                const glow = ctx.createRadialGradient(w * 0.5, h * 0.4, 0, w * 0.5, h * 0.4, w * 0.5);
-                glow.addColorStop(0, 'rgba(255,200,210,0.15)');
-                glow.addColorStop(1, 'rgba(255,200,210,0)');
-                ctx.fillStyle = glow;
+                ctx.globalAlpha = (progress - 0.85) * 4;
+                const finalGlow = ctx.createRadialGradient(w * 0.5, h * 0.4, 0, w * 0.5, h * 0.4, w * 0.6);
+                finalGlow.addColorStop(0, 'rgba(255,200,210,0.12)');
+                finalGlow.addColorStop(0.5, 'rgba(255,180,200,0.06)');
+                finalGlow.addColorStop(1, 'rgba(255,180,200,0)');
+                ctx.fillStyle = finalGlow;
                 ctx.fillRect(0, 0, w, h);
                 ctx.restore();
             }
         }
 
         // ============================================
-        // 3. ANIMACIÓN
+        // ANIMACIÓN PRINCIPAL
         // ============================================
         let lastFrameTime = 0;
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+        }
 
         function animate(time) {
             const delta = lastFrameTime ? (time - lastFrameTime) / 1000 : 0.016;
             lastFrameTime = time;
 
             if (!isComplete && progress < 1) {
-                progress += delta * 0.035;
+                progress += delta * 0.03;
                 if (progress > 1) {
                     progress = 1;
                     isComplete = true;
@@ -622,29 +780,36 @@
         }
 
         // ============================================
-        // 4. SISTEMA DE POEMAS
+        // SISTEMA DE POEMAS (MEJORADO)
         // ============================================
         let currentPoemTimeout = null;
 
         function showNextPoem() {
-            if (poemIndex >= poems.length || isComplete) return;
+            if (poemIndex >= poems.length || isComplete) {
+                // Si se acabaron los poemas pero no ha terminado, repetir el último
+                if (!isComplete && poemIndex >= poems.length) {
+                    poemIndex = poems.length - 1;
+                }
+                return;
+            }
 
             const poem = poems[poemIndex];
             const poemText = document.getElementById('poemText');
-            
-            poemText.textContent = poem.text;
+
+            // Usar innerHTML para soportar etiquetas HTML en los poemas
+            poemText.innerHTML = poem.text;
             poemText.classList.add('show');
-            
-            const nextDelay = poem.delay * 1000 + 2000;
+
+            const nextDelay = poem.delay * 1000 + 2500;
             currentPoemTimeout = setTimeout(() => {
                 poemText.classList.remove('show');
                 poemIndex++;
-                setTimeout(showNextPoem, 1000);
+                setTimeout(showNextPoem, 800);
             }, nextDelay);
         }
 
         // ============================================
-        // 5. CARRUSEL
+        // CARRUSEL CON TUS IMÁGENES
         // ============================================
         let currentSlide = 0;
         let totalSlides = 0;
@@ -657,17 +822,14 @@
         function initCarousel() {
             const track = document.getElementById('carouselTrack');
             const dotsContainer = document.getElementById('dotsContainer');
-            
+
             track.innerHTML = '';
             carouselImages.forEach((img, index) => {
                 const slide = document.createElement('div');
                 slide.className = 'carousel-slide';
                 slide.innerHTML = `
-                    <div class="placeholder-image" style="background: linear-gradient(135deg, ${img.color}33, ${img.color}11); border-color: ${img.color}44;">
-                        <div style="font-size: 4rem;">${img.emoji}</div>
-                        <span style="color: ${img.color}; font-size: 0.8rem;">❤️ Recuerdo especial</span>
-                    </div>
-                    <div class="image-caption" style="color: ${img.color};">${img.caption}</div>
+                    <img src="${img.src}" alt="Recuerdo ${index + 1}" loading="lazy" />
+                    <div class="image-caption">${img.caption}</div>
                 `;
                 track.appendChild(slide);
             });
@@ -686,14 +848,16 @@
             }
 
             // Botones
-            document.getElementById('prevBtn').addEventListener('click', function() {
+            document.getElementById('prevBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
                 goToSlide(currentSlide - 1);
             });
-            document.getElementById('nextBtn').addEventListener('click', function() {
+            document.getElementById('nextBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
                 goToSlide(currentSlide + 1);
             });
 
-            // Touch
+            // Touch y drag
             track.addEventListener('mousedown', startDrag);
             track.addEventListener('touchstart', startDragTouch, { passive: true });
             document.addEventListener('mousemove', drag);
@@ -728,7 +892,7 @@
             if (carouselInterval) clearInterval(carouselInterval);
             carouselInterval = setInterval(() => {
                 goToSlide(currentSlide + 1);
-            }, 3500);
+            }, 4000);
         }
 
         function resetAutoPlay() {
@@ -736,7 +900,7 @@
                 clearInterval(carouselInterval);
                 carouselInterval = setInterval(() => {
                     goToSlide(currentSlide + 1);
-                }, 3500);
+                }, 4000);
             }
         }
 
@@ -766,7 +930,6 @@
             if (!isDragging) return;
             const diffX = e.clientX - startX;
             const diffY = e.clientY - startY;
-            
             if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
                 goToSlide(diffX > 0 ? currentSlide - 1 : currentSlide + 1);
                 isDragging = false;
@@ -778,7 +941,6 @@
             const touch = e.touches[0];
             const diffX = touch.clientX - startX;
             const diffY = touch.clientY - startY;
-            
             if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
                 goToSlide(diffX > 0 ? currentSlide - 1 : currentSlide + 1);
                 isDragging = false;
@@ -793,47 +955,47 @@
         }
 
         // ============================================
-        // 6. CORAZONES FLOTANTES
+        // CORAZONES FLOTANTES
         // ============================================
         let heartsInterval = null;
 
         function createFloatingHearts() {
             const container = document.getElementById('floatingHearts');
             const emojis = ['❤️', '💕', '💗', '💖', '💝', '💘'];
-            
+
             if (heartsInterval) clearInterval(heartsInterval);
-            
+
             heartsInterval = setInterval(() => {
                 if (!document.getElementById('messageSection').classList.contains('visible')) return;
-                
+
                 const heart = document.createElement('div');
                 heart.className = 'floating-heart';
                 heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
                 heart.style.left = Math.random() * 100 + '%';
-                heart.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
-                heart.style.animationDuration = (8 + Math.random() * 12) + 's';
-                heart.style.animationDelay = (Math.random() * 3) + 's';
-                
+                heart.style.fontSize = (1 + Math.random() * 1.8) + 'rem';
+                heart.style.animationDuration = (8 + Math.random() * 14) + 's';
+                heart.style.animationDelay = (Math.random() * 4) + 's';
+
                 container.appendChild(heart);
-                setTimeout(() => heart.remove(), 15000);
-            }, 1000);
+                setTimeout(() => heart.remove(), 16000);
+            }, 900);
         }
 
         // ============================================
-        // 7. MENSAJE FINAL
+        // MENSAJE FINAL
         // ============================================
         function showFinalMessage() {
             const section = document.getElementById('messageSection');
             section.classList.add('visible');
-            
+
             if (!carouselInitialized) {
-                setTimeout(initCarousel, 500);
+                setTimeout(initCarousel, 600);
             }
             createFloatingHearts();
         }
 
         // ============================================
-        // 8. LIMPIAR / REINICIAR
+        // REINICIAR
         // ============================================
         function cleanScreen() {
             if (isComplete) {
@@ -843,46 +1005,43 @@
                 poemIndex = 0;
                 carouselInitialized = false;
                 currentSlide = 0;
-                
+
                 document.getElementById('messageSection').classList.remove('visible');
                 document.getElementById('poemText').classList.remove('show');
-                
+
                 if (currentPoemTimeout) {
                     clearTimeout(currentPoemTimeout);
                     currentPoemTimeout = null;
                 }
-                
+
                 if (carouselInterval) {
                     clearInterval(carouselInterval);
                     carouselInterval = null;
                 }
-                
+
                 if (heartsInterval) {
                     clearInterval(heartsInterval);
                     heartsInterval = null;
                 }
-                
+
                 document.getElementById('floatingHearts').innerHTML = '';
                 document.getElementById('progressFill').style.width = '0%';
                 document.getElementById('progressPercent').textContent = '0%';
-                
+
                 setTimeout(showNextPoem, 1000);
             }
         }
 
         // ============================================
-        // 9. INICIO
+        // INICIO
         // ============================================
         function init() {
             resizeCanvas();
-            window.addEventListener('resize', () => {
-                resizeCanvas();
-            });
+            window.addEventListener('resize', resizeCanvas);
             document.getElementById('cleanBtn').addEventListener('click', cleanScreen);
-            
-            // Iniciar animación
+
             animate(0);
-            setTimeout(showNextPoem, 1000);
+            setTimeout(showNextPoem, 1200);
         }
 
         window.addEventListener('load', init);
