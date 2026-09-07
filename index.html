@@ -2,12 +2,22 @@
 
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>🌸 Nuestro jardín de lirios 🌸</title>
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
+>
+
+<title>🌸Para Alee Nuestro Jardín 🌸</title>
 
 <style>
+
+/* =====================================================
+   CONFIGURACIÓN GENERAL
+===================================================== */
 
 *{
     margin:0;
@@ -15,70 +25,92 @@
     box-sizing:border-box;
 }
 
+
 html,
 body{
     width:100%;
     height:100%;
     overflow:hidden;
-    font-family:Georgia,"Times New Roman",serif;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
     background:#071018;
 }
 
 
-/* =========================================
-   CONTENEDOR PRINCIPAL
-========================================= */
+/* =====================================================
+   CONTENEDOR
+===================================================== */
 
 .container{
     position:fixed;
     inset:0;
+
     width:100%;
     height:100vh;
+
     overflow:hidden;
 }
 
 
-/* =========================================
+/* =====================================================
    CANVAS
-========================================= */
+===================================================== */
 
 canvas{
     position:absolute;
     inset:0;
+
     width:100%;
     height:100%;
+
     display:block;
-    cursor:crosshair;
+
+    cursor:pointer;
+
+    touch-action:none;
 }
 
 
-/* =========================================
-   INSTRUCCIÓN
-========================================= */
+/* =====================================================
+   INSTRUCCIONES
+===================================================== */
 
 .name{
+
     position:fixed;
+
     top:50%;
     left:50%;
 
     width:90%;
 
-    transform:translate(-50%,-50%);
+    transform:
+        translate(-50%,-50%);
 
-    color:white;
+    color:#fff;
 
     text-align:center;
 
-    font-size:clamp(22px,4vw,48px);
+    font-size:
+        clamp(24px,4vw,48px);
 
     text-shadow:
+
         0 0 10px #ff6bb5,
+
         0 0 30px rgba(255,70,160,.6);
 
     user-select:none;
+
     pointer-events:none;
 
     z-index:10;
+
+    transition:opacity 1s ease;
 
     animation:pulseText 2s infinite;
 }
@@ -90,100 +122,65 @@ canvas{
 
     margin-top:15px;
 
-    font-size:clamp(14px,2vw,20px);
+    font-family:
+        Arial,
+        sans-serif;
 
-    color:#ffd4e8;
+    font-size:
+        clamp(14px,2vw,20px);
 
-    font-family:Arial,sans-serif;
-
-    font-weight:normal;
+    color:#ffd5e7;
 
 }
 
 
 @keyframes pulseText{
 
-    0%,100%{
+    0%,
+    100%{
+
+        transform:
+            translate(-50%,-50%)
+            scale(1);
+
         opacity:.75;
-        transform:translate(-50%,-50%) scale(1);
+
     }
+
 
     50%{
+
+        transform:
+            translate(-50%,-50%)
+            scale(1.04);
+
         opacity:1;
-        transform:translate(-50%,-50%) scale(1.04);
+
     }
 
 }
 
 
-/* =========================================
-   BOTÓN LIMPIAR
-========================================= */
-
-.clean-btn{
-
-    position:fixed;
-
-    left:25px;
-    bottom:20px;
-
-    z-index:20;
-
-    font-family:Arial,sans-serif;
-
-    font-size:14px;
-
-    color:white;
-
-    background:rgba(0,0,0,.25);
-
-    backdrop-filter:blur(10px);
-
-    border:1px solid rgba(255,255,255,.15);
-
-    border-radius:30px;
-
-    padding:10px 18px;
-
-    cursor:pointer;
-
-    opacity:.75;
-
-    transition:.3s;
-
-}
-
-
-.clean-btn:hover{
-
-    opacity:1;
-
-    transform:scale(1.05);
-
-    background:rgba(255,70,150,.25);
-
-}
-
-
-/* =========================================
+/* =====================================================
    POEMAS
-========================================= */
+===================================================== */
 
 .poem-box{
 
     position:fixed;
 
-    top:8%;
+    top:7%;
 
     left:50%;
 
-    transform:translateX(-50%);
+    transform:
+        translateX(-50%);
 
-    width:min(85%,800px);
+    width:min(88%,850px);
 
     text-align:center;
 
-    z-index:15;
+    z-index:20;
 
     pointer-events:none;
 
@@ -192,23 +189,29 @@ canvas{
 
 .poem{
 
-    color:#fff4fa;
+    min-height:80px;
 
-    font-size:clamp(20px,2.5vw,34px);
+    color:#fff5fa;
+
+    font-size:
+        clamp(19px,2.4vw,33px);
 
     line-height:1.5;
 
-    text-shadow:
-
-        0 0 10px rgba(255,100,180,.7),
-
-        0 0 30px rgba(255,80,150,.35);
-
     opacity:0;
 
-    transform:translateY(20px);
+    transform:
+        translateY(20px);
 
-    transition:1.5s ease;
+    transition:
+        opacity 1.5s ease,
+        transform 1.5s ease;
+
+    text-shadow:
+
+        0 0 10px rgba(255,100,180,.8),
+
+        0 0 30px rgba(255,80,150,.4);
 
 }
 
@@ -217,20 +220,23 @@ canvas{
 
     opacity:1;
 
-    transform:translateY(0);
+    transform:
+        translateY(0);
 
 }
 
 
+/* =====================================================
+   BARRA DE PROGRESO
+===================================================== */
+
 .progress-container{
 
-    width:300px;
+    width:280px;
 
     max-width:70%;
 
     height:5px;
-
-    background:rgba(255,255,255,.15);
 
     margin:20px auto;
 
@@ -238,31 +244,86 @@ canvas{
 
     overflow:hidden;
 
+    background:
+        rgba(255,255,255,.18);
+
 }
 
 
 .progress{
 
-    height:100%;
-
     width:0%;
 
-    background:linear-gradient(
-        90deg,
-        #ff6cab,
-        #ffd1e5
-    );
+    height:100%;
 
-    box-shadow:0 0 15px #ff4f9c;
+    border-radius:20px;
 
-    transition:width .3s;
+    background:
+
+        linear-gradient(
+            90deg,
+            #ff5fa2,
+            #ffd0e4
+        );
+
+    box-shadow:
+
+        0 0 15px #ff4f9c;
 
 }
 
 
-/* =========================================
+/* =====================================================
+   BOTÓN REINICIAR
+===================================================== */
+
+.clean-btn{
+
+    position:fixed;
+
+    left:20px;
+    bottom:20px;
+
+    z-index:30;
+
+    border:none;
+
+    border-radius:25px;
+
+    padding:
+        10px 18px;
+
+    color:#fff;
+
+    background:
+        rgba(0,0,0,.35);
+
+    backdrop-filter:
+        blur(10px);
+
+    font-size:14px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+
+.clean-btn:hover{
+
+    transform:
+        scale(1.08);
+
+    background:
+        rgba(255,80,150,.35);
+
+}
+
+
+/* =====================================================
    PANTALLA FINAL
-========================================= */
+===================================================== */
 
 .final-screen{
 
@@ -270,17 +331,21 @@ canvas{
 
     inset:0;
 
-    background:rgba(5,8,15,.96);
-
-    backdrop-filter:blur(15px);
+    z-index:100;
 
     display:flex;
 
-    align-items:center;
-
     justify-content:center;
 
-    z-index:100;
+    align-items:center;
+
+    padding:20px;
+
+    background:
+        rgba(5,8,15,.96);
+
+    backdrop-filter:
+        blur(15px);
 
     opacity:0;
 
@@ -302,7 +367,8 @@ canvas{
 
 .final-content{
 
-    width:min(90%,700px);
+    width:
+        min(92%,750px);
 
     text-align:center;
 
@@ -311,22 +377,24 @@ canvas{
 
 .final-content h1{
 
-    font-size:clamp(38px,7vw,70px);
+    color:#ff78b5;
 
-    color:#ff70b0;
+    font-size:
+        clamp(38px,7vw,70px);
 
     text-shadow:
 
         0 0 20px #ff3f91,
 
-        0 0 60px rgba(255,40,150,.6);
+        0 0 60px rgba(255,40,150,.7);
 
 }
 
 
 .final-content h2{
 
-    margin:15px 0 30px;
+    margin:
+        15px 0 30px;
 
     color:#fff0f6;
 
@@ -335,9 +403,9 @@ canvas{
 }
 
 
-/* =========================================
+/* =====================================================
    CARRUSEL
-========================================= */
+===================================================== */
 
 .carousel{
 
@@ -351,6 +419,9 @@ canvas{
 
     background:#111;
 
+    box-shadow:
+        0 0 50px rgba(255,80,160,.25);
+
 }
 
 
@@ -358,7 +429,8 @@ canvas{
 
     display:flex;
 
-    transition:transform .7s ease;
+    transition:
+        transform .7s ease;
 
 }
 
@@ -374,7 +446,8 @@ canvas{
 
     width:100%;
 
-    height:min(55vh,430px);
+    height:
+        min(55vh,430px);
 
     object-fit:cover;
 
@@ -389,8 +462,14 @@ canvas{
 
     color:#ffe5f1;
 
+    font-size:18px;
+
 }
 
+
+/* =====================================================
+   BOTONES CARRUSEL
+===================================================== */
 
 .carousel button{
 
@@ -398,22 +477,27 @@ canvas{
 
     top:50%;
 
-    transform:translateY(-50%);
+    transform:
+        translateY(-50%);
 
     width:50px;
-    height:50px;
 
-    border-radius:50%;
+    height:50px;
 
     border:none;
 
-    background:rgba(0,0,0,.45);
+    border-radius:50%;
 
     color:white;
+
+    background:
+        rgba(0,0,0,.5);
 
     font-size:35px;
 
     cursor:pointer;
+
+    z-index:5;
 
 }
 
@@ -422,20 +506,25 @@ canvas{
     left:10px;
 }
 
+
 .next{
     right:10px;
 }
 
 
-.dots{
+/* =====================================================
+   PUNTOS
+===================================================== */
 
-    margin-top:18px;
+.dots{
 
     display:flex;
 
     justify-content:center;
 
     gap:10px;
+
+    margin-top:18px;
 
 }
 
@@ -451,6 +540,8 @@ canvas{
 
     cursor:pointer;
 
+    transition:.3s;
+
 }
 
 
@@ -458,9 +549,11 @@ canvas{
 
     background:#ff5ca8;
 
-    box-shadow:0 0 15px #ff5ca8;
+    box-shadow:
+        0 0 15px #ff5ca8;
 
 }
+
 
 </style>
 
@@ -468,78 +561,133 @@ canvas{
 
 <body>
 
+<!-- =====================================================
+     JARDÍN
+===================================================== -->
+
 <div class="container">
 
 ```
 <canvas id="canvas"></canvas>
 
-<div class="name" id="instruction">
 
-    🌸 Toca la pantalla para hacer crecer un lirio 🌸
+<div
+    class="name"
+    id="instruction"
+>
+
+    🌸 Toca la pantalla para hacer crecer flores 🌸
 
     <small>
-        Cada toque hará florecer una nueva flor en nuestro jardín
+
+        Cada toque hará crecer una nueva flor
+        en nuestro jardín
+
     </small>
 
 </div>
 
 
+
+<!-- POEMAS -->
+
 <div class="poem-box">
 
-    <div class="poem" id="poem"></div>
+    <div
+        class="poem"
+        id="poem"
+    ></div>
 
-    <div class="progress-container">
 
-        <div class="progress" id="progress"></div>
+    <div
+        class="progress-container"
+    >
+
+        <div
+            class="progress"
+            id="progress"
+        ></div>
 
     </div>
 
 </div>
 
 
-<button class="clean-btn" id="cleanBtn">
 
-    ✨ Volver a empezar
+<!-- REINICIAR -->
+
+<button
+    class="clean-btn"
+    id="cleanBtn"
+>
+
+    🌱 Volver a empezar
 
 </button>
 ```
 
 </div>
 
-<!-- =====================================
+<!-- =====================================================
      PANTALLA FINAL
-===================================== -->
+===================================================== -->
 
-<div class="final-screen" id="finalScreen">
+<div
+    class="final-screen"
+    id="finalScreen"
+>
 
 ```
 <div class="final-content">
+
 
     <h1>
         🌸 Te amo Ale 🌸
     </h1>
 
+
     <h2>
-        Nuestro jardín apenas comienza a florecer ❤️
+        Nuestro jardín siempre seguirá floreciendo ❤️
     </h2>
 
 
+
+    <!-- CARRUSEL -->
+
     <div class="carousel">
 
-        <button class="prev" id="prevBtn">
+
+        <button
+            class="prev"
+            id="prevBtn"
+        >
             ‹
         </button>
 
-        <div class="track" id="track"></div>
 
-        <button class="next" id="nextBtn">
+        <div
+            class="track"
+            id="track"
+        ></div>
+
+
+        <button
+            class="next"
+            id="nextBtn"
+        >
             ›
         </button>
+
 
     </div>
 
 
-    <div class="dots" id="dots"></div>
+
+    <div
+        class="dots"
+        id="dots"
+    ></div>
+
 
 </div>
 ```
@@ -549,12 +697,13 @@ canvas{
 <script>
 
 
-/* =========================================
+/* =====================================================
    CANVAS
-========================================= */
+===================================================== */
 
 const canvas =
     document.getElementById("canvas");
+
 
 const ctx =
     canvas.getContext("2d");
@@ -573,6 +722,7 @@ function resizeCanvas(){
 
 resizeCanvas();
 
+
 window.addEventListener(
     "resize",
     resizeCanvas
@@ -580,9 +730,9 @@ window.addEventListener(
 
 
 
-/* =========================================
+/* =====================================================
    VARIABLES
-========================================= */
+===================================================== */
 
 let flowers = [];
 
@@ -591,25 +741,28 @@ let particles = [];
 let startTime =
     Date.now();
 
-let experienceStarted =
-    false;
-
 let experienceFinished =
     false;
 
+let currentPoem =
+    -1;
 
 
-/* =========================================
-   CONFIGURACIÓN
-========================================= */
+
+/* =====================================================
+   DURACIÓN TOTAL
+
+   Aproximadamente 55 segundos
+===================================================== */
 
 const EXPERIENCE_TIME =
     55000;
 
 
-/* =========================================
+
+/* =====================================================
    POEMAS
-========================================= */
+===================================================== */
 
 const poems = [
 
@@ -619,34 +772,37 @@ const poems = [
 
     "🌸 Cada momento a tu lado hizo florecer mi corazón.",
 
-    "💖 Porque en el jardín de mi vida, tú eres mi flor favorita.",
+    "💖 Porque en el jardín de mi vida, tú eres una de las flores más bonitas.",
 
-    "❤️ Seis meses contigo... y deseo que sean muchos más.",
+    "❤️ Seis meses contigo y deseo que sean muchos más.",
 
-    "🌸 Te amo Ale, y quiero seguir construyendo nuestro jardín juntos. 🌸"
+    "🌸 Te amo Ale... y quiero seguir haciendo florecer nuestro jardín juntos. 🌸"
 
 ];
-
-
-let currentPoem =
-    0;
 
 
 const poemEl =
     document.getElementById("poem");
 
 
+
 function showPoem(index){
 
-    poemEl.classList.remove("show");
+
+    poemEl.classList.remove(
+        "show"
+    );
 
 
-    setTimeout(() => {
+    setTimeout(()=>{
 
         poemEl.textContent =
             poems[index];
 
-        poemEl.classList.add("show");
+
+        poemEl.classList.add(
+            "show"
+        );
 
     },500);
 
@@ -654,488 +810,376 @@ function showPoem(index){
 
 
 
-/* =========================================
+/* =====================================================
+   ELEGIR TIPO DE FLOR
+
+   65% LIRIOS
+===================================================== */
+
+function getFlowerType(){
+
+    const random =
+        Math.random();
+
+
+    if(random < 0.65){
+
+        return "lily";
+
+    }
+
+
+    if(random < 0.80){
+
+        return "tulip";
+
+    }
+
+
+    if(random < 0.92){
+
+        return "daisy";
+
+    }
+
+
+    return "wild";
+
+}
+
+
+
+/* =====================================================
+   COLORES
+===================================================== */
+
+function getRandomFlowerColor(type){
+
+    const colors = {
+
+
+        lily:[
+
+            "#ffffff",
+
+            "#ffe0ef",
+
+            "#ffc0dc",
+
+            "#f5d4ff",
+
+            "#fff4f8"
+
+        ],
+
+
+        tulip:[
+
+            "#ff5c8d",
+
+            "#ff709f",
+
+            "#ff9abe",
+
+            "#e14c7b"
+
+        ],
+
+
+        daisy:[
+
+            "#ffffff",
+
+            "#fff7df",
+
+            "#ffe8f0"
+
+        ],
+
+
+        wild:[
+
+            "#a980ff",
+
+            "#ff7eb3",
+
+            "#ffb347",
+
+            "#ff6b9d"
+
+        ]
+
+    };
+
+
+    const list =
+        colors[type];
+
+
+    return list[
+        Math.floor(
+            Math.random()*list.length
+        )
+    ];
+
+}
+
+
+
+function getFlowerAccent(type){
+
+    const accents={
+
+
+        lily:"#c2185b",
+
+
+        tulip:"#a61b50",
+
+
+        daisy:"#f0a500",
+
+
+        wild:"#7b2cbf"
+
+    };
+
+
+    return accents[type];
+
+}
+
+
+
+/* =====================================================
    CREAR FLOR
-========================================= */
+===================================================== */
 
 function createFlower(x,y){
+
 
     if(experienceFinished)
         return;
 
 
-    experienceStarted = true;
+    /*
+       Evitar demasiadas flores exactamente
+       en el mismo lugar.
+    */
+
+    let finalX=x;
+
+    let finalY=y;
 
 
-    const maxHeight =
-        70 +
-        Math.random()*90;
+    for(const flower of flowers){
+
+
+        const distance =
+            Math.hypot(
+
+                finalX-flower.x,
+
+                finalY-flower.y
+
+            );
+
+
+        /*
+           Si está demasiado cerca,
+           la movemos ligeramente.
+        */
+
+        if(distance < 45){
+
+            finalX +=
+                (Math.random()-.5)*55;
+
+
+            finalY +=
+                (Math.random()-.5)*25;
+
+        }
+
+    }
+
+
+    /*
+       Evitar que se salga de pantalla.
+    */
+
+    finalX =
+        Math.max(
+            20,
+            Math.min(
+                canvas.width-20,
+                finalX
+            )
+        );
+
+
+    finalY =
+        Math.max(
+            60,
+            Math.min(
+                canvas.height-20,
+                finalY
+            )
+        );
+
+
+    const type =
+        getFlowerType();
+
+
+
+    /*
+       TAMAÑO PEQUEÑO Y VARIABLE
+
+       Mínimo: 13px
+       Máximo: 27px
+
+       Ninguna flor será gigante.
+    */
+
+    const size =
+        13+
+        Math.random()*14;
+
+
+
+    /*
+       TALLOS MÁS CORTOS
+
+       Mínimo: 45px
+       Máximo: 100px
+    */
+
+    const height =
+        45+
+        Math.random()*55;
+
 
 
     flowers.push({
 
-        x:x,
 
-        y:y,
+        x:finalX,
 
-        height:maxHeight,
+        y:finalY,
+
+
+        type:type,
+
+
+        height:height,
+
+
+        size:size,
+
 
         progress:0,
 
+
         speed:
-            0.0015 +
-            Math.random()*0.001,
+
+            0.0018+
+
+            Math.random()*0.0015,
+
 
         color:
-            Math.random()>.5
-            ? "#ff8fbd"
-            : "#ffd1e2",
+            getRandomFlowerColor(type),
+
 
         accent:
-            "#b51c62",
+            getFlowerAccent(type),
+
 
         wind:
-            Math.random()*10,
+            Math.random()*10
 
-        created:
-            Date.now()
 
     });
 
 
-    createParticles(x,y,25);
+
+    /*
+       PARTÍCULAS
+    */
+
+    createParticles(
+
+        finalX,
+
+        finalY,
+
+        16
+
+    );
 
 
 }
 
 
 
-/* =========================================
+/* =====================================================
    PARTÍCULAS
-========================================= */
+===================================================== */
 
 function createParticles(x,y,amount){
 
+
     for(let i=0;i<amount;i++){
 
+
         particles.push({
+
 
             x:x,
 
             y:y,
 
+
             vx:
-                (Math.random()-.5)*3,
+                (Math.random()-.5)*2.5,
+
 
             vy:
-                (Math.random()-.5)*3-1,
+                (Math.random()-.5)*2.5-1,
+
 
             size:
-                Math.random()*4+1,
+                Math.random()*3+1,
 
-            life:
-                1,
+
+            life:1,
+
 
             decay:
-                .01+
+                .015+
                 Math.random()*.02
+
 
         });
 
+
     }
+
 
 }
 
 
-
-/* =========================================
-   TALLO
-========================================= */
-
-function drawStem(flower){
-
-    const height =
-        flower.height *
-        Math.min(
-            flower.progress*2.5,
-            1
-        );
-
-
-    const wind =
-        Math.sin(
-            Date.now()/1000+
-            flower.wind
-        )*5;
-
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-        flower.x,
-        flower.y
-    );
-
-
-    ctx.quadraticCurveTo(
-
-        flower.x+wind,
-
-        flower.y-height*.5,
-
-        flower.x+wind*.5,
-
-        flower.y-height
-
-    );
-
-
-    ctx.strokeStyle =
-        "#3f8c4d";
-
-    ctx.lineWidth =
-        5;
-
-    ctx.lineCap =
-        "round";
-
-    ctx.stroke();
-
-
-
-    /* HOJAS */
-
-
-    if(flower.progress>.2){
-
-        const leafY =
-            flower.y-height*.45;
-
-
-        ctx.fillStyle =
-            "#4e9c54";
-
-
-        drawLeaf(
-
-            flower.x,
-
-            leafY,
-
-            -1,
-
-            35
-
-        );
-
-
-        drawLeaf(
-
-            flower.x,
-
-            leafY+15,
-
-            1,
-
-            32
-
-        );
-
-    }
-
-}
-
-
-
-/* =========================================
-   HOJA
-========================================= */
-
-function drawLeaf(
-    x,
-    y,
-    direction,
-    size
-){
-
-    ctx.beginPath();
-
-
-    ctx.moveTo(x,y);
-
-
-    ctx.quadraticCurveTo(
-
-        x+
-        direction*size,
-
-        y-size*.4,
-
-        x+
-        direction*size*1.6,
-
-        y
-
-    );
-
-
-    ctx.quadraticCurveTo(
-
-        x+
-        direction*size,
-
-        y+size*.25,
-
-        x,
-
-        y
-
-    );
-
-
-    ctx.fill();
-
-}
-
-
-
-/* =========================================
-   LIRIO
-========================================= */
-
-function drawLily(flower){
-
-    if(flower.progress<.4)
-        return;
-
-
-    const bloom =
-        Math.min(
-            (flower.progress-.4)*2,
-            1
-        );
-
-
-    const topY =
-        flower.y-
-        flower.height;
-
-
-    const size =
-        28+
-        bloom*25;
-
-
-    ctx.save();
-
-
-    ctx.translate(
-
-        flower.x,
-
-        topY
-
-    );
-
-
-    ctx.globalAlpha =
-        bloom;
-
-
-    /* 6 PÉTALOS */
-
-
-    for(let i=0;i<6;i++){
-
-        ctx.save();
-
-
-        ctx.rotate(
-            i*Math.PI/3
-        );
-
-
-        const gradient =
-            ctx.createLinearGradient(
-
-                0,
-
-                0,
-
-                0,
-
-                -size
-
-            );
-
-
-        gradient.addColorStop(
-            0,
-            flower.accent
-        );
-
-        gradient.addColorStop(
-            .5,
-            flower.color
-        );
-
-        gradient.addColorStop(
-            1,
-            "#fff8fb"
-        );
-
-
-        ctx.fillStyle =
-            gradient;
-
-
-        ctx.beginPath();
-
-
-        ctx.moveTo(0,0);
-
-
-        ctx.bezierCurveTo(
-
-            size*.5,
-            -size*.3,
-
-            size*.45,
-            -size*.9,
-
-            0,
-            -size*1.2
-
-        );
-
-
-        ctx.bezierCurveTo(
-
-            -size*.45,
-            -size*.9,
-
-            -size*.5,
-            -size*.3,
-
-            0,
-            0
-
-        );
-
-
-        ctx.fill();
-
-
-        ctx.restore();
-
-    }
-
-
-
-    /* CENTRO */
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-
-        0,
-
-        0,
-
-        size*.16,
-
-        0,
-
-        Math.PI*2
-
-    );
-
-
-    ctx.fillStyle =
-        "#ffd36b";
-
-
-    ctx.fill();
-
-
-
-    /* ESTAMBRES */
-
-
-    for(let i=0;i<6;i++){
-
-        const angle =
-            i*Math.PI/3;
-
-
-        const length =
-            size*.55;
-
-
-        ctx.beginPath();
-
-
-        ctx.moveTo(0,0);
-
-
-        ctx.lineTo(
-
-            Math.cos(angle)*length,
-
-            Math.sin(angle)*length
-
-        );
-
-
-        ctx.strokeStyle =
-            "#9a6723";
-
-        ctx.lineWidth=2;
-
-        ctx.stroke();
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-
-            Math.cos(angle)*length,
-
-            Math.sin(angle)*length,
-
-            3,
-
-            0,
-
-            Math.PI*2
-
-        );
-
-
-        ctx.fillStyle =
-            "#d69a31";
-
-        ctx.fill();
-
-    }
-
-
-    ctx.restore();
-
-}
-
-
-
-/* =========================================
-   DIBUJAR PARTÍCULAS
-========================================= */
 
 function updateParticles(){
 
-    particles.forEach((p,index)=>{
+
+    for(let i=particles.length-1;i>=0;i--){
+
+
+        const p=
+            particles[i];
+
 
         p.x+=p.vx;
 
@@ -1144,6 +1188,7 @@ function updateParticles(){
         p.vy+=.02;
 
         p.life-=p.decay;
+
 
 
         ctx.beginPath();
@@ -1164,58 +1209,963 @@ function updateParticles(){
         );
 
 
-        ctx.fillStyle =
-            `rgba(255,190,220,${p.life})`;
+        ctx.fillStyle=
+            `rgba(255,210,230,${Math.max(0,p.life)})`;
 
 
         ctx.fill();
 
 
+
         if(p.life<=0){
 
             particles.splice(
-                index,
+                i,
                 1
             );
 
         }
 
-    });
+    }
+
 
 }
 
 
 
-/* =========================================
-   FONDO
-========================================= */
+/* =====================================================
+   DIBUJAR TALLO
+===================================================== */
+
+function drawStem(flower){
+
+
+    const growth =
+        Math.min(
+            flower.progress*2.2,
+            1
+        );
+
+
+    const height =
+        flower.height*growth;
+
+
+    const wind =
+
+        Math.sin(
+
+            Date.now()/1200+
+            flower.wind
+
+        )*3;
+
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+
+        flower.x,
+
+        flower.y
+
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        flower.x+wind,
+
+        flower.y-height*.5,
+
+        flower.x+wind*.5,
+
+        flower.y-height
+
+    );
+
+
+    ctx.strokeStyle=
+        "#3f8248";
+
+
+    ctx.lineWidth=
+        Math.max(
+            1.8,
+            flower.size*.11
+        );
+
+
+    ctx.lineCap=
+        "round";
+
+
+    ctx.stroke();
+
+
+
+    /* =====================================
+       HOJAS PEQUEÑAS
+    ===================================== */
+
+    if(flower.progress>.28){
+
+
+        const leafY=
+
+            flower.y-
+
+            height*.45;
+
+
+
+        ctx.fillStyle=
+            "#4c914f";
+
+
+
+        drawLeaf(
+
+            flower.x,
+
+            leafY,
+
+            -1,
+
+            9+flower.size*.35
+
+        );
+
+
+
+        drawLeaf(
+
+            flower.x,
+
+            leafY+7,
+
+            1,
+
+            8+flower.size*.3
+
+        );
+
+    }
+
+
+}
+
+
+
+/* =====================================================
+   DIBUJAR HOJA
+===================================================== */
+
+function drawLeaf(
+    x,
+    y,
+    direction,
+    size
+){
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+        x,
+        y
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        x+direction*size*.6,
+
+        y-size*.45,
+
+        x+direction*size,
+
+        y-size*.08
+
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        x+direction*size*.5,
+
+        y+size*.18,
+
+        x,
+
+        y
+
+    );
+
+
+    ctx.fill();
+
+
+}
+
+
+
+/* =====================================================
+   ELEGIR FLOR PARA DIBUJAR
+===================================================== */
+
+function drawFlower(flower){
+
+
+    switch(flower.type){
+
+
+        case "lily":
+
+            drawLily(flower);
+
+        break;
+
+
+
+        case "tulip":
+
+            drawTulip(flower);
+
+        break;
+
+
+
+        case "daisy":
+
+            drawDaisy(flower);
+
+        break;
+
+
+
+        case "wild":
+
+            drawWildFlower(flower);
+
+        break;
+
+
+    }
+
+
+}
+
+
+
+/* =====================================================
+   🌸 LIRIO
+===================================================== */
+
+function drawLily(flower){
+
+
+    if(flower.progress<.4)
+        return;
+
+
+
+    const bloom=
+
+        Math.min(
+
+            (flower.progress-.4)*2.2,
+
+            1
+
+        );
+
+
+
+    const topY=
+
+        flower.y-
+
+        flower.height;
+
+
+
+    /*
+       TAMAÑO CONTROLADO
+    */
+
+    const size=
+
+        flower.size*
+
+        (.45+bloom*.65);
+
+
+
+    ctx.save();
+
+
+    ctx.translate(
+
+        flower.x,
+
+        topY
+
+    );
+
+
+    ctx.globalAlpha=
+        bloom;
+
+
+
+    /*
+       SEIS PÉTALOS
+    */
+
+    for(let i=0;i<6;i++){
+
+
+        ctx.save();
+
+
+        ctx.rotate(
+
+            i*Math.PI/3
+
+        );
+
+
+
+        const gradient=
+
+            ctx.createLinearGradient(
+
+                0,
+
+                0,
+
+                0,
+
+                -size*1.7
+
+            );
+
+
+
+        gradient.addColorStop(
+
+            0,
+
+            flower.accent
+
+        );
+
+
+        gradient.addColorStop(
+
+            .55,
+
+            flower.color
+
+        );
+
+
+        gradient.addColorStop(
+
+            1,
+
+            "#fffaff"
+
+        );
+
+
+
+        ctx.fillStyle=
+            gradient;
+
+
+
+        ctx.beginPath();
+
+
+        ctx.moveTo(0,0);
+
+
+
+        ctx.bezierCurveTo(
+
+            size*.65,
+
+            -size*.25,
+
+            size*.58,
+
+            -size*1.25,
+
+            0,
+
+            -size*1.7
+
+        );
+
+
+
+        ctx.bezierCurveTo(
+
+            -size*.58,
+
+            -size*1.25,
+
+            -size*.65,
+
+            -size*.25,
+
+            0,
+
+            0
+
+        );
+
+
+
+        ctx.fill();
+
+
+        ctx.restore();
+
+    }
+
+
+
+    /*
+       CENTRO
+    */
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+
+        0,
+
+        0,
+
+        size*.16,
+
+        0,
+
+        Math.PI*2
+
+    );
+
+
+    ctx.fillStyle=
+        "#ffd166";
+
+
+    ctx.fill();
+
+
+
+    /*
+       ESTAMBRES
+    */
+
+    for(let i=0;i<6;i++){
+
+
+        const angle=
+
+            i*Math.PI/3;
+
+
+
+        const length=
+
+            size*.72;
+
+
+
+        ctx.beginPath();
+
+
+        ctx.moveTo(0,0);
+
+
+        ctx.lineTo(
+
+            Math.cos(angle)*length,
+
+            Math.sin(angle)*length
+
+        );
+
+
+        ctx.strokeStyle=
+            "#9b6429";
+
+
+        ctx.lineWidth=1.2;
+
+
+        ctx.stroke();
+
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+
+            Math.cos(angle)*length,
+
+            Math.sin(angle)*length,
+
+            1.8,
+
+            0,
+
+            Math.PI*2
+
+        );
+
+
+        ctx.fillStyle=
+            "#d99a35";
+
+
+        ctx.fill();
+
+    }
+
+
+    ctx.restore();
+
+}
+
+
+
+/* =====================================================
+   🌷 TULIPÁN
+===================================================== */
+
+function drawTulip(flower){
+
+
+    if(flower.progress<.42)
+        return;
+
+
+    const bloom=
+
+        Math.min(
+
+            (flower.progress-.42)*2,
+
+            1
+
+        );
+
+
+    const topY=
+
+        flower.y-
+
+        flower.height;
+
+
+    const size=
+
+        flower.size*bloom;
+
+
+
+    ctx.save();
+
+
+    ctx.translate(
+
+        flower.x,
+
+        topY
+
+    );
+
+
+    ctx.globalAlpha=
+        bloom;
+
+
+    ctx.fillStyle=
+        flower.color;
+
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+        -size*.8,
+        0
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        -size,
+        -size*1.1,
+
+        -size*.4,
+        -size*1.5
+
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        0,
+        -size*1.1,
+
+        size*.4,
+        -size*1.5
+
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        size,
+        -size*1.1,
+
+        size*.8,
+        0
+
+    );
+
+
+    ctx.closePath();
+
+
+    ctx.fill();
+
+
+    ctx.restore();
+
+}
+
+
+
+/* =====================================================
+   🌼 MARGARITA
+===================================================== */
+
+function drawDaisy(flower){
+
+
+    if(flower.progress<.42)
+        return;
+
+
+    const bloom=
+
+        Math.min(
+
+            (flower.progress-.42)*2,
+
+            1
+
+        );
+
+
+    const topY=
+
+        flower.y-
+
+        flower.height;
+
+
+    const size=
+
+        flower.size*.9*bloom;
+
+
+
+    ctx.save();
+
+
+    ctx.translate(
+
+        flower.x,
+
+        topY
+
+    );
+
+
+    ctx.globalAlpha=
+        bloom;
+
+
+
+    for(let i=0;i<10;i++){
+
+
+        ctx.save();
+
+
+        ctx.rotate(
+
+            i*Math.PI/5
+
+        );
+
+
+        ctx.fillStyle=
+            flower.color;
+
+
+
+        ctx.beginPath();
+
+
+        ctx.ellipse(
+
+            0,
+
+            -size*.65,
+
+            size*.26,
+
+            size*.65,
+
+            0,
+
+            0,
+
+            Math.PI*2
+
+        );
+
+
+        ctx.fill();
+
+
+        ctx.restore();
+
+    }
+
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+
+        0,
+
+        0,
+
+        size*.3,
+
+        0,
+
+        Math.PI*2
+
+    );
+
+
+    ctx.fillStyle=
+        "#ffd166";
+
+
+    ctx.fill();
+
+
+    ctx.restore();
+
+}
+
+
+
+/* =====================================================
+   🌺 FLOR SILVESTRE
+===================================================== */
+
+function drawWildFlower(flower){
+
+
+    if(flower.progress<.42)
+        return;
+
+
+    const bloom=
+
+        Math.min(
+
+            (flower.progress-.42)*2,
+
+            1
+
+        );
+
+
+    const topY=
+
+        flower.y-
+
+        flower.height;
+
+
+    const size=
+
+        flower.size*.85*bloom;
+
+
+
+    ctx.save();
+
+
+    ctx.translate(
+
+        flower.x,
+
+        topY
+
+    );
+
+
+    ctx.globalAlpha=
+        bloom;
+
+
+
+    for(let i=0;i<5;i++){
+
+
+        ctx.save();
+
+
+        ctx.rotate(
+
+            i*(Math.PI*2/5)
+
+        );
+
+
+        ctx.fillStyle=
+            flower.color;
+
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+
+            0,
+
+            -size*.55,
+
+            size*.48,
+
+            0,
+
+            Math.PI*2
+
+        );
+
+
+        ctx.fill();
+
+
+        ctx.restore();
+
+    }
+
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+
+        0,
+
+        0,
+
+        size*.25,
+
+        0,
+
+        Math.PI*2
+
+    );
+
+
+    ctx.fillStyle=
+        "#ffe066";
+
+
+    ctx.fill();
+
+
+    ctx.restore();
+
+}
+
+
+
+/* =====================================================
+   FONDO DEL JARDÍN
+===================================================== */
 
 function drawBackground(){
 
-    const gradient =
+
+    const gradient=
+
         ctx.createLinearGradient(
 
             0,
+
             0,
+
             0,
+
             canvas.height
 
         );
 
 
+
     gradient.addColorStop(
+
         0,
-        "#07131f"
+
+        "#07111d"
+
     );
 
-    gradient.addColorStop(
-        .6,
-        "#172b32"
-    );
 
     gradient.addColorStop(
+
+        .55,
+
+        "#142933"
+
+    );
+
+
+    gradient.addColorStop(
+
         1,
-        "#102416"
+
+        "#16351d"
+
     );
 
 
@@ -1226,25 +2176,50 @@ function drawBackground(){
     ctx.fillRect(
 
         0,
+
         0,
+
         canvas.width,
+
         canvas.height
 
     );
 
 
 
-    /* ESTRELLAS */
+    /*
+       ESTRELLAS
+    */
 
+    for(let i=0;i<45;i++){
 
-    for(let i=0;i<50;i++){
 
         const x=
-            (i*137)%canvas.width;
+
+            (i*137)%
+
+            canvas.width;
+
+
 
         const y=
+
             (i*73)%
-            (canvas.height*.6);
+
+            (canvas.height*.55);
+
+
+
+        const pulse=
+
+            .3+
+
+            Math.sin(
+
+                Date.now()/1000+i
+
+            )*.15;
+
 
 
         ctx.beginPath();
@@ -1253,40 +2228,51 @@ function drawBackground(){
         ctx.arc(
 
             x,
+
             y,
+
             1,
+
             0,
+
             Math.PI*2
 
         );
 
 
         ctx.fillStyle=
-            "rgba(255,255,255,.35)";
+
+            `rgba(255,255,255,${pulse})`;
 
 
         ctx.fill();
 
     }
 
+
 }
 
 
 
-/* =========================================
-   PROGRESO Y TIEMPO
-========================================= */
+/* =====================================================
+   ACTUALIZAR EXPERIENCIA
+===================================================== */
 
 function updateExperience(){
 
-    const elapsed =
+
+    const elapsed=
+
         Date.now()-startTime;
 
 
-    const percentage =
+
+    const percentage=
+
         Math.min(
 
             elapsed/
+
             EXPERIENCE_TIME,
 
             1
@@ -1294,18 +2280,24 @@ function updateExperience(){
         );
 
 
+
     document
         .getElementById("progress")
         .style.width=
-            percentage*100+"%";
+
+            (percentage*100)+"%";
+
 
 
     const poemIndex=
+
         Math.min(
 
             Math.floor(
+
                 percentage*
                 poems.length
+
             ),
 
             poems.length-1
@@ -1313,16 +2305,20 @@ function updateExperience(){
         );
 
 
+
     if(poemIndex!==currentPoem){
+
 
         currentPoem=
             poemIndex;
+
 
         showPoem(
             currentPoem
         );
 
     }
+
 
 
     if(
@@ -1333,30 +2329,39 @@ function updateExperience(){
 
     ){
 
+
         experienceFinished=true;
 
 
+
         setTimeout(
+
             showFinalScreen,
-            1500
+
+            1200
+
         );
 
     }
+
 
 }
 
 
 
-/* =========================================
+/* =====================================================
    ANIMACIÓN
-========================================= */
+===================================================== */
 
 function animate(){
+
 
     drawBackground();
 
 
+
     flowers.forEach(flower=>{
+
 
         flower.progress+=
             flower.speed;
@@ -1364,16 +2369,23 @@ function animate(){
 
         flower.progress=
             Math.min(
+
                 flower.progress,
+
                 1
+
             );
+
 
 
         drawStem(flower);
 
-        drawLily(flower);
+
+        drawFlower(flower);
+
 
     });
+
 
 
     updateParticles();
@@ -1384,6 +2396,7 @@ function animate(){
         updateExperience();
 
     }
+
 
 
     requestAnimationFrame(
@@ -1397,13 +2410,18 @@ animate();
 
 
 
-/* =========================================
-   EVENTOS MOUSE
-========================================= */
+/* =====================================================
+   EVENTOS
+
+   COMPUTADORA
+===================================================== */
 
 canvas.addEventListener(
+
     "click",
+
     e=>{
+
 
         createFlower(
 
@@ -1413,25 +2431,31 @@ canvas.addEventListener(
 
         );
 
+
     }
 
 );
 
 
 
-/* =========================================
-   EVENTOS TOUCH
-========================================= */
+/* =====================================================
+   CELULAR
+===================================================== */
 
 canvas.addEventListener(
+
     "touchstart",
+
     e=>{
+
 
         e.preventDefault();
 
 
         const touch=
+
             e.touches[0];
+
 
 
         createFlower(
@@ -1442,86 +2466,120 @@ canvas.addEventListener(
 
         );
 
+
     },
 
-    {passive:false}
+    {
+        passive:false
+    }
 
 );
 
 
 
-/* =========================================
-   INICIAR POEMAS
-========================================= */
-
-showPoem(0);
-
-
-
-/* =========================================
-   LIMPIAR / REINICIAR
-========================================= */
+/* =====================================================
+   REINICIAR
+===================================================== */
 
 document
-.getElementById("cleanBtn")
-.addEventListener(
-    "click",
-    ()=>{
+    .getElementById("cleanBtn")
+    .addEventListener(
+
+        "click",
+
+        ()=>{
 
 
-        flowers=[];
+            flowers=[];
 
-        particles=[];
-
-        startTime=
-            Date.now();
-
-        currentPoem=0;
-
-        experienceFinished=false;
-
-        experienceStarted=false;
+            particles=[];
 
 
-        document
-        .getElementById("finalScreen")
-        .classList.remove("show");
+            startTime=
+                Date.now();
 
 
-        showPoem(0);
+            experienceFinished=
+                false;
 
 
-    }
-);
+            currentPoem=
+                -1;
 
 
 
-/* =========================================
-   CARRUSEL
-========================================= */
+            poemEl.classList.add(
+                "show"
+            );
 
+
+            document
+                .getElementById("instruction")
+                .style.display=
+                    "block";
+
+
+            document
+                .getElementById("finalScreen")
+                .classList.remove(
+                    "show"
+                );
+
+
+        }
+
+    );
+
+
+
+/* =====================================================
+   CARRUSEL DE FOTOS
+===================================================== */
+
+
+/*
+    CAMBIA ESTAS RUTAS
+    POR TUS PROPIAS FOTOS
+*/
 
 const images=[
 
+
     {
-        src:"images/foto1.jpg",
+
+        src:"images/972a18d4-5852-41a3-a29f-b39289947f4b.jpeg",
+
         text:"❤️ Nuestro primer recuerdo"
+
     },
 
-    {
-        src:"images/foto2.jpg",
-        text:"🌸 Momentos que nunca olvidaré"
-    },
 
     {
-        src:"images/foto3.jpg",
+
+        src:"images/b01c638a-a57c-475d-a456-5690d9ca3d2a.jpeg",
+
+        text:"🌸 Momentos que siempre recordaré"
+
+    },
+
+
+    {
+
+        src:"images/fe9422b3-16bf-4309-a664-3f5a6a4a280d.jpeg",
+
         text:"💖 Tú haces mi vida más bonita"
+
     },
 
+
     {
-        src:"images/foto4.jpg",
-        text:"✨ Por muchos recuerdos más"
+
+        src:"images/262e46c9-8d04-472c-96be-9b967b57a7f2.jpeg",
+
+        text:"✨ Por muchos momentos más juntos"
+
     }
+
 
 ];
 
@@ -1530,152 +2588,229 @@ let slideIndex=0;
 
 
 const track=
+
     document.getElementById("track");
 
 
 const dots=
+
     document.getElementById("dots");
 
 
-images.forEach((image,index)=>{
+
+images.forEach(
+
+    (image,index)=>{
 
 
-    const slide=
-        document.createElement("div");
+        const slide=
+
+            document.createElement("div");
 
 
-    slide.className="slide";
-
-
-    slide.innerHTML=`
-
-        <img src="${image.src}">
-
-        <div class="caption">
-
-            ${image.text}
-
-        </div>
-
-    `;
-
-
-    track.appendChild(slide);
+        slide.className=
+            "slide";
 
 
 
-    const dot=
-        document.createElement("div");
+        slide.innerHTML=`
+
+            <img
+                src="${image.src}"
+                alt="Nuestro recuerdo"
+            >
+
+            <div class="caption">
+
+                ${image.text}
+
+            </div>
+
+        `;
 
 
-    dot.className=
-        index===0
-        ? "dot active"
-        : "dot";
+
+        track.appendChild(
+            slide
+        );
 
 
-    dot.onclick=()=>{
 
-        goToSlide(index);
+        const dot=
 
-    };
+            document.createElement(
+                "div"
+            );
 
 
-    dots.appendChild(dot);
+        dot.className=
 
-});
+            index===0
+
+                ? "dot active"
+
+                : "dot";
+
+
+
+        dot.addEventListener(
+
+            "click",
+
+            ()=>{
+
+                goToSlide(
+                    index
+                );
+
+            }
+
+        );
+
+
+
+        dots.appendChild(
+            dot
+        );
+
+
+    }
+
+);
+
 
 
 function goToSlide(index){
 
 
-    if(index<0)
-        index=images.length-1;
+    if(index<0){
+
+        index=
+            images.length-1;
+
+    }
 
 
-    if(index>=images.length)
+    if(index>=images.length){
+
         index=0;
+
+    }
 
 
     slideIndex=index;
 
 
+
     track.style.transform=
+
         `translateX(-${index*100}%)`;
 
 
+
     document
-    .querySelectorAll(".dot")
-    .forEach((dot,i)=>{
+        .querySelectorAll(".dot")
+        .forEach(
+
+            (dot,i)=>{
 
 
-        dot.classList.toggle(
+                dot.classList.toggle(
 
-            "active",
+                    "active",
 
-            i===index
+                    i===index
+
+                );
+
+
+            }
 
         );
 
-    });
 
 }
 
 
 
-document
-.getElementById("prevBtn")
-.addEventListener(
-    "click",
-    ()=>{
-
-        goToSlide(
-            slideIndex-1
-        );
-
-    }
-);
-
-
+/* =====================================================
+   BOTONES DEL CARRUSEL
+===================================================== */
 
 document
-.getElementById("nextBtn")
-.addEventListener(
-    "click",
-    ()=>{
+    .getElementById("prevBtn")
+    .addEventListener(
 
-        goToSlide(
-            slideIndex+1
-        );
+        "click",
 
-    }
-);
+        ()=>{
+
+            goToSlide(
+
+                slideIndex-1
+
+            );
+
+        }
+
+    );
 
 
 
-/* =========================================
-   PANTALLA FINAL
-========================================= */
+document
+    .getElementById("nextBtn")
+    .addEventListener(
+
+        "click",
+
+        ()=>{
+
+            goToSlide(
+
+                slideIndex+1
+
+            );
+
+        }
+
+    );
+
+
+
+/* =====================================================
+   MOSTRAR CARRUSEL
+===================================================== */
 
 function showFinalScreen(){
 
 
     document
-    .getElementById("instruction")
-    .style.display=
-        "none";
+        .getElementById("instruction")
+        .style.display=
+            "none";
 
 
     document
-    .getElementById("finalScreen")
-    .classList.add(
-        "show"
-    );
+        .getElementById("finalScreen")
+        .classList.add(
+            "show"
+        );
+
 
 }
+
+
+/* =====================================================
+   INICIAR PRIMER POEMA
+===================================================== */
+
+showPoem(0);
+
+currentPoem=0;
 
 
 </script>
 
 </body>
+
 </html>
