@@ -3,58 +3,346 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🌸 Para Ale</title>
+    <title>🌸 Para Ale - Nuestro Jardín de Amor</title>
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <!-- Fondo de pétalos flotantes -->
-    <div id="petals-container"></div>
-
-    <!-- Sección 1: Dibujo de lirios -->
-    <section id="lilies-section" class="section">
-        <div class="content">
-            <h1 class="title">🌸</h1>
-            <canvas id="lilyCanvas" width="600" height="500"></canvas>
+    <!-- Contenedor del canvas -->
+    <div class="container">
+        <canvas id="canvas"></canvas>
+        
+        <!-- Textos que aparecen durante el dibujo -->
+        <div id="poemContainer" class="poem-container">
+            <p id="poemText" class="poem-text"></p>
             <div class="progress-bar">
                 <div id="progressFill" class="progress-fill"></div>
             </div>
-            <p class="hint">Observa cómo florecen los lirios...</p>
+            <div class="progress-percent" id="progressPercent">0%</div>
         </div>
-    </section>
 
-    <!-- Sección 2: Mensaje y carrusel -->
-    <section id="message-section" class="section hidden">
-        <div class="content">
-            <h1 class="love-message">Te amo Ale ❤️</h1>
+        <!-- Botón de limpiar (solo para interacción) -->
+        <div class="clean-btn" id="cleanBtn">✨ Volver a empezar</div>
+    </div>
+
+    <!-- Sección del mensaje final y carrusel -->
+    <div id="messageSection" class="message-section hidden">
+        <div class="message-content">
+            <h1 class="love-message">🌹 Te amo Ale 🌹</h1>
             <h2 class="sub-message">Gracias por estos 6 Meses a tu lado</h2>
-            <p class="extra-message">Cada día a tu lado es un nuevo amanecer lleno de colores ✨</p>
-
+            <p class="extra-message">"Cada día contigo es un poema que el corazón escribe"</p>
+            <p class="extra-message" style="font-size: 0.9rem; opacity: 0.6; margin-top: -0.5rem;">
+                ❤️ 6 meses de amor, 6 meses de magia ❤️
+            </p>
+            
             <div class="carousel-container">
                 <button class="carousel-btn prev" id="prevBtn">‹</button>
                 <div class="carousel-track" id="carouselTrack">
                     <div class="carousel-slide">
-                        <img src="images/262e46c9-8d04-472c-96be-9b967b57a7f2.jpeg" alt="Foto 1" />
+                        <img src="images/foto1.jpg" alt="Foto 1" />
+                        <div class="image-caption">✨ Nuestro primer atardecer</div>
                     </div>
                     <div class="carousel-slide">
-                        <img src="images/972a18d4-5852-41a3-a29f-b39289947f4b.jpeg" alt="Foto 2" />
+                        <img src="images/foto2.jpg" alt="Foto 2" />
+                        <div class="image-caption">💖 Tu sonrisa ilumina mis días</div>
                     </div>
                     <div class="carousel-slide">
-                        <img src="images/b01c638a-a57c-475d-a456-5690d9ca3d2a.jpeg" alt="Foto 3" />
+                        <img src="images/foto3.jpg" alt="Foto 3" />
+                        <div class="image-caption">🌸 Momentos que atesoro</div>
                     </div>
                     <div class="carousel-slide">
-                        <img src="images/fe9422b3-16bf-4309-a664-3f5a6a4a280d.jpeg" alt="Foto 4" />
+                        <img src="images/foto4.jpg" alt="Foto 4" />
+                        <div class="image-caption">🌺 Eres mi razón para sonreír</div>
                     </div>
                     <div class="carousel-slide">
                         <img src="images/foto5.jpg" alt="Foto 5" />
+                        <div class="image-caption">💝 Por siempre tú y yo</div>
                     </div>
                 </div>
                 <button class="carousel-btn next" id="nextBtn">›</button>
             </div>
             <div class="dots" id="dotsContainer"></div>
-            <p class="carousel-hint">🖱️ Desliza o usa los botones</p>
+            
+            <div class="carousel-hint">🖱️ Desliza o usa los botones para ver más recuerdos</div>
+            
+            <div class="floating-hearts" id="floatingHearts"></div>
         </div>
-    </section>
+    </div>
 
+    <!-- Fragment Shader - Versión mejorada con lirios más detallados -->
+    <script type="x-shader/x-fragment" id="fragmentShader">
+        #define PI 3.14159265359
+
+        uniform float u_ratio;
+        uniform vec2 u_cursor;
+        uniform float u_stop_time;
+        uniform float u_clean;
+        uniform vec2 u_stop_randomizer;
+        uniform float u_progress;
+
+        varying vec2 vUv;
+
+        // --------------------------------
+        // 2D noise
+        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+        vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+        vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+        
+        float snoise(vec2 v) {
+            const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+            vec2 i = floor(v + dot(v, C.yy));
+            vec2 x0 = v - i + dot(i, C.xx);
+            vec2 i1;
+            i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+            vec4 x12 = x0.xyxy + C.xxzz;
+            x12.xy -= i1;
+            i = mod289(i);
+            vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+            vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.0);
+            m = m*m;
+            m = m*m;
+            vec3 x = 2.0 * fract(p * C.www) - 1.0;
+            vec3 h = abs(x) - 0.5;
+            vec3 ox = floor(x + 0.5);
+            vec3 a0 = x - ox;
+            m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
+            vec3 g;
+            g.x = a0.x * x0.x + h.x * x0.y;
+            g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+            return 130.0 * dot(m, g);
+        }
+
+        // Función mejorada para crear un lirio
+        float get_lily_shape(vec2 p, float petal_count, float angle, float outline) {
+            float petal_angle = 3.14159 / petal_count;
+            float a = atan(p.y, p.x);
+            float r = length(p);
+            
+            // Rotación
+            float ca = cos(angle);
+            float sa = sin(angle);
+            vec2 rotated_p = vec2(p.x * ca - p.y * sa, p.x * sa + p.y * ca);
+            a = atan(rotated_p.y, rotated_p.x);
+            
+            // Distorsión para forma de pétalo con más detalle
+            float petal_shape = abs(cos(a * petal_count * 0.5));
+            float petal_radius = 0.5 + 0.5 * petal_shape;
+            
+            // Curvatura del pétalo con efecto de onda
+            float curve = 0.3 * sin(a * 3.0 + 1.2) + 0.1 * sin(a * 5.0 + 2.0);
+            float r_petal = r / (petal_radius + curve * 0.2);
+            
+            // Borde suave con degradado
+            float edge = 1.0 - smoothstep(0.7, 1.3, r_petal);
+            
+            // Detalle de la nervadura más realista
+            float vein = 0.0;
+            if (r_petal < 1.0 && r_petal > 0.1) {
+                float vein_pattern = sin(a * petal_count * 2.0 + r * 12.0) * 0.5 + 0.5;
+                vein = vein_pattern * (1.0 - r_petal) * 0.4;
+                // Nervadura principal
+                float main_vein = 1.0 - smoothstep(0.0, 0.3, abs(sin(a * petal_count * 0.5) * r * 2.0));
+                vein += main_vein * 0.2 * (1.0 - r_petal);
+            }
+            
+            // Brillo en el centro
+            float center_glow = exp(-r * 12.0) * 0.3;
+            
+            return max(0.0, edge + vein + center_glow);
+        }
+
+        // Función para hojas
+        float get_leaf(vec2 p, float angle, float size) {
+            float ca = cos(angle);
+            float sa = sin(angle);
+            vec2 rp = vec2(p.x * ca - p.y * sa, p.x * sa + p.y * ca);
+            
+            float leaf_shape = 1.0 - smoothstep(0.0, size, abs(rp.x));
+            leaf_shape *= 1.0 - smoothstep(0.0, size * 0.5, abs(rp.y));
+            leaf_shape *= 1.0 - smoothstep(0.0, size * 0.3, abs(rp.x * 0.5 + rp.y));
+            
+            return max(0.0, leaf_shape);
+        }
+
+        void main() {
+            vec2 uv = vUv;
+            float aspect = u_ratio;
+            vec2 center = vec2(0.5, 0.5);
+            
+            // Centrar y ajustar
+            vec2 p = uv - center;
+            p.x *= aspect;
+            
+            // Progreso global
+            float progress = u_progress;
+            float time = u_stop_time;
+            
+            // Variables para el dibujo
+            vec3 color = vec3(0.0);
+            vec3 bg_color = vec3(0.98, 0.92, 0.94); // Fondo rosa suave
+            
+            // Fondo con gradiente
+            vec2 bg_p = uv;
+            vec3 bg_grad = mix(
+                vec3(0.98, 0.93, 0.95),
+                vec3(0.95, 0.88, 0.92),
+                length(uv - 0.5) * 0.8
+            );
+            color = bg_grad;
+            
+            // Número de lirios basado en el progreso
+            float num_lilies = floor(progress * 8.0) + 1.0;
+            
+            // Dibujar lirios
+            for (float i = 0.0; i < 9.0; i += 1.0) {
+                if (i >= num_lilies) break;
+                
+                // Posiciones predefinidas para un arreglo armonioso
+                vec2 pos;
+                float size_offset = 0.0;
+                
+                if (i == 0.0) { pos = vec2(0.0, 0.0); size_offset = 0.0; }
+                else if (i == 1.0) { pos = vec2(-0.25, 0.2); size_offset = 0.02; }
+                else if (i == 2.0) { pos = vec2(0.25, -0.15); size_offset = -0.02; }
+                else if (i == 3.0) { pos = vec2(-0.35, -0.2); size_offset = 0.04; }
+                else if (i == 4.0) { pos = vec2(0.35, 0.25); size_offset = -0.01; }
+                else if (i == 5.0) { pos = vec2(-0.15, -0.35); size_offset = 0.03; }
+                else if (i == 6.0) { pos = vec2(0.15, 0.35); size_offset = 0.0; }
+                else if (i == 7.0) { pos = vec2(-0.45, 0.1); size_offset = 0.05; }
+                else if (i == 8.0) { pos = vec2(0.45, -0.1); size_offset = -0.03; }
+                
+                vec2 delta = p - pos;
+                
+                // Tamaño del lirio
+                float size = 0.09 + 0.03 * sin(i * 1.3 + 2.0) + size_offset;
+                
+                // Color del lirio (variaciones de rosa con más detalle)
+                vec3 color1, color2, color3;
+                float petal_count = 6.0 + sin(i * 2.0 + 1.0) * 1.0;
+                
+                if (mod(i, 3.0) < 1.0) {
+                    color1 = vec3(0.99, 0.75, 0.85);
+                    color2 = vec3(0.95, 0.55, 0.70);
+                    color3 = vec3(1.0, 0.88, 0.92);
+                } else if (mod(i, 3.0) < 2.0) {
+                    color1 = vec3(0.98, 0.80, 0.88);
+                    color2 = vec3(0.92, 0.60, 0.75);
+                    color3 = vec3(1.0, 0.90, 0.94);
+                } else {
+                    color1 = vec3(0.96, 0.70, 0.80);
+                    color2 = vec3(0.90, 0.45, 0.60);
+                    color3 = vec3(0.98, 0.85, 0.90);
+                }
+                
+                // Obtener forma del lirio
+                float lily_shape = get_lily_shape(
+                    delta / size,
+                    petal_count,
+                    i * 0.8 + time * 0.05,
+                    0.3
+                );
+                
+                // Brillo del lirio según progreso (aparición gradual)
+                float bloom = 1.0 - smoothstep(0.0, 0.4, i / num_lilies);
+                float lily_intensity = lily_shape * bloom * 0.9;
+                
+                // Mezclar colores
+                vec3 lily_color = mix(color1, color2, lily_shape);
+                lily_color = mix(lily_color, color3, 0.3 * (1.0 - lily_shape));
+                
+                // Agregar al color final
+                color = mix(color, lily_color, lily_intensity);
+                
+                // Sombra suave para profundidad
+                if (lily_shape > 0.05) {
+                    float shadow = 0.08 * (1.0 - lily_shape) * bloom;
+                    color -= shadow * 0.3;
+                }
+                
+                // Centro del lirio (estambre)
+                if (length(delta / size) < 0.12 && lily_shape > 0.3) {
+                    vec3 center_color = vec3(1.0, 0.85, 0.2);
+                    float center_intensity = 1.0 - smoothstep(0.0, 0.12, length(delta / size));
+                    center_intensity *= 0.6 * bloom;
+                    color = mix(color, center_color, center_intensity);
+                    
+                    // Puntos de polen en el centro
+                    float pollen = sin(length(delta / size) * 50.0 + time) * 0.5 + 0.5;
+                    pollen *= (1.0 - length(delta / size) * 8.0);
+                    pollen = max(0.0, pollen) * 0.3 * bloom;
+                    color += vec3(1.0, 0.9, 0.4) * pollen;
+                }
+            }
+            
+            // Añadir hojas verdes en la base de los lirios (cuando hay progreso)
+            if (progress > 0.15) {
+                float leaf_progress = (progress - 0.15) / 0.3;
+                for (float i = 0.0; i < 6.0; i += 1.0) {
+                    float leaf_pos = i / 6.0;
+                    float leaf_angle = leaf_pos * 6.28 + 0.5;
+                    float leaf_radius = 0.35 + 0.1 * sin(i * 2.0);
+                    vec2 leaf_pos = vec2(
+                        0.08 * cos(leaf_angle + 0.3),
+                        0.08 * sin(leaf_angle * 1.2 + 0.5)
+                    );
+                    
+                    vec2 delta_leaf = p - leaf_pos;
+                    float leaf_size = 0.03 + 0.02 * sin(i * 1.7);
+                    
+                    float leaf = get_leaf(delta_leaf, leaf_angle + 0.5, leaf_size);
+                    leaf *= leaf_progress;
+                    
+                    vec3 leaf_color = mix(
+                        vec3(0.2, 0.6, 0.2),
+                        vec3(0.3, 0.7, 0.3),
+                        sin(i * 1.3) * 0.5 + 0.5
+                    );
+                    
+                    color = mix(color, leaf_color, leaf * 0.4);
+                }
+            }
+            
+            // Partículas brillantes (polen y destellos)
+            if (progress > 0.2) {
+                float particle_intensity = min(1.0, (progress - 0.2) * 2.0);
+                for (float i = 0.0; i < 40.0; i += 1.0) {
+                    float px = fract(sin(i * 127.1 + 311.7 + time * 0.1) * 43758.5453);
+                    float py = fract(sin(i * 269.5 + 183.3 + time * 0.07) * 43758.5453);
+                    float ps = 0.0015 + 0.003 * sin(i * 3.7 + time * 0.5);
+                    float float_offset = sin(i * 2.3 + time * 0.3) * 0.03;
+                    
+                    vec2 pp = vec2(px + float_offset * 0.5, py + float_offset * 0.3);
+                    float dist = length(uv - pp);
+                    
+                    if (dist < ps && progress > 0.2 + i * 0.015) {
+                        float brightness = 0.4 * (1.0 - dist / ps) * particle_intensity;
+                        float twinkle = sin(time * 2.0 + i * 5.0) * 0.5 + 0.5;
+                        brightness *= (0.5 + 0.5 * twinkle);
+                        color += vec3(1.0, 0.92, 0.85) * brightness * 0.6;
+                    }
+                }
+            }
+            
+            // Brillo general y calidez
+            float warm_glow = 0.05 * sin(time * 0.3 + 1.0) + 0.05;
+            color += vec3(warm_glow * 0.3, warm_glow * 0.2, warm_glow * 0.1);
+            
+            // Vignette suave
+            float vignette = 1.0 - length((uv - 0.5) * 1.3);
+            vignette = smoothstep(0.0, 0.7, vignette);
+            color *= (0.75 + 0.25 * vignette);
+            
+            // Efecto de luz desde el cursor
+            vec2 cursor_pos = u_cursor;
+            float cursor_dist = length(uv - cursor_pos);
+            float cursor_light = exp(-cursor_dist * 6.0) * 0.15;
+            color += vec3(1.0, 0.9, 0.85) * cursor_light;
+            
+            gl_FragColor = vec4(color, 1.0);
+        }
+    </script>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
