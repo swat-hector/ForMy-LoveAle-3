@@ -1,348 +1,339 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🌸 Para Ale - Nuestro Jardín de Amor</title>
-    <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-    <!-- Contenedor del canvas -->
-    <div class="container">
-        <canvas id="canvas"></canvas>
+// ============================
+// 1. CONFIGURACIÓN DE THREE.JS
+// ============================
+let scene, camera, renderer, material, mesh;
+let progress = 0;
+let isComplete = false;
+let poemIndex = 0;
+let startTime = Date.now();
+
+// Poemas y textos románticos
+const poems = [
+    { text: '🌷 "En el jardín de mi corazón, tú eres la flor más hermosa"', delay: 1 },
+    { text: '🌸 "Cada latido es un poema que escribo pensando en ti"', delay: 3 },
+    { text: '🌺 "Tu amor es la luz que ilumina mis días más oscuros"', delay: 5 },
+    { text: '🌹 "Eres el sueño del que nunca quiero despertar"', delay: 7 },
+    { text: '💖 "Contigo, cada momento es una obra de arte"', delay: 9 },
+    { text: '✨ "Tu sonrisa es el sol que hace florecer mi alma"', delay: 11 },
+    { text: '💝 "6 meses de magia, infinitos más por descubrir"', delay: 13 }
+];
+
+// ============================
+// 2. INICIALIZAR THREE.JS
+// ============================
+function init() {
+    const container = document.querySelector('.container');
+    const canvas = document.getElementById('canvas');
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a0a12);
+
+    camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+    camera.position.z = 1;
+
+    renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        antialias: true,
+        alpha: true
+    });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // Obtener el shader
+    const fragmentShader = document.getElementById('fragmentShader').textContent;
+
+    // Uniformes
+    const uniforms = {
+        u_ratio: { value: width / height },
+        u_cursor: { value: new THREE.Vector2(0.5, 0.5) },
+        u_stop_time: { value: 0.0 },
+        u_clean: { value: 0.0 },
+        u_stop_randomizer: { value: new THREE.Vector2(0.0, 0.0) },
+        u_progress: { value: 0.0 }
+    };
+
+    material = new THREE.ShaderMaterial({
+        uniforms: uniforms,
+        vertexShader: `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `,
+        fragmentShader: fragmentShader
+    });
+
+    const geometry = new THREE.PlaneGeometry(2, 2);
+    mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
+    // Event listeners
+    window.addEventListener('resize', onResize);
+    canvas.addEventListener('mousemove', onMouseMove);
+    canvas.addEventListener('click', onClick);
+    document.getElementById('cleanBtn').addEventListener('click', cleanScreen);
+
+    // Iniciar animación
+    animate();
+
+    // Iniciar textos
+    setTimeout(() => {
+        showNextPoem();
+    }, 1000);
+}
+
+// ============================
+// 3. ANIMACIÓN PRINCIPAL
+// ============================
+let lastTime = 0;
+
+function animate(time = 0) {
+    const delta = (time - lastTime) / 1000;
+    lastTime = time;
+
+    // Actualizar tiempo
+    const elapsed = (Date.now() - startTime) / 1000;
+    material.uniforms.u_stop_time.value = elapsed * 0.3;
+
+    // Actualizar progreso (solo si no está completo)
+    if (!isComplete && progress < 1) {
+        progress += delta * 0.045; // Velocidad de dibujo
+        if (progress > 1) {
+            progress = 1;
+            isComplete = true;
+            // Mostrar mensaje final después de un delay
+            setTimeout(showFinalMessage, 1500);
+        }
+        material.uniforms.u_progress.value = progress;
+        document.getElementById('progressFill').style.width = (progress * 100) + '%';
+        document.getElementById('progressPercent').textContent = Math.round(progress * 100) + '%';
+    }
+
+    // Actualizar randomizer para efecto de parpadeo
+    material.uniforms.u_stop_randomizer.value = new THREE.Vector2(
+        Math.sin(elapsed * 0.7) * 0.5 + 0.5,
+        Math.cos(elapsed * 0.5) * 0.5 + 0.5
+    );
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+}
+
+// ============================
+// 4. SISTEMA DE POEMAS
+// ============================
+let currentPoemTimeout = null;
+
+function showNextPoem() {
+    if (poemIndex >= poems.length || isComplete) return;
+
+    const poem = poems[poemIndex];
+    const poemText = document.getElementById('poemText');
+    
+    poemText.textContent = poem.text;
+    poemText.classList.add('show');
+    
+    // Programar siguiente poema
+    const nextDelay = poem.delay * 1000 + 2000;
+    currentPoemTimeout = setTimeout(() => {
+        poemText.classList.remove('show');
+        poemIndex++;
+        setTimeout(showNextPoem, 1000);
+    }, nextDelay);
+}
+
+// ============================
+// 5. MENSAJE FINAL Y CARRUSEL
+// ============================
+function showFinalMessage() {
+    const section = document.getElementById('messageSection');
+    section.classList.add('visible');
+    
+    // Iniciar carrusel
+    initCarousel();
+    
+    // Corazones flotantes
+    createFloatingHearts();
+}
+
+// ============================
+// 6. CARRUSEL
+// ============================
+let currentSlide = 0;
+let totalSlides = 0;
+let carouselInterval = null;
+let isDragging = false;
+let startX = 0;
+
+function initCarousel() {
+    const track = document.getElementById('carouselTrack');
+    const slides = track.querySelectorAll('.carousel-slide');
+    totalSlides = slides.length;
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    // Crear dots
+    dotsContainer.innerHTML = '';
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.dataset.index = i;
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
+    }
+
+    // Botones
+    document.getElementById('prevBtn').addEventListener('click', () => goToSlide(currentSlide - 1));
+    document.getElementById('nextBtn').addEventListener('click', () => goToSlide(currentSlide + 1));
+
+    // Touch / drag
+    track.addEventListener('mousedown', startDrag);
+    track.addEventListener('touchstart', startDragTouch);
+    track.addEventListener('mousemove', drag);
+    track.addEventListener('touchmove', dragTouch);
+    track.addEventListener('mouseup', endDrag);
+    track.addEventListener('touchend', endDrag);
+
+    // Auto-play
+    startAutoPlay();
+
+    // Pausar auto-play al interactuar
+    track.addEventListener('mouseenter', stopAutoPlay);
+    track.addEventListener('mouseleave', startAutoPlay);
+    track.addEventListener('touchstart', stopAutoPlay);
+    track.addEventListener('touchend', startAutoPlay);
+
+    updateCarousel();
+}
+
+function goToSlide(index) {
+    if (index < 0) index = totalSlides - 1;
+    if (index >= totalSlides) index = 0;
+    currentSlide = index;
+    updateCarousel();
+}
+
+function updateCarousel() {
+    const track = document.getElementById('carouselTrack');
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+    document.querySelectorAll('.dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+    });
+}
+
+function startAutoPlay() {
+    if (carouselInterval) clearInterval(carouselInterval);
+    carouselInterval = setInterval(() => {
+        goToSlide(currentSlide + 1);
+    }, 3500);
+}
+
+function stopAutoPlay() {
+    if (carouselInterval) {
+        clearInterval(carouselInterval);
+        carouselInterval = null;
+    }
+}
+
+// Drag con mouse
+function startDrag(e) { isDragging = true; startX = e.clientX; stopAutoPlay(); }
+function drag(e) {
+    if (!isDragging) return;
+    const diff = e.clientX - startX;
+    if (Math.abs(diff) > 30) {
+        goToSlide(diff > 0 ? currentSlide - 1 : currentSlide + 1);
+        isDragging = false;
+    }
+}
+function endDrag() { isDragging = false; startAutoPlay(); }
+
+function startDragTouch(e) { isDragging = true; startX = e.touches[0].clientX; stopAutoPlay(); }
+function dragTouch(e) {
+    if (!isDragging) return;
+    const diff = e.touches[0].clientX - startX;
+    if (Math.abs(diff) > 30) {
+        goToSlide(diff > 0 ? currentSlide - 1 : currentSlide + 1);
+        isDragging = false;
+    }
+}
+
+// ============================
+// 7. CORAZONES FLOTANTES
+// ============================
+function createFloatingHearts() {
+    const container = document.getElementById('floatingHearts');
+    const emojis = ['❤️', '💕', '💗', '💖', '💝', '💘'];
+    
+    setInterval(() => {
+        if (!document.getElementById('messageSection').classList.contains('visible')) return;
         
-        <!-- Textos que aparecen durante el dibujo -->
-        <div id="poemContainer" class="poem-container">
-            <p id="poemText" class="poem-text"></p>
-            <div class="progress-bar">
-                <div id="progressFill" class="progress-fill"></div>
-            </div>
-            <div class="progress-percent" id="progressPercent">0%</div>
-        </div>
-
-        <!-- Botón de limpiar (solo para interacción) -->
-        <div class="clean-btn" id="cleanBtn">✨ Volver a empezar</div>
-    </div>
-
-    <!-- Sección del mensaje final y carrusel -->
-    <div id="messageSection" class="message-section hidden">
-        <div class="message-content">
-            <h1 class="love-message">🌹 Te amo Ale 🌹</h1>
-            <h2 class="sub-message">Gracias por estos 6 Meses a tu lado</h2>
-            <p class="extra-message">"Cada día contigo es un poema que el corazón escribe"</p>
-            <p class="extra-message" style="font-size: 0.9rem; opacity: 0.6; margin-top: -0.5rem;">
-                ❤️ 6 meses de amor, 6 meses de magia ❤️
-            </p>
-            
-            <div class="carousel-container">
-                <button class="carousel-btn prev" id="prevBtn">‹</button>
-                <div class="carousel-track" id="carouselTrack">
-                    <div class="carousel-slide">
-                        <img src="images/foto1.jpg" alt="Foto 1" />
-                        <div class="image-caption">✨ Nuestro primer atardecer</div>
-                    </div>
-                    <div class="carousel-slide">
-                        <img src="images/foto2.jpg" alt="Foto 2" />
-                        <div class="image-caption">💖 Tu sonrisa ilumina mis días</div>
-                    </div>
-                    <div class="carousel-slide">
-                        <img src="images/foto3.jpg" alt="Foto 3" />
-                        <div class="image-caption">🌸 Momentos que atesoro</div>
-                    </div>
-                    <div class="carousel-slide">
-                        <img src="images/foto4.jpg" alt="Foto 4" />
-                        <div class="image-caption">🌺 Eres mi razón para sonreír</div>
-                    </div>
-                    <div class="carousel-slide">
-                        <img src="images/foto5.jpg" alt="Foto 5" />
-                        <div class="image-caption">💝 Por siempre tú y yo</div>
-                    </div>
-                </div>
-                <button class="carousel-btn next" id="nextBtn">›</button>
-            </div>
-            <div class="dots" id="dotsContainer"></div>
-            
-            <div class="carousel-hint">🖱️ Desliza o usa los botones para ver más recuerdos</div>
-            
-            <div class="floating-hearts" id="floatingHearts"></div>
-        </div>
-    </div>
-
-    <!-- Fragment Shader - Versión mejorada con lirios más detallados -->
-    <script type="x-shader/x-fragment" id="fragmentShader">
-        #define PI 3.14159265359
-
-        uniform float u_ratio;
-        uniform vec2 u_cursor;
-        uniform float u_stop_time;
-        uniform float u_clean;
-        uniform vec2 u_stop_randomizer;
-        uniform float u_progress;
-
-        varying vec2 vUv;
-
-        // --------------------------------
-        // 2D noise
-        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-        vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-        vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+        const heart = document.createElement('div');
+        heart.className = 'floating-heart';
+        heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+        heart.style.animationDuration = (8 + Math.random() * 12) + 's';
+        heart.style.animationDelay = (Math.random() * 3) + 's';
         
-        float snoise(vec2 v) {
-            const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
-            vec2 i = floor(v + dot(v, C.yy));
-            vec2 x0 = v - i + dot(i, C.xx);
-            vec2 i1;
-            i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-            vec4 x12 = x0.xyxy + C.xxzz;
-            x12.xy -= i1;
-            i = mod289(i);
-            vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
-            vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.0);
-            m = m*m;
-            m = m*m;
-            vec3 x = 2.0 * fract(p * C.www) - 1.0;
-            vec3 h = abs(x) - 0.5;
-            vec3 ox = floor(x + 0.5);
-            vec3 a0 = x - ox;
-            m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
-            vec3 g;
-            g.x = a0.x * x0.x + h.x * x0.y;
-            g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-            return 130.0 * dot(m, g);
-        }
+        container.appendChild(heart);
+        
+        setTimeout(() => heart.remove(), 15000);
+    }, 1000);
+}
 
-        // Función mejorada para crear un lirio
-        float get_lily_shape(vec2 p, float petal_count, float angle, float outline) {
-            float petal_angle = 3.14159 / petal_count;
-            float a = atan(p.y, p.x);
-            float r = length(p);
-            
-            // Rotación
-            float ca = cos(angle);
-            float sa = sin(angle);
-            vec2 rotated_p = vec2(p.x * ca - p.y * sa, p.x * sa + p.y * ca);
-            a = atan(rotated_p.y, rotated_p.x);
-            
-            // Distorsión para forma de pétalo con más detalle
-            float petal_shape = abs(cos(a * petal_count * 0.5));
-            float petal_radius = 0.5 + 0.5 * petal_shape;
-            
-            // Curvatura del pétalo con efecto de onda
-            float curve = 0.3 * sin(a * 3.0 + 1.2) + 0.1 * sin(a * 5.0 + 2.0);
-            float r_petal = r / (petal_radius + curve * 0.2);
-            
-            // Borde suave con degradado
-            float edge = 1.0 - smoothstep(0.7, 1.3, r_petal);
-            
-            // Detalle de la nervadura más realista
-            float vein = 0.0;
-            if (r_petal < 1.0 && r_petal > 0.1) {
-                float vein_pattern = sin(a * petal_count * 2.0 + r * 12.0) * 0.5 + 0.5;
-                vein = vein_pattern * (1.0 - r_petal) * 0.4;
-                // Nervadura principal
-                float main_vein = 1.0 - smoothstep(0.0, 0.3, abs(sin(a * petal_count * 0.5) * r * 2.0));
-                vein += main_vein * 0.2 * (1.0 - r_petal);
-            }
-            
-            // Brillo en el centro
-            float center_glow = exp(-r * 12.0) * 0.3;
-            
-            return max(0.0, edge + vein + center_glow);
-        }
+// ============================
+// 8. EVENTOS DEL CANVAS
+// ============================
+function onMouseMove(event) {
+    const rect = event.target.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = 1 - (event.clientY - rect.top) / rect.height;
+    material.uniforms.u_cursor.value.set(x, y);
+}
 
-        // Función para hojas
-        float get_leaf(vec2 p, float angle, float size) {
-            float ca = cos(angle);
-            float sa = sin(angle);
-            vec2 rp = vec2(p.x * ca - p.y * sa, p.x * sa + p.y * ca);
-            
-            float leaf_shape = 1.0 - smoothstep(0.0, size, abs(rp.x));
-            leaf_shape *= 1.0 - smoothstep(0.0, size * 0.5, abs(rp.y));
-            leaf_shape *= 1.0 - smoothstep(0.0, size * 0.3, abs(rp.x * 0.5 + rp.y));
-            
-            return max(0.0, leaf_shape);
-        }
+function onClick(event) {
+    // Efecto de "polen" al hacer clic
+    const rect = event.target.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = 1 - (event.clientY - rect.top) / rect.height;
+    
+    // Crear un efecto visual con partículas (opcional)
+}
 
-        void main() {
-            vec2 uv = vUv;
-            float aspect = u_ratio;
-            vec2 center = vec2(0.5, 0.5);
-            
-            // Centrar y ajustar
-            vec2 p = uv - center;
-            p.x *= aspect;
-            
-            // Progreso global
-            float progress = u_progress;
-            float time = u_stop_time;
-            
-            // Variables para el dibujo
-            vec3 color = vec3(0.0);
-            vec3 bg_color = vec3(0.98, 0.92, 0.94); // Fondo rosa suave
-            
-            // Fondo con gradiente
-            vec2 bg_p = uv;
-            vec3 bg_grad = mix(
-                vec3(0.98, 0.93, 0.95),
-                vec3(0.95, 0.88, 0.92),
-                length(uv - 0.5) * 0.8
-            );
-            color = bg_grad;
-            
-            // Número de lirios basado en el progreso
-            float num_lilies = floor(progress * 8.0) + 1.0;
-            
-            // Dibujar lirios
-            for (float i = 0.0; i < 9.0; i += 1.0) {
-                if (i >= num_lilies) break;
-                
-                // Posiciones predefinidas para un arreglo armonioso
-                vec2 pos;
-                float size_offset = 0.0;
-                
-                if (i == 0.0) { pos = vec2(0.0, 0.0); size_offset = 0.0; }
-                else if (i == 1.0) { pos = vec2(-0.25, 0.2); size_offset = 0.02; }
-                else if (i == 2.0) { pos = vec2(0.25, -0.15); size_offset = -0.02; }
-                else if (i == 3.0) { pos = vec2(-0.35, -0.2); size_offset = 0.04; }
-                else if (i == 4.0) { pos = vec2(0.35, 0.25); size_offset = -0.01; }
-                else if (i == 5.0) { pos = vec2(-0.15, -0.35); size_offset = 0.03; }
-                else if (i == 6.0) { pos = vec2(0.15, 0.35); size_offset = 0.0; }
-                else if (i == 7.0) { pos = vec2(-0.45, 0.1); size_offset = 0.05; }
-                else if (i == 8.0) { pos = vec2(0.45, -0.1); size_offset = -0.03; }
-                
-                vec2 delta = p - pos;
-                
-                // Tamaño del lirio
-                float size = 0.09 + 0.03 * sin(i * 1.3 + 2.0) + size_offset;
-                
-                // Color del lirio (variaciones de rosa con más detalle)
-                vec3 color1, color2, color3;
-                float petal_count = 6.0 + sin(i * 2.0 + 1.0) * 1.0;
-                
-                if (mod(i, 3.0) < 1.0) {
-                    color1 = vec3(0.99, 0.75, 0.85);
-                    color2 = vec3(0.95, 0.55, 0.70);
-                    color3 = vec3(1.0, 0.88, 0.92);
-                } else if (mod(i, 3.0) < 2.0) {
-                    color1 = vec3(0.98, 0.80, 0.88);
-                    color2 = vec3(0.92, 0.60, 0.75);
-                    color3 = vec3(1.0, 0.90, 0.94);
-                } else {
-                    color1 = vec3(0.96, 0.70, 0.80);
-                    color2 = vec3(0.90, 0.45, 0.60);
-                    color3 = vec3(0.98, 0.85, 0.90);
-                }
-                
-                // Obtener forma del lirio
-                float lily_shape = get_lily_shape(
-                    delta / size,
-                    petal_count,
-                    i * 0.8 + time * 0.05,
-                    0.3
-                );
-                
-                // Brillo del lirio según progreso (aparición gradual)
-                float bloom = 1.0 - smoothstep(0.0, 0.4, i / num_lilies);
-                float lily_intensity = lily_shape * bloom * 0.9;
-                
-                // Mezclar colores
-                vec3 lily_color = mix(color1, color2, lily_shape);
-                lily_color = mix(lily_color, color3, 0.3 * (1.0 - lily_shape));
-                
-                // Agregar al color final
-                color = mix(color, lily_color, lily_intensity);
-                
-                // Sombra suave para profundidad
-                if (lily_shape > 0.05) {
-                    float shadow = 0.08 * (1.0 - lily_shape) * bloom;
-                    color -= shadow * 0.3;
-                }
-                
-                // Centro del lirio (estambre)
-                if (length(delta / size) < 0.12 && lily_shape > 0.3) {
-                    vec3 center_color = vec3(1.0, 0.85, 0.2);
-                    float center_intensity = 1.0 - smoothstep(0.0, 0.12, length(delta / size));
-                    center_intensity *= 0.6 * bloom;
-                    color = mix(color, center_color, center_intensity);
-                    
-                    // Puntos de polen en el centro
-                    float pollen = sin(length(delta / size) * 50.0 + time) * 0.5 + 0.5;
-                    pollen *= (1.0 - length(delta / size) * 8.0);
-                    pollen = max(0.0, pollen) * 0.3 * bloom;
-                    color += vec3(1.0, 0.9, 0.4) * pollen;
-                }
-            }
-            
-            // Añadir hojas verdes en la base de los lirios (cuando hay progreso)
-            if (progress > 0.15) {
-                float leaf_progress = (progress - 0.15) / 0.3;
-                for (float i = 0.0; i < 6.0; i += 1.0) {
-                    float leaf_pos = i / 6.0;
-                    float leaf_angle = leaf_pos * 6.28 + 0.5;
-                    float leaf_radius = 0.35 + 0.1 * sin(i * 2.0);
-                    vec2 leaf_pos = vec2(
-                        0.08 * cos(leaf_angle + 0.3),
-                        0.08 * sin(leaf_angle * 1.2 + 0.5)
-                    );
-                    
-                    vec2 delta_leaf = p - leaf_pos;
-                    float leaf_size = 0.03 + 0.02 * sin(i * 1.7);
-                    
-                    float leaf = get_leaf(delta_leaf, leaf_angle + 0.5, leaf_size);
-                    leaf *= leaf_progress;
-                    
-                    vec3 leaf_color = mix(
-                        vec3(0.2, 0.6, 0.2),
-                        vec3(0.3, 0.7, 0.3),
-                        sin(i * 1.3) * 0.5 + 0.5
-                    );
-                    
-                    color = mix(color, leaf_color, leaf * 0.4);
-                }
-            }
-            
-            // Partículas brillantes (polen y destellos)
-            if (progress > 0.2) {
-                float particle_intensity = min(1.0, (progress - 0.2) * 2.0);
-                for (float i = 0.0; i < 40.0; i += 1.0) {
-                    float px = fract(sin(i * 127.1 + 311.7 + time * 0.1) * 43758.5453);
-                    float py = fract(sin(i * 269.5 + 183.3 + time * 0.07) * 43758.5453);
-                    float ps = 0.0015 + 0.003 * sin(i * 3.7 + time * 0.5);
-                    float float_offset = sin(i * 2.3 + time * 0.3) * 0.03;
-                    
-                    vec2 pp = vec2(px + float_offset * 0.5, py + float_offset * 0.3);
-                    float dist = length(uv - pp);
-                    
-                    if (dist < ps && progress > 0.2 + i * 0.015) {
-                        float brightness = 0.4 * (1.0 - dist / ps) * particle_intensity;
-                        float twinkle = sin(time * 2.0 + i * 5.0) * 0.5 + 0.5;
-                        brightness *= (0.5 + 0.5 * twinkle);
-                        color += vec3(1.0, 0.92, 0.85) * brightness * 0.6;
-                    }
-                }
-            }
-            
-            // Brillo general y calidez
-            float warm_glow = 0.05 * sin(time * 0.3 + 1.0) + 0.05;
-            color += vec3(warm_glow * 0.3, warm_glow * 0.2, warm_glow * 0.1);
-            
-            // Vignette suave
-            float vignette = 1.0 - length((uv - 0.5) * 1.3);
-            vignette = smoothstep(0.0, 0.7, vignette);
-            color *= (0.75 + 0.25 * vignette);
-            
-            // Efecto de luz desde el cursor
-            vec2 cursor_pos = u_cursor;
-            float cursor_dist = length(uv - cursor_pos);
-            float cursor_light = exp(-cursor_dist * 6.0) * 0.15;
-            color += vec3(1.0, 0.9, 0.85) * cursor_light;
-            
-            gl_FragColor = vec4(color, 1.0);
+function cleanScreen() {
+    if (isComplete) {
+        progress = 0;
+        isComplete = false;
+        startTime = Date.now();
+        poemIndex = 0;
+        document.getElementById('messageSection').classList.remove('visible');
+        document.getElementById('poemText').classList.remove('show');
+        
+        if (currentPoemTimeout) {
+            clearTimeout(currentPoemTimeout);
+            currentPoemTimeout = null;
         }
-    </script>
+        
+        setTimeout(() => {
+            showNextPoem();
+        }, 1000);
+    }
+}
 
-    <!-- Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+// ============================
+// 9. REDIMENSIONAR
+// ============================
+function onResize() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    renderer.setSize(width, height);
+    material.uniforms.u_ratio.value = width / height;
+}
+
+// ============================
+// 10. INICIAR
+// ============================
+document.addEventListener('DOMContentLoaded', init);
