@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>🌸 Para Ale - Nuestro Jardín de Amor</title>
+
     <style>
+
         * {
             margin: 0;
             padding: 0;
@@ -12,1039 +15,3371 @@
         }
 
         body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background: #1a0a12;
+            font-family: Georgia, "Times New Roman", serif;
+            background: #08111a;
             overflow: hidden;
-            height: 100vh;
             width: 100vw;
+            height: 100vh;
         }
 
         .container {
             position: relative;
             width: 100vw;
             height: 100vh;
-            background: linear-gradient(180deg, #0a0510, #1a0a12, #0a0510);
             overflow: hidden;
         }
 
         #canvas {
-            display: block;
             width: 100%;
             height: 100%;
+            display: block;
         }
 
-        /* Poemas y textos - Mejorados */
+
+        /* ========================================= */
+        /* POEMAS */
+        /* ========================================= */
+
         .poem-container {
             position: absolute;
-            top: 50%;
+
+            top: 8%;
             left: 50%;
-            transform: translate(-50%, -50%);
+
+            transform: translateX(-50%);
+
+            width: 88%;
+            max-width: 750px;
+
             text-align: center;
-            pointer-events: none;
+
+            padding: 1.5rem 2rem;
+
+            border-radius: 25px;
+
+            background: rgba(5, 10, 18, 0.28);
+
+            backdrop-filter: blur(10px);
+
+            border: 1px solid rgba(255, 180, 220, 0.12);
+
             z-index: 10;
-            width: 85%;
-            max-width: 650px;
-            padding: 2rem;
-            background: rgba(10, 5, 8, 0.3);
-            backdrop-filter: blur(8px);
-            border-radius: 30px;
-            border: 1px solid rgba(255, 20, 147, 0.1);
+
+            pointer-events: none;
         }
+
 
         .poem-text {
-            font-size: 2rem;
-            color: #fce4ec;
-            text-shadow: 0 0 40px rgba(255, 105, 180, 0.6), 0 0 80px rgba(255, 20, 147, 0.3);
+
+            font-size: clamp(1.2rem, 2.5vw, 2rem);
+
+            color: #fff5fa;
+
+            line-height: 1.6;
+
+            letter-spacing: 1px;
+
             opacity: 0;
-            transition: opacity 1.8s ease, transform 1.8s ease;
-            font-weight: 300;
-            letter-spacing: 2px;
-            line-height: 1.8;
-            min-height: 140px;
-            font-family: 'Georgia', serif;
+
             transform: translateY(20px);
+
+            transition:
+                opacity 1.5s ease,
+                transform 1.5s ease;
+
+            text-shadow:
+                0 0 15px rgba(255, 130, 200, 0.6),
+                0 0 35px rgba(255, 80, 170, 0.3);
+
+            min-height: 70px;
         }
+
 
         .poem-text.show {
+
             opacity: 1;
+
             transform: translateY(0);
+
         }
 
-        .poem-text .highlight {
-            color: #ff6b9d;
-            font-weight: 400;
+
+        .highlight {
+
+            color: #ff91c5;
+
+            font-weight: bold;
+
         }
 
-        .poem-text .heart {
+
+        .heart {
+
             display: inline-block;
-            animation: heartbeat 1.5s ease-in-out infinite;
+
+            animation: heartbeat 1.4s infinite;
+
         }
+
 
         @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.25);
+            }
+
         }
+
+
+        /* ========================================= */
+        /* BARRA DE PROGRESO */
+        /* ========================================= */
 
         .progress-bar {
-            width: 80%;
-            max-width: 400px;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
+
+            width: 75%;
+
+            max-width: 420px;
+
+            height: 5px;
+
+            margin: 20px auto 8px;
+
+            border-radius: 20px;
+
             overflow: hidden;
-            margin: 1.5rem auto 0.5rem;
+
+            background:
+                rgba(255,255,255,0.10);
+
         }
+
 
         .progress-fill {
-            height: 100%;
+
             width: 0%;
-            background: linear-gradient(90deg, #ff6b9d, #ff1493, #ff6b9d);
-            border-radius: 10px;
-            transition: width 0.3s ease;
-            box-shadow: 0 0 30px rgba(255, 20, 147, 0.4);
+
+            height: 100%;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ff8fbe,
+                    #ff3f93,
+                    #ffd1e5
+                );
+
+            box-shadow:
+                0 0 15px #ff4fa0;
+
         }
+
 
         .progress-percent {
-            color: rgba(255, 255, 255, 0.4);
+
+            color: rgba(255,255,255,0.65);
+
             font-size: 0.8rem;
+
             letter-spacing: 3px;
-            font-weight: 300;
+
         }
 
-        /* Botón limpiar */
+
+        /* ========================================= */
+        /* BOTÓN REINICIAR */
+        /* ========================================= */
+
         .clean-btn {
+
             position: absolute;
-            bottom: 30px;
-            right: 30px;
-            padding: 12px 28px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+
+            bottom: 25px;
+            right: 25px;
+
+            padding: 12px 22px;
+
             border-radius: 50px;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.85rem;
+
+            border:
+                1px solid rgba(255,255,255,0.15);
+
+            background:
+                rgba(0,0,0,0.25);
+
+            backdrop-filter: blur(10px);
+
+            color: white;
+
             cursor: pointer;
-            transition: all 0.4s ease;
-            z-index: 20;
-            font-family: 'Georgia', serif;
-            letter-spacing: 2px;
-            pointer-events: auto;
+
+            z-index: 30;
+
+            transition: 0.3s;
+
+            font-family: Georgia, serif;
+
         }
+
 
         .clean-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 0 40px rgba(255, 20, 147, 0.15);
-            border-color: rgba(255, 20, 147, 0.3);
+
+            transform:
+                scale(1.08);
+
+            background:
+                rgba(255,80,160,0.25);
+
+            box-shadow:
+                0 0 25px rgba(255,80,170,0.4);
+
         }
 
-        /* Sección mensaje final */
+
+        /* ========================================= */
+        /* MENSAJE FINAL */
+        /* ========================================= */
+
         .message-section {
+
             position: fixed;
+
             top: 0;
             left: 0;
+
             width: 100%;
             height: 100%;
-            background: rgba(10, 5, 8, 0.95);
-            backdrop-filter: blur(25px);
+
             display: flex;
+
             justify-content: center;
             align-items: center;
+
+            background:
+                rgba(5, 8, 15, 0.94);
+
+            backdrop-filter: blur(18px);
+
             z-index: 100;
+
             opacity: 0;
+
             pointer-events: none;
-            transition: opacity 1.8s ease;
+
+            transition:
+                opacity 1.8s ease;
+
+            overflow-y: auto;
+
         }
+
 
         .message-section.visible {
+
             opacity: 1;
+
             pointer-events: auto;
+
         }
+
 
         .message-content {
-            max-width: 750px;
+
             width: 92%;
-            padding: 2rem 1.5rem;
+
+            max-width: 760px;
+
             text-align: center;
-            animation: fadeInUp 1.8s ease;
+
+            padding: 2rem 1rem;
+
+            animation:
+                fadeInUp 1.5s ease;
+
         }
+
 
         @keyframes fadeInUp {
+
             from {
+
                 opacity: 0;
-                transform: translateY(40px) scale(0.95);
+
+                transform:
+                    translateY(50px)
+                    scale(0.95);
+
             }
+
             to {
+
                 opacity: 1;
-                transform: translateY(0) scale(1);
+
+                transform:
+                    translateY(0)
+                    scale(1);
+
             }
+
         }
+
 
         .love-message {
-            font-size: 3.8rem;
-            background: linear-gradient(135deg, #ff6b9d, #ff1493, #ff6b9d);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.2rem;
-            animation: pulseGlow 2.5s ease-in-out infinite;
-            text-shadow: none;
+
+            font-size:
+                clamp(2.5rem, 7vw, 4.5rem);
+
+            color: #ff6baa;
+
+            text-shadow:
+
+                0 0 15px #ff4f9c,
+
+                0 0 35px rgba(255,50,150,0.6),
+
+                0 0 70px rgba(255,30,130,0.3);
+
+            margin-bottom: 10px;
+
         }
 
-        @keyframes pulseGlow {
-            0%, 100% { 
-                transform: scale(1);
-                filter: drop-shadow(0 0 20px rgba(255,20,147,0.2));
-            }
-            50% { 
-                transform: scale(1.03);
-                filter: drop-shadow(0 0 40px rgba(255,20,147,0.4));
-            }
-        }
 
         .sub-message {
-            font-size: 2.2rem;
-            color: #fce4ec;
-            font-weight: 300;
-            margin-bottom: 0.3rem;
-            letter-spacing: 1px;
+
+            font-size:
+                clamp(1.2rem, 4vw, 2rem);
+
+            color: #fff0f7;
+
+            font-weight: normal;
+
+            margin-bottom: 10px;
+
         }
+
 
         .extra-message {
-            font-size: 1.2rem;
-            color: #e8c8d4;
+
+            color:
+                rgba(255,220,235,0.75);
+
             font-style: italic;
-            margin-bottom: 2rem;
-            opacity: 0.7;
+
+            margin-bottom: 25px;
+
+            font-size: 1.1rem;
+
         }
 
-        /* Carrusel */
+
+        /* ========================================= */
+        /* CARRUSEL */
+        /* ========================================= */
+
         .carousel-container {
+
             position: relative;
+
             width: 100%;
-            max-width: 520px;
-            margin: 0 auto;
-            border-radius: 24px;
+
+            max-width: 550px;
+
+            margin: auto;
+
             overflow: hidden;
-            box-shadow: 0 25px 70px rgba(255, 20, 147, 0.15);
-            background: #0a0510;
+
+            border-radius: 22px;
+
+            background: #080b12;
+
+            box-shadow:
+                0 20px 70px rgba(255,50,150,0.20);
+
         }
+
 
         .carousel-track {
+
             display: flex;
-            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            touch-action: pan-y;
+
+            transition:
+                transform 0.7s cubic-bezier(
+                    0.25,
+                    0.46,
+                    0.45,
+                    0.94
+                );
+
         }
+
 
         .carousel-slide {
+
             min-width: 100%;
-            aspect-ratio: 4/3;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: #0a0510;
+
             padding: 12px;
-            user-select: none;
-            position: relative;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
         }
+
 
         .carousel-slide img {
+
             width: 100%;
-            height: 85%;
+
+            height: min(58vh, 420px);
+
             object-fit: cover;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+
+            border-radius: 15px;
+
         }
+
 
         .image-caption {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.85rem;
-            margin-top: 8px;
+
+            color:
+                rgba(255,255,255,0.75);
+
+            margin-top: 10px;
+
             font-style: italic;
-            letter-spacing: 0.5px;
+
         }
+
 
         .carousel-btn {
+
             position: absolute;
+
             top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #fff;
-            width: 46px;
-            height: 46px;
+
+            transform:
+                translateY(-50%);
+
+            width: 48px;
+            height: 48px;
+
             border-radius: 50%;
+
+            border:
+                1px solid rgba(255,255,255,0.2);
+
+            background:
+                rgba(0,0,0,0.35);
+
+            backdrop-filter: blur(8px);
+
+            color: white;
+
             font-size: 2rem;
+
             cursor: pointer;
-            transition: all 0.4s ease;
+
             z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: auto;
-            font-weight: 300;
+
         }
 
-        .carousel-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-50%) scale(1.08);
-            box-shadow: 0 0 40px rgba(255, 20, 147, 0.15);
+
+        .prev {
+
+            left: 10px;
+
         }
 
-        .carousel-btn.prev { left: 8px; }
-        .carousel-btn.next { right: 8px; }
+
+        .next {
+
+            right: 10px;
+
+        }
+
 
         .dots {
+
             display: flex;
+
             justify-content: center;
+
             gap: 10px;
-            margin-top: 1.2rem;
+
+            margin-top: 20px;
+
         }
+
 
         .dot {
+
             width: 10px;
             height: 10px;
+
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
+
             border: none;
+
+            background:
+                rgba(255,255,255,0.25);
+
             cursor: pointer;
-            transition: all 0.4s ease;
-            padding: 0;
-            pointer-events: auto;
+
+            transition: 0.3s;
+
         }
 
-        .dot:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
 
         .dot.active {
-            background: #ff1493;
-            transform: scale(1.4);
-            box-shadow: 0 0 25px rgba(255, 20, 147, 0.5);
+
+            background: #ff4f9c;
+
+            transform:
+                scale(1.5);
+
+            box-shadow:
+                0 0 15px #ff4f9c;
+
         }
+
 
         .carousel-hint {
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 0.75rem;
-            margin-top: 0.8rem;
-            letter-spacing: 1px;
+
+            margin-top: 15px;
+
+            color:
+                rgba(255,255,255,0.45);
+
+            font-size: 0.8rem;
+
         }
 
-        /* Corazones flotantes */
+
+        /* ========================================= */
+        /* CORAZONES */
+        /* ========================================= */
+
         .floating-hearts {
+
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+
+            inset: 0;
+
             pointer-events: none;
-            z-index: -1;
+
             overflow: hidden;
+
         }
+
 
         .floating-heart {
+
             position: absolute;
-            font-size: 1.5rem;
-            animation: floatHeart linear forwards;
-            opacity: 0.3;
+
+            bottom: -50px;
+
+            animation:
+                floatHeart linear forwards;
+
         }
+
 
         @keyframes floatHeart {
+
             0% {
-                transform: translateY(100vh) rotate(0deg) scale(0.3);
+
+                transform:
+                    translateY(0)
+                    rotate(0deg);
+
                 opacity: 0;
+
             }
-            10% { opacity: 0.4; }
-            90% { opacity: 0.4; }
+
+            10% {
+
+                opacity: 0.7;
+
+            }
+
             100% {
-                transform: translateY(-10vh) rotate(720deg) scale(1.2);
+
+                transform:
+                    translateY(-120vh)
+                    rotate(720deg);
+
                 opacity: 0;
+
             }
+
         }
+
 
         @media (max-width: 600px) {
-            .love-message { font-size: 2.4rem; }
-            .sub-message { font-size: 1.4rem; }
-            .extra-message { font-size: 1rem; }
-            .poem-text { font-size: 1.3rem; min-height: 100px; }
-            .poem-container { padding: 1.2rem; width: 90%; }
-            .carousel-btn { width: 36px; height: 36px; font-size: 1.4rem; }
-            .clean-btn { padding: 8px 16px; font-size: 0.75rem; bottom: 16px; right: 16px; }
-            .carousel-slide img { height: 80%; }
+
+            .poem-container {
+
+                top: 4%;
+
+                padding:
+                    1rem;
+
+            }
+
+            .clean-btn {
+
+                bottom: 15px;
+                right: 15px;
+
+                padding:
+                    9px 15px;
+
+                font-size: 0.75rem;
+
+            }
+
         }
+
     </style>
+
 </head>
+
+
 <body>
+
+
+    <!-- ========================================= -->
+    <!-- JARDÍN -->
+    <!-- ========================================= -->
+
     <div class="container">
+
         <canvas id="canvas"></canvas>
-        
-        <div id="poemContainer" class="poem-container">
-            <p id="poemText" class="poem-text"></p>
+
+
+        <!-- POEMAS -->
+
+        <div
+            id="poemContainer"
+            class="poem-container"
+        >
+
+            <p
+                id="poemText"
+                class="poem-text"
+            ></p>
+
+
             <div class="progress-bar">
-                <div id="progressFill" class="progress-fill"></div>
+
+                <div
+                    id="progressFill"
+                    class="progress-fill"
+                ></div>
+
             </div>
-            <div class="progress-percent" id="progressPercent">0%</div>
+
+
+            <div
+                id="progressPercent"
+                class="progress-percent"
+            >
+                0%
+            </div>
+
         </div>
 
-        <div class="clean-btn" id="cleanBtn">✨ Volver a empezar</div>
+
+        <button
+            class="clean-btn"
+            id="cleanBtn"
+        >
+            ✨ Volver a empezar
+        </button>
+
     </div>
 
-    <div id="messageSection" class="message-section">
+
+
+    <!-- ========================================= -->
+    <!-- MENSAJE FINAL -->
+    <!-- ========================================= -->
+
+    <div
+        id="messageSection"
+        class="message-section"
+    >
+
         <div class="message-content">
-            <h1 class="love-message">🌹 Te amo Ale 🌹</h1>
-            <h2 class="sub-message">Gracias por estos 6 Meses a tu lado</h2>
-            <p class="extra-message">"Cada día contigo es un poema que el corazón escribe"</p>
-            
+
+
+            <h1 class="love-message">
+
+                🌸 Te amo Ale 🌸
+
+            </h1>
+
+
+            <h2 class="sub-message">
+
+                Gracias por estos 6 meses a tu lado ❤️
+
+            </h2>
+
+
+            <p class="extra-message">
+
+                "Así como este jardín florece poco a poco,
+                mi amor por ti sigue creciendo cada día."
+
+            </p>
+
+
+
+            <!-- CARRUSEL -->
+
             <div class="carousel-container">
-                <button class="carousel-btn prev" id="prevBtn">‹</button>
-                <div class="carousel-track" id="carouselTrack"></div>
-                <button class="carousel-btn next" id="nextBtn">›</button>
+
+
+                <button
+                    class="carousel-btn prev"
+                    id="prevBtn"
+                >
+                    ‹
+                </button>
+
+
+                <div
+                    class="carousel-track"
+                    id="carouselTrack"
+                ></div>
+
+
+                <button
+                    class="carousel-btn next"
+                    id="nextBtn"
+                >
+                    ›
+                </button>
+
+
             </div>
-            <div class="dots" id="dotsContainer"></div>
-            <div class="carousel-hint">🖱️ Desliza o usa los botones para ver más recuerdos</div>
-            <div class="floating-hearts" id="floatingHearts"></div>
+
+
+            <div
+                class="dots"
+                id="dotsContainer"
+            ></div>
+
+
+            <div class="carousel-hint">
+
+                ❤️ Usa las flechas para recordar
+                nuestros momentos ❤️
+
+            </div>
+
+
+            <div
+                class="floating-hearts"
+                id="floatingHearts"
+            ></div>
+
+
         </div>
+
     </div>
 
-    <script>
-        // ============================================
-        // CONFIGURACIÓN
-        // ============================================
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        let progress = 0;
-        let isComplete = false;
-        let poemIndex = 0;
-        let animationFrame = null;
-        let startTime = Date.now();
 
-        // POEMAS MEJORADOS
-        const poems = [
-            { text: '🌷 "En el jardín de mi corazón, <span class="highlight">tú</span> eres la flor más hermosa"', delay: 2 },
-            { text: '🌸 "Cada latido es un poema que <span class="highlight">escribo</span> pensando en ti"', delay: 4 },
-            { text: '🌺 "Tu amor es la luz que <span class="highlight">ilumina</span> mis días más oscuros"', delay: 6 },
-            { text: '🌹 "Eres el sueño del que <span class="highlight">nunca</span> quiero despertar"', delay: 8 },
-            { text: '💖 "Contigo, cada momento es una <span class="highlight">obra de arte</span>"', delay: 10 },
-            { text: '✨ "Tu sonrisa es el sol que hace <span class="highlight">florecer</span> mi alma"', delay: 12 },
-            { text: '💝 "<span class="heart">❤️</span> 6 meses de magia, <span class="highlight">infinitos</span> más por descubrir"', delay: 14 }
-        ];
 
-        // TUS IMÁGENES PARA EL CARRUSEL
-        const carouselImages = [
-            { src: 'images/972a18d4-5852-41a3-a29f-b39289947f4b.jpeg', caption: '✨ Nuestro primer atardecer juntos' },
-            { src: 'images/b01c638a-a57c-475d-a456-5690d9ca3d2a.jpeg', caption: '💖 Tu sonrisa ilumina mis días' },
-            { src: 'images/fe9422b3-16bf-4309-a664-3f5a6a4a280d.jpeg', caption: '🌸 Momentos que atesoro en mi corazón' },
-            { src: 'images/262e46c9-8d04-472c-96be-9b967b57a7f2.jpeg', caption: '🌺 Eres mi razón para sonreír' },
-            { src: 'images/972a18d4-5852-41a3-a29f-b39289947f4b.jpeg', caption: '💝 Por siempre tú y yo' }
-        ];
+<script>
 
-        // ============================================
-        // FUNCIÓN PARA DIBUJAR LIRIOS REALISTAS
-        // ============================================
-        function drawRealisticLily(ctx, x, y, size, color1, color2, rotation, alpha, bloom) {
-            ctx.save();
-            ctx.globalAlpha = alpha || 1;
-            ctx.translate(x, y);
-            ctx.rotate(rotation || 0);
 
-            const petalCount = 6;
-            const petalLength = size * 0.95;
-            const petalWidth = size * 0.32;
+/* ========================================= */
+/* CONFIGURACIÓN */
+/* ========================================= */
 
-            // Dibujar cada pétalo
-            for (let i = 0; i < petalCount; i++) {
-                const angle = (i / petalCount) * Math.PI * 2 - Math.PI / 2;
-                const px = Math.cos(angle) * petalLength * 0.55;
-                const py = Math.sin(angle) * petalLength * 0.55;
 
-                ctx.save();
-                ctx.translate(px, py);
-                ctx.rotate(angle);
+const canvas =
+    document.getElementById("canvas");
 
-                // Gradiente del pétalo
-                const grad = ctx.createRadialGradient(0, -petalLength * 0.2, 0, 0, 0, petalWidth);
-                grad.addColorStop(0, color1);
-                grad.addColorStop(0.4, color2);
-                grad.addColorStop(0.7, color1);
-                grad.addColorStop(1, 'rgba(200,100,130,0.1)');
 
-                // Forma del pétalo con curvatura realista
-                ctx.beginPath();
-                ctx.moveTo(0, -petalLength * 0.6);
-                ctx.quadraticCurveTo(petalWidth * 1.1, -petalLength * 0.2, petalWidth * 0.9, petalLength * 0.3);
-                ctx.quadraticCurveTo(petalWidth * 0.3, petalLength * 0.5, 0, petalLength * 0.4);
-                ctx.quadraticCurveTo(-petalWidth * 0.3, petalLength * 0.5, -petalWidth * 0.9, petalLength * 0.3);
-                ctx.quadraticCurveTo(-petalWidth * 1.1, -petalLength * 0.2, 0, -petalLength * 0.6);
-                ctx.closePath();
+const ctx =
+    canvas.getContext("2d");
 
-                ctx.fillStyle = grad;
-                ctx.fill();
 
-                // Sombra suave en el borde
-                ctx.shadowColor = 'rgba(150,60,80,0.1)';
-                ctx.shadowBlur = 8;
+let progress = 0;
 
-                // Nervaduras principales del pétalo
-                ctx.shadowBlur = 0;
-                ctx.strokeStyle = 'rgba(180,80,100,0.15)';
-                ctx.lineWidth = 0.8;
+let isComplete = false;
 
-                // Nervadura central
-                ctx.beginPath();
-                ctx.moveTo(0, -petalLength * 0.4);
-                ctx.quadraticCurveTo(petalWidth * 0.1, 0, 0, petalLength * 0.3);
-                ctx.stroke();
+let lastFrameTime = 0;
 
-                // Nervaduras laterales
-                for (let j = -1; j <= 1; j += 2) {
-                    ctx.beginPath();
-                    ctx.moveTo(j * petalWidth * 0.2, -petalLength * 0.2);
-                    ctx.quadraticCurveTo(j * petalWidth * 0.6, 0, j * petalWidth * 0.3, petalLength * 0.2);
-                    ctx.stroke();
-                }
+let poemIndex = 0;
 
-                ctx.restore();
-            }
+let currentPoemTimeout = null;
 
-            // Centro del lirio (estambres y pistilo)
-            // Pistilo central
-            const gradCenter = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 0.18);
-            gradCenter.addColorStop(0, '#fff9c4');
-            gradCenter.addColorStop(0.4, '#ffeb3b');
-            gradCenter.addColorStop(0.7, '#f9a825');
-            gradCenter.addColorStop(1, '#e65100');
+let animationStarted = false;
+
+
+/* ========================================= */
+/* POEMAS */
+/* ========================================= */
+
+
+const poems = [
+
+    {
+        text:
+            '🌱 "Todo comenzó como una pequeña semilla..."',
+        delay: 3500
+    },
+
+    {
+        text:
+            '🌿 "Y poco a poco, contigo, mi corazón comenzó a <span class="highlight">crecer</span>"',
+        delay: 4500
+    },
+
+    {
+        text:
+            '🌷 "Cada momento contigo hizo que algo hermoso comenzara a <span class="highlight">florecer</span>"',
+        delay: 5000
+    },
+
+    {
+        text:
+            '🌸 "Porque en el jardín de mi vida, <span class="highlight">tú eres mi flor favorita</span>"',
+        delay: 5000
+    },
+
+    {
+        text:
+            '💖 "Y quiero seguir viendo florecer nuestra historia..."',
+        delay: 4500
+    },
+
+    {
+        text:
+            '❤️ "<span class="heart">❤️</span> 6 meses contigo... y deseo que sean muchos más <span class="heart">❤️</span>"',
+        delay: 6000
+    }
+
+];
+
+
+/* ========================================= */
+/* IMÁGENES DEL CARRUSEL */
+/* ========================================= */
+
+
+const carouselImages = [
+
+    {
+        src:
+            "images/972a18d4-5852-41a3-a29f-b39289947f4b.jpeg",
+
+        caption:
+            "✨ Nuestro primer atardecer juntos"
+    },
+
+    {
+        src:
+            "images/b01c638a-a57c-475d-a456-5690d9ca3d2a.jpeg",
+
+        caption:
+            "💖 Tu sonrisa ilumina mis días"
+    },
+
+    {
+        src:
+            "images/fe9422b3-16bf-4309-a664-3f5a6a4a280d.jpeg",
+
+        caption:
+            "🌸 Momentos que guardaré siempre"
+    },
+
+    {
+        src:
+            "images/262e46c9-8d04-472c-96be-9b967b57a7f2.jpeg",
+
+        caption:
+            "❤️ Tú y yo, creando recuerdos"
+    },
+
+    {
+        src:
+            "images/972a18d4-5852-41a3-a29f-b39289947f4b.jpeg",
+
+        caption:
+            "💝 Por muchos momentos más juntos"
+    }
+
+];
+
+
+/* ========================================= */
+/* CONFIGURACIÓN DEL JARDÍN */
+/* ========================================= */
+
+
+const gardenLilies = [
+
+    {
+        x: 0.05,
+        scale: 0.75,
+        delay: 0.05,
+        color: "#ffd7e7",
+        accent: "#d81b60",
+        height: 0.28
+    },
+
+    {
+        x: 0.13,
+        scale: 0.90,
+        delay: 0.10,
+        color: "#f8bbd0",
+        accent: "#c2185b",
+        height: 0.36
+    },
+
+    {
+        x: 0.22,
+        scale: 1.00,
+        delay: 0.16,
+        color: "#ffe2ee",
+        accent: "#e91e63",
+        height: 0.42
+    },
+
+    {
+        x: 0.32,
+        scale: 1.15,
+        delay: 0.22,
+        color: "#f48fb1",
+        accent: "#ad1457",
+        height: 0.48
+    },
+
+    {
+        x: 0.42,
+        scale: 1.30,
+        delay: 0.28,
+        color: "#ffe7f0",
+        accent: "#d81b60",
+        height: 0.52
+    },
+
+    {
+        x: 0.52,
+        scale: 1.55,
+        delay: 0.34,
+        color: "#fff0f6",
+        accent: "#c2185b",
+        height: 0.58
+    },
+
+    {
+        x: 0.63,
+        scale: 1.35,
+        delay: 0.40,
+        color: "#f8bbd0",
+        accent: "#e91e63",
+        height: 0.50
+    },
+
+    {
+        x: 0.73,
+        scale: 1.10,
+        delay: 0.48,
+        color: "#ffd5e5",
+        accent: "#d81b60",
+        height: 0.43
+    },
+
+    {
+        x: 0.83,
+        scale: 0.95,
+        delay: 0.56,
+        color: "#ffe5ef",
+        accent: "#c2185b",
+        height: 0.36
+    },
+
+    {
+        x: 0.93,
+        scale: 0.80,
+        delay: 0.64,
+        color: "#f48fb1",
+        accent: "#ad1457",
+        height: 0.30
+    }
+
+];
+
+
+
+/* ========================================= */
+/* FUNCIONES AUXILIARES */
+/* ========================================= */
+
+
+function clamp(value, min = 0, max = 1) {
+
+    return Math.max(
+        min,
+        Math.min(max, value)
+    );
+
+}
+
+
+function smoothStep(value) {
+
+    value = clamp(value);
+
+    return value *
+        value *
+        (3 - 2 * value);
+
+}
+
+
+
+/* ========================================= */
+/* DIBUJAR TALLO */
+/* ========================================= */
+
+
+function drawLilyStem(
+    x,
+    baseY,
+    height,
+    growth,
+    wind
+) {
+
+    const visibleHeight =
+        height *
+        smoothStep(growth);
+
+
+    ctx.save();
+
+
+    ctx.lineCap = "round";
+
+
+    const gradient =
+        ctx.createLinearGradient(
+            x,
+            baseY,
+            x,
+            baseY - visibleHeight
+        );
+
+
+    gradient.addColorStop(
+        0,
+        "#153f26"
+    );
+
+    gradient.addColorStop(
+        0.5,
+        "#2f7d46"
+    );
+
+    gradient.addColorStop(
+        1,
+        "#7ebf6a"
+    );
+
+
+    ctx.strokeStyle = gradient;
+
+    ctx.lineWidth =
+        Math.max(
+            4,
+            height * 0.025
+        );
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+        x,
+        baseY
+    );
+
+
+    ctx.bezierCurveTo(
+
+        x + wind * 0.2,
+
+        baseY - visibleHeight * 0.30,
+
+
+        x - wind * 0.4,
+
+        baseY - visibleHeight * 0.65,
+
+
+        x + wind,
+
+        baseY - visibleHeight
+
+    );
+
+
+    ctx.stroke();
+
+
+    ctx.restore();
+
+}
+
+
+
+/* ========================================= */
+/* HOJAS DEL LIRIO */
+/* ========================================= */
+
+
+function drawLilyLeaf(
+    x,
+    y,
+    length,
+    angle,
+    growth
+) {
+
+    const g =
+        smoothStep(growth);
+
+
+    if (g <= 0) return;
+
+
+    ctx.save();
+
+
+    ctx.translate(x, y);
+
+    ctx.rotate(angle);
+
+
+    const visibleLength =
+        length * g;
+
+
+    const width =
+        visibleLength * 0.14;
+
+
+    const gradient =
+        ctx.createLinearGradient(
+            0,
+            0,
+            visibleLength,
+            0
+        );
+
+
+    gradient.addColorStop(
+        0,
+        "#1b542d"
+    );
+
+    gradient.addColorStop(
+        0.5,
+        "#469451"
+    );
+
+    gradient.addColorStop(
+        1,
+        "#88c96a"
+    );
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(0, 0);
+
+
+    ctx.bezierCurveTo(
+
+        visibleLength * 0.30,
+        -width,
+
+        visibleLength * 0.70,
+        -width * 0.6,
+
+        visibleLength,
+        0
+
+    );
+
+
+    ctx.bezierCurveTo(
+
+        visibleLength * 0.70,
+        width * 0.6,
+
+        visibleLength * 0.30,
+        width,
+
+        0,
+        0
+
+    );
+
+
+    ctx.fillStyle = gradient;
+
+    ctx.fill();
+
+
+    /* Nervadura */
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(0, 0);
+
+    ctx.lineTo(
+        visibleLength,
+        0
+    );
+
+
+    ctx.strokeStyle =
+        "rgba(20,70,30,0.4)";
+
+    ctx.lineWidth = 1;
+
+    ctx.stroke();
+
+
+    ctx.restore();
+
+}
+
+
+
+/* ========================================= */
+/* CAPULLO */
+/* ========================================= */
+
+
+function drawLilyBud(
+    x,
+    y,
+    size,
+    color,
+    progress
+) {
+
+    const g =
+        smoothStep(progress);
+
+
+    ctx.save();
+
+
+    ctx.translate(x, y);
+
+    ctx.scale(g, g);
+
+
+    /* Base verde */
+
+
+    ctx.fillStyle = "#4c8a4e";
+
+
+    ctx.beginPath();
+
+
+    ctx.ellipse(
+
+        0,
+
+        size * 0.20,
+
+        size * 0.30,
+
+        size * 0.45,
+
+        0,
+
+        0,
+
+        Math.PI * 2
+
+    );
+
+
+    ctx.fill();
+
+
+
+    /* Capullo */
+
+
+    const gradient =
+        ctx.createLinearGradient(
+            0,
+            -size,
+            0,
+            size
+        );
+
+
+    gradient.addColorStop(
+        0,
+        "#ffffff"
+    );
+
+    gradient.addColorStop(
+        0.5,
+        color
+    );
+
+    gradient.addColorStop(
+        1,
+        "#c2185b"
+    );
+
+
+    ctx.fillStyle = gradient;
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+        0,
+        -size * 0.90
+    );
+
+
+    ctx.bezierCurveTo(
+
+        size * 0.55,
+        -size * 0.40,
+
+        size * 0.45,
+        size * 0.35,
+
+        0,
+        size * 0.65
+
+    );
+
+
+    ctx.bezierCurveTo(
+
+        -size * 0.45,
+        size * 0.35,
+
+        -size * 0.55,
+        -size * 0.40,
+
+        0,
+        -size * 0.90
+
+    );
+
+
+    ctx.fill();
+
+
+    ctx.restore();
+
+}
+
+
+
+/* ========================================= */
+/* PÉTALO DEL LIRIO */
+/* ========================================= */
+
+
+function drawLilyPetal(
+    angle,
+    length,
+    width,
+    color,
+    accent,
+    openness
+) {
+
+    ctx.save();
+
+
+    ctx.rotate(angle);
+
+
+    const open =
+        openness *
+        length *
+        0.40;
+
+
+    const gradient =
+        ctx.createLinearGradient(
+            0,
+            0,
+            0,
+            -length
+        );
+
+
+    gradient.addColorStop(
+        0,
+        accent
+    );
+
+    gradient.addColorStop(
+        0.30,
+        color
+    );
+
+    gradient.addColorStop(
+        0.75,
+        "#fff5f9"
+    );
+
+    gradient.addColorStop(
+        1,
+        "#ffffff"
+    );
+
+
+    ctx.fillStyle = gradient;
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(0, 0);
+
+
+    ctx.bezierCurveTo(
+
+        width * 0.25,
+        -length * 0.15,
+
+        width,
+        -length * 0.55,
+
+        width * 0.65,
+        -length
+
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        open * 0.15,
+        -length * 1.20,
+
+        0,
+        -length * 1.28
+
+    );
+
+
+    ctx.quadraticCurveTo(
+
+        -open * 0.15,
+        -length * 1.20,
+
+        -width * 0.65,
+        -length
+
+    );
+
+
+    ctx.bezierCurveTo(
+
+        -width,
+        -length * 0.55,
+
+        -width * 0.25,
+        -length * 0.15,
+
+        0,
+        0
+
+    );
+
+
+    ctx.closePath();
+
+
+    ctx.fill();
+
+
+
+    /* Borde */
+
+
+    ctx.strokeStyle =
+        "rgba(150,30,80,0.25)";
+
+    ctx.lineWidth = 1;
+
+    ctx.stroke();
+
+
+
+    /* Nervadura */
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(0, 0);
+
+
+    ctx.quadraticCurveTo(
+
+        width * 0.08,
+
+        -length * 0.60,
+
+        0,
+
+        -length * 1.12
+
+    );
+
+
+    ctx.strokeStyle = accent;
+
+    ctx.globalAlpha = 0.35;
+
+    ctx.lineWidth = 1.2;
+
+    ctx.stroke();
+
+
+
+    /* MANCHAS DEL LIRIO */
+
+
+    ctx.globalAlpha = 0.35;
+
+
+    for (let i = 0; i < 5; i++) {
+
+
+        const px =
+            Math.sin(
+                i * 2.8 + angle
+            ) *
+            width *
+            0.35;
+
+
+        const py =
+            -length *
+            (
+                0.35 +
+                i * 0.11
+            );
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+
+            px,
+
+            py,
+
+            Math.max(
+                1.5,
+                width * 0.07
+            ),
+
+            0,
+
+            Math.PI * 2
+
+        );
+
+
+        ctx.fillStyle = "#861541";
+
+        ctx.fill();
+
+    }
+
+
+    ctx.restore();
+
+}
+
+
+
+/* ========================================= */
+/* LIRIO COMPLETO */
+/* ========================================= */
+
+
+function drawRealisticLily(
+    x,
+    y,
+    size,
+    color,
+    accent,
+    bloomProgress,
+    wind
+) {
+
+
+    const bloom =
+        smoothStep(bloomProgress);
+
+
+    if (bloom <= 0) return;
+
+
+    ctx.save();
+
+
+    ctx.translate(x, y);
+
+    ctx.rotate(wind);
+
+
+
+    /* ===================================== */
+    /* 6 PÉTALOS */
+    /* ===================================== */
+
+
+    const petalCount = 6;
+
+
+    for (
+        let i = 0;
+        i < petalCount;
+        i++
+    ) {
+
+
+        const angle =
+            (Math.PI * 2 / petalCount)
+            * i;
+
+
+        const petalLength =
+            size *
+            (
+                0.95 +
+                (i % 2) * 0.12
+            );
+
+
+        const petalWidth =
+            size * 0.32;
+
+
+        drawLilyPetal(
+
+            angle,
+
+            petalLength,
+
+            petalWidth,
+
+            color,
+
+            accent,
+
+            bloom
+
+        );
+
+    }
+
+
+
+    /* ===================================== */
+    /* ESTAMBRES */
+    /* ===================================== */
+
+
+    ctx.save();
+
+
+    ctx.globalAlpha = bloom;
+
+
+    for (let i = 0; i < 6; i++) {
+
+
+        const angle =
+            (Math.PI * 2 / 6) *
+            i;
+
+
+        const length =
+            size * 0.48;
+
+
+        const sx =
+            Math.cos(angle) *
+            length;
+
+
+        const sy =
+            Math.sin(angle) *
+            length;
+
+
+
+        /* Filamento */
+
+
+        ctx.beginPath();
+
+
+        ctx.moveTo(0, 0);
+
+
+        ctx.quadraticCurveTo(
+
+            sx * 0.5,
+
+            sy * 0.5,
+
+            sx,
+
+            sy
+
+        );
+
+
+        ctx.strokeStyle = "#8d6b2c";
+
+        ctx.lineWidth =
+            Math.max(
+                1.5,
+                size * 0.025
+            );
+
+
+        ctx.stroke();
+
+
+
+        /* Antera */
+
+
+        ctx.beginPath();
+
+
+        ctx.ellipse(
+
+            sx,
+
+            sy,
+
+            size * 0.07,
+
+            size * 0.035,
+
+            angle,
+
+            0,
+
+            Math.PI * 2
+
+        );
+
+
+        ctx.fillStyle = "#a56b20";
+
+        ctx.fill();
+
+    }
+
+
+    ctx.restore();
+
+
+
+    /* ===================================== */
+    /* CENTRO */
+    /* ===================================== */
+
+
+    const centerGradient =
+        ctx.createRadialGradient(
+
+            0,
+
+            0,
+
+            1,
+
+            0,
+
+            0,
+
+            size * 0.18
+
+        );
+
+
+    centerGradient.addColorStop(
+        0,
+        "#fff7c2"
+    );
+
+
+    centerGradient.addColorStop(
+        0.5,
+        "#f6c453"
+    );
+
+
+    centerGradient.addColorStop(
+        1,
+        "#a76b18"
+    );
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+
+        0,
+
+        0,
+
+        size * 0.16,
+
+        0,
+
+        Math.PI * 2
+
+    );
+
+
+    ctx.fillStyle = centerGradient;
+
+    ctx.fill();
+
+
+    ctx.restore();
+
+}
+
+
+
+/* ========================================= */
+/* PLANTA COMPLETA */
+/* ========================================= */
+
+
+function drawLilyPlant(
+    lily,
+    progress,
+    w,
+    h,
+    index
+) {
+
+
+    const localProgress =
+        clamp(
+            (
+                progress -
+                lily.delay
+            ) /
+            (
+                1 -
+                lily.delay
+            )
+        );
+
+
+    if (localProgress <= 0) return;
+
+
+
+    const groundY =
+        h * 0.94;
+
+
+    const plantX =
+        w * lily.x;
+
+
+    const maxHeight =
+        h *
+        lily.height *
+        lily.scale;
+
+
+
+    /* ===================================== */
+    /* VIENTO */
+    /* ===================================== */
+
+
+    const wind =
+        Math.sin(
+            Date.now() / 1600 +
+            index * 1.5
+        ) * 8;
+
+
+
+    /* ===================================== */
+    /* TALLO */
+    /* ===================================== */
+
+
+    const stemProgress =
+        clamp(
+            localProgress / 0.42
+        );
+
+
+    drawLilyStem(
+
+        plantX,
+
+        groundY,
+
+        maxHeight,
+
+        stemProgress,
+
+        wind
+
+    );
+
+
+    const topY =
+        groundY -
+
+        maxHeight *
+        smoothStep(stemProgress);
+
+
+
+    /* ===================================== */
+    /* HOJAS */
+    /* ===================================== */
+
+
+    const leafProgress =
+        clamp(
+            (
+                localProgress -
+                0.18
+            ) /
+            0.35
+        );
+
+
+    if (leafProgress > 0) {
+
+
+        drawLilyLeaf(
+
+            plantX,
+
+            groundY -
+            maxHeight * 0.20,
+
+            maxHeight * 0.65,
+
+            -0.70,
+
+            leafProgress
+
+        );
+
+
+        drawLilyLeaf(
+
+            plantX,
+
+            groundY -
+            maxHeight * 0.34,
+
+            maxHeight * 0.55,
+
+            0.70,
+
+            leafProgress
+
+        );
+
+
+        drawLilyLeaf(
+
+            plantX,
+
+            groundY -
+            maxHeight * 0.50,
+
+            maxHeight * 0.42,
+
+            -0.45,
+
+            leafProgress
+
+        );
+
+    }
+
+
+
+    /* ===================================== */
+    /* CAPULLO */
+    /* ===================================== */
+
+
+    const budProgress =
+        clamp(
+            (
+                localProgress -
+                0.42
+            ) /
+            0.22
+        );
+
+
+    if (
+        budProgress > 0 &&
+        budProgress < 1
+    ) {
+
+
+        drawLilyBud(
+
+            plantX + wind,
+
+            topY,
+
+            maxHeight * 0.18,
+
+            lily.color,
+
+            budProgress
+
+        );
+
+    }
+
+
+
+    /* ===================================== */
+    /* FLOR */
+    /* ===================================== */
+
+
+    const bloomProgress =
+        clamp(
+            (
+                localProgress -
+                0.58
+            ) /
+            0.42
+        );
+
+
+    if (bloomProgress > 0) {
+
+
+        const flowerSize =
+            Math.min(w, h) *
+            0.065 *
+            lily.scale;
+
+
+        drawRealisticLily(
+
+            plantX + wind,
+
+            topY,
+
+            flowerSize,
+
+            lily.color,
+
+            lily.accent,
+
+            bloomProgress,
+
+            wind * 0.01
+
+        );
+
+    }
+
+}
+
+
+
+/* ========================================= */
+/* SUELO DEL JARDÍN */
+/* ========================================= */
+
+
+function drawGardenGround(
+    w,
+    h,
+    progress
+) {
+
+
+    const groundProgress =
+        smoothStep(
+            clamp(progress * 3)
+        );
+
+
+    const groundHeight =
+        h *
+        0.18 *
+        groundProgress;
+
+
+    const gradient =
+        ctx.createLinearGradient(
+
+            0,
+
+            h - groundHeight,
+
+            0,
+
+            h
+
+        );
+
+
+    gradient.addColorStop(
+        0,
+        "#35663a"
+    );
+
+    gradient.addColorStop(
+        0.40,
+        "#21452a"
+    );
+
+    gradient.addColorStop(
+        1,
+        "#0c2014"
+    );
+
+
+    ctx.fillStyle = gradient;
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(0, h);
+
+
+    for (
+        let x = 0;
+        x <= w;
+        x += 20
+    ) {
+
+
+        const wave =
+            Math.sin(x * 0.018) *
+            7;
+
+
+        ctx.lineTo(
+
+            x,
+
+            h -
+            groundHeight +
+            wave
+
+        );
+
+    }
+
+
+    ctx.lineTo(w, h);
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+
+    /* ===================================== */
+    /* HIERBA */
+    /* ===================================== */
+
+
+    if (progress > 0.15) {
+
+
+        ctx.save();
+
+
+        ctx.globalAlpha =
+            Math.min(
+                0.9,
+                progress * 1.3
+            );
+
+
+        for (let i = 0; i < 90; i++) {
+
+
+            const x =
+                (
+                    i * 97.31
+                ) % w;
+
+
+            const y =
+                h -
+                groundHeight +
+                (
+                    i * 31.7 %
+                    groundHeight
+                );
+
+
             ctx.beginPath();
-            ctx.arc(0, 0, size * 0.13, 0, Math.PI * 2);
-            ctx.fillStyle = gradCenter;
-            ctx.fill();
-            ctx.shadowColor = 'rgba(255,200,50,0.3)';
-            ctx.shadowBlur = 15;
 
-            // Estambres
-            ctx.shadowBlur = 0;
-            for (let i = 0; i < 8; i++) {
-                const a = (i / 8) * Math.PI * 2 + Math.random() * 0.1;
-                const r = size * 0.18 + Math.random() * 0.03;
-                const sx = Math.cos(a) * r;
-                const sy = Math.sin(a) * r;
 
-                // Filamento
-                ctx.beginPath();
-                ctx.moveTo(0, 0);
-                ctx.lineTo(sx * 1.2, sy * 1.2);
-                ctx.strokeStyle = '#bf8f3a';
-                ctx.lineWidth = 1.2;
-                ctx.stroke();
+            ctx.moveTo(
+                x,
+                y + 8
+            );
 
-                // Antera (punta)
-                const anteraSize = 2 + Math.random() * 2;
-                ctx.beginPath();
-                ctx.arc(sx * 1.2, sy * 1.2, anteraSize, 0, Math.PI * 2);
-                ctx.fillStyle = '#e6a53a';
-                ctx.fill();
-                ctx.shadowColor = 'rgba(200,150,50,0.2)';
-                ctx.shadowBlur = 5;
-            }
 
-            // Brillo extra en el centro
-            ctx.shadowBlur = 0;
-            const glow = ctx.createRadialGradient(0, -size * 0.1, 0, 0, 0, size * 0.25);
-            glow.addColorStop(0, 'rgba(255,255,220,0.2)');
-            glow.addColorStop(1, 'rgba(255,255,220,0)');
-            ctx.beginPath();
-            ctx.arc(0, 0, size * 0.25, 0, Math.PI * 2);
-            ctx.fillStyle = glow;
-            ctx.fill();
+            ctx.lineTo(
 
-            // Efecto de brillo general (bloom)
-            if (bloom) {
-                ctx.shadowBlur = 0;
-                const bloomGrad = ctx.createRadialGradient(0, -size * 0.2, 0, 0, 0, size * 0.5);
-                bloomGrad.addColorStop(0, `rgba(255,200,210,${bloom * 0.15})`);
-                bloomGrad.addColorStop(1, 'rgba(255,200,210,0)');
-                ctx.beginPath();
-                ctx.arc(0, 0, size * 0.5, 0, Math.PI * 2);
-                ctx.fillStyle = bloomGrad;
-                ctx.fill();
-            }
+                x +
+                Math.sin(i * 3) * 4,
 
-            ctx.restore();
-        }
+                y
 
-        // ============================================
-        // FUNCIÓN PARA DIBUJAR HOJAS
-        // ============================================
-        function drawLeaf(ctx, x, y, angle, size, color) {
-            ctx.save();
-            ctx.translate(x, y);
-            ctx.rotate(angle);
+            );
 
-            ctx.beginPath();
-            ctx.moveTo(0, -size * 0.8);
-            ctx.quadraticCurveTo(size * 0.8, -size * 0.2, size * 0.6, size * 0.3);
-            ctx.quadraticCurveTo(0, size * 0.1, -size * 0.6, size * 0.3);
-            ctx.quadraticCurveTo(-size * 0.8, -size * 0.2, 0, -size * 0.8);
-            ctx.closePath();
 
-            const grad = ctx.createLinearGradient(0, -size, 0, size);
-            grad.addColorStop(0, color);
-            grad.addColorStop(0.5, color);
-            grad.addColorStop(1, 'rgba(30,80,30,0.8)');
-            ctx.fillStyle = grad;
-            ctx.fill();
+            ctx.strokeStyle =
+                i % 2 === 0
+                    ? "#4d914b"
+                    : "#356e3b";
 
-            // Nervadura central de la hoja
-            ctx.strokeStyle = 'rgba(30,80,30,0.3)';
-            ctx.lineWidth = 0.5;
-            ctx.beginPath();
-            ctx.moveTo(0, -size * 0.6);
-            ctx.quadraticCurveTo(size * 0.1, 0, 0, size * 0.2);
+
+            ctx.lineWidth = 1.2;
+
             ctx.stroke();
 
-            ctx.restore();
         }
 
-        // ============================================
-        // DIBUJO DE LA ESCENA COMPLETA
-        // ============================================
-        function drawScene(progress) {
-            const w = canvas.width;
-            const h = canvas.height;
 
-            // Fondo con gradiente suave
-            const bgGrad = ctx.createRadialGradient(w * 0.5, h * 0.3, 0, w * 0.5, h * 0.5, w * 0.8);
-            bgGrad.addColorStop(0, '#fce8e6');
-            bgGrad.addColorStop(0.4, '#f5d6d0');
-            bgGrad.addColorStop(0.7, '#e8c4c0');
-            bgGrad.addColorStop(1, '#d4b0b0');
-            ctx.fillStyle = bgGrad;
-            ctx.fillRect(0, 0, w, h);
+        ctx.restore();
 
-            // Efecto de luz suave
-            const lightGrad = ctx.createRadialGradient(w * 0.5, h * 0.2, 0, w * 0.5, h * 0.3, w * 0.6);
-            lightGrad.addColorStop(0, 'rgba(255,240,235,0.15)');
-            lightGrad.addColorStop(1, 'rgba(255,240,235,0)');
-            ctx.fillStyle = lightGrad;
-            ctx.fillRect(0, 0, w, h);
+    }
 
-            // Calcular número de lirios según progreso
-            const numLilies = Math.min(7, Math.floor(progress * 7) + 1);
+}
 
-            // Posiciones de los lirios (más naturales)
-            const positions = [
-                { x: 0.5, y: 0.48, size: 0.13, rot: 0.0 },
-                { x: 0.32, y: 0.55, size: 0.10, rot: 0.4 },
-                { x: 0.68, y: 0.42, size: 0.09, rot: -0.3 },
-                { x: 0.25, y: 0.35, size: 0.075, rot: 0.7 },
-                { x: 0.75, y: 0.58, size: 0.075, rot: -0.5 },
-                { x: 0.42, y: 0.75, size: 0.065, rot: 0.9 },
-                { x: 0.58, y: 0.25, size: 0.065, rot: -0.7 }
-            ];
 
-            // Colores de lirios (tonos rosas y blancos)
-            const colors = [
-                ['#f8bbd0', '#f06292'],
-                ['#f48fb1', '#ec407a'],
-                ['#fce4ec', '#e91e63'],
-                ['#f8bbd0', '#d81b60'],
-                ['#fce4ec', '#f06292'],
-                ['#f48fb1', '#ec407a'],
-                ['#f8bbd0', '#d81b60']
-            ];
 
-            // Dibujar hojas (base verde)
-            if (progress > 0.08) {
-                const leafProgress = Math.min(1, (progress - 0.08) / 0.2);
-                ctx.save();
-                ctx.globalAlpha = leafProgress * 0.7;
+/* ========================================= */
+/* ESCENA COMPLETA */
+/* ========================================= */
 
-                const leafPositions = [
-                    { x: 0.35, y: 0.7, angle: 0.3, size: 25, color: '#66bb6a' },
-                    { x: 0.45, y: 0.75, angle: -0.5, size: 22, color: '#81c784' },
-                    { x: 0.55, y: 0.72, angle: 0.8, size: 20, color: '#66bb6a' },
-                    { x: 0.3, y: 0.5, angle: -0.2, size: 18, color: '#81c784' },
-                    { x: 0.7, y: 0.52, angle: 0.6, size: 18, color: '#66bb6a' },
-                    { x: 0.38, y: 0.3, angle: 0.1, size: 15, color: '#81c784' },
-                    { x: 0.62, y: 0.3, angle: -0.4, size: 15, color: '#66bb6a' }
+
+function drawScene(progress) {
+
+
+    const w =
+        canvas.width;
+
+
+    const h =
+        canvas.height;
+
+
+
+    /* ===================================== */
+    /* CIELO */
+    /* ===================================== */
+
+
+    const sky =
+        ctx.createLinearGradient(
+
+            0,
+
+            0,
+
+            0,
+
+            h
+
+        );
+
+
+    sky.addColorStop(
+        0,
+        "#07111c"
+    );
+
+    sky.addColorStop(
+        0.30,
+        "#142638"
+    );
+
+    sky.addColorStop(
+        0.65,
+        "#473d55"
+    );
+
+    sky.addColorStop(
+        1,
+        "#263b2b"
+    );
+
+
+    ctx.fillStyle = sky;
+
+    ctx.fillRect(
+        0,
+        0,
+        w,
+        h
+    );
+
+
+
+    /* ===================================== */
+    /* LUZ MÁGICA */
+    /* ===================================== */
+
+
+    const glow =
+        ctx.createRadialGradient(
+
+            w * 0.5,
+
+            h * 0.20,
+
+            0,
+
+
+            w * 0.5,
+
+            h * 0.20,
+
+            w * 0.55
+
+        );
+
+
+    glow.addColorStop(
+
+        0,
+
+        "rgba(255,210,235,0.18)"
+
+    );
+
+
+    glow.addColorStop(
+
+        0.40,
+
+        "rgba(255,150,210,0.06)"
+
+    );
+
+
+    glow.addColorStop(
+
+        1,
+
+        "rgba(255,150,210,0)"
+
+    );
+
+
+    ctx.fillStyle = glow;
+
+    ctx.fillRect(
+        0,
+        0,
+        w,
+        h
+    );
+
+
+
+    /* ===================================== */
+    /* ESTRELLAS */
+    /* ===================================== */
+
+
+    const time =
+        Date.now() / 1000;
+
+
+    for (let i = 0; i < 50; i++) {
+
+
+        const x =
+            (i * 137.5) % w;
+
+
+        const y =
+            (i * 73.2) %
+            (h * 0.62);
+
+
+        const alpha =
+            0.25 +
+
+            Math.sin(
+                time * 2 + i
+            ) *
+            0.18;
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+
+            x,
+
+            y,
+
+            1 + (i % 3) * 0.4,
+
+            0,
+
+            Math.PI * 2
+
+        );
+
+
+        ctx.fillStyle =
+            `rgba(255,235,245,${alpha})`;
+
+
+        ctx.fill();
+
+    }
+
+
+
+    /* ===================================== */
+    /* SUELO */
+    /* ===================================== */
+
+
+    drawGardenGround(
+        w,
+        h,
+        progress
+    );
+
+
+
+    /* ===================================== */
+    /* CRECER JARDÍN */
+    /* ===================================== */
+
+
+    gardenLilies.forEach(
+
+        (
+            lily,
+            index
+        ) => {
+
+
+            drawLilyPlant(
+
+                lily,
+
+                progress,
+
+                w,
+
+                h,
+
+                index
+
+            );
+
+        }
+
+    );
+
+
+
+    /* ===================================== */
+    /* POLEN MÁGICO */
+    /* ===================================== */
+
+
+    if (progress > 0.25) {
+
+
+        const amount =
+            Math.floor(
+                20 +
+                progress * 50
+            );
+
+
+        for (
+            let i = 0;
+            i < amount;
+            i++
+        ) {
+
+
+            const x =
+
+                (
+                    Math.sin(
+                        i * 17.13 +
+                        time * 0.6
+                    ) * 0.5 +
+                    0.5
+                ) * w;
+
+
+            const y =
+
+                (
+                    Math.cos(
+                        i * 9.21 +
+                        time * 0.35
+                    ) * 0.5 +
+                    0.5
+                ) * h;
+
+
+            const size =
+                1 +
+                Math.sin(
+                    time + i
+                ) * 1;
+
+
+            ctx.beginPath();
+
+
+            ctx.arc(
+
+                x,
+
+                y,
+
+                Math.max(
+                    0.5,
+                    size
+                ),
+
+                0,
+
+                Math.PI * 2
+
+            );
+
+
+            ctx.fillStyle =
+                `rgba(255,220,150,${0.18 * progress})`;
+
+
+            ctx.fill();
+
+        }
+
+    }
+
+
+
+    /* ===================================== */
+    /* BRILLO FINAL */
+    /* ===================================== */
+
+
+    if (progress > 0.80) {
+
+
+        const finalGlow =
+            ctx.createRadialGradient(
+
+                w * 0.5,
+
+                h * 0.60,
+
+                0,
+
+
+                w * 0.5,
+
+                h * 0.60,
+
+                w * 0.70
+
+            );
+
+
+        finalGlow.addColorStop(
+
+            0,
+
+            `rgba(255,80,170,${
+                (progress - 0.8) * 0.25
+            })`
+
+        );
+
+
+        finalGlow.addColorStop(
+
+            1,
+
+            "rgba(255,80,170,0)"
+
+        );
+
+
+        ctx.fillStyle = finalGlow;
+
+
+        ctx.fillRect(
+            0,
+            0,
+            w,
+            h
+        );
+
+    }
+
+}
+
+
+
+/* ========================================= */
+/* REDIMENSIONAR CANVAS */
+/* ========================================= */
+
+
+function resizeCanvas() {
+
+
+    const rect =
+        canvas.parentElement
+        .getBoundingClientRect();
+
+
+    const dpr =
+        window.devicePixelRatio || 1;
+
+
+    canvas.width =
+        rect.width * dpr;
+
+
+    canvas.height =
+        rect.height * dpr;
+
+
+    canvas.style.width =
+        rect.width + "px";
+
+
+    canvas.style.height =
+        rect.height + "px";
+
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+
+}
+
+
+
+/* ========================================= */
+/* ANIMACIÓN PRINCIPAL */
+/* ========================================= */
+
+
+function animate(time) {
+
+
+    const delta =
+        lastFrameTime
+
+            ? (time - lastFrameTime) / 1000
+
+            : 0.016;
+
+
+    lastFrameTime = time;
+
+
+
+    if (
+        !isComplete &&
+        progress < 1
+    ) {
+
+
+        /* Velocidad del crecimiento */
+
+
+        progress +=
+            delta * 0.040;
+
+
+        if (progress >= 1) {
+
+
+            progress = 1;
+
+            isComplete = true;
+
+
+            setTimeout(
+                showFinalMessage,
+                1800
+            );
+
+        }
+
+
+        document
+            .getElementById("progressFill")
+            .style.width =
+                (progress * 100) + "%";
+
+
+        document
+            .getElementById("progressPercent")
+            .textContent =
+                Math.round(
+                    progress * 100
+                ) + "%";
+
+    }
+
+
+    drawScene(progress);
+
+
+    requestAnimationFrame(animate);
+
+}
+
+
+
+/* ========================================= */
+/* SISTEMA DE POEMAS */
+/* ========================================= */
+
+
+function showNextPoem() {
+
+
+    if (
+        poemIndex >= poems.length
+    ) return;
+
+
+    if (isComplete) return;
+
+
+    const poem =
+        poems[poemIndex];
+
+
+    const poemText =
+        document.getElementById(
+            "poemText"
+        );
+
+
+    poemText.classList.remove("show");
+
+
+    setTimeout(() => {
+
+
+        poemText.innerHTML =
+            poem.text;
+
+
+        poemText.classList.add("show");
+
+
+    }, 500);
+
+
+
+    currentPoemTimeout =
+        setTimeout(() => {
+
+
+            poemText.classList.remove(
+                "show"
+            );
+
+
+            poemIndex++;
+
+
+            if (
+                poemIndex < poems.length &&
+                !isComplete
+            ) {
+
+
+                setTimeout(
+                    showNextPoem,
+                    900
+                );
+
+            }
+
+
+        }, poem.delay);
+
+}
+
+
+
+/* ========================================= */
+/* CARRUSEL */
+/* ========================================= */
+
+
+let currentSlide = 0;
+
+let carouselInterval = null;
+
+let carouselInitialized = false;
+
+
+function initCarousel() {
+
+
+    if (carouselInitialized) return;
+
+
+    carouselInitialized = true;
+
+
+    const track =
+        document.getElementById(
+            "carouselTrack"
+        );
+
+
+    const dots =
+        document.getElementById(
+            "dotsContainer"
+        );
+
+
+    track.innerHTML = "";
+
+    dots.innerHTML = "";
+
+
+
+    carouselImages.forEach(
+
+        (image, index) => {
+
+
+            const slide =
+                document.createElement("div");
+
+
+            slide.className =
+                "carousel-slide";
+
+
+            slide.innerHTML = `
+
+                <img
+                    src="${image.src}"
+                    alt="Nuestro recuerdo ${index + 1}"
+                >
+
+                <div class="image-caption">
+
+                    ${image.caption}
+
+                </div>
+
+            `;
+
+
+            track.appendChild(slide);
+
+
+
+            const dot =
+                document.createElement("button");
+
+
+            dot.className =
+                "dot" +
+                (
+                    index === 0
+                        ? " active"
+                        : ""
+                );
+
+
+            dot.addEventListener(
+                "click",
+                () => {
+
+                    goToSlide(index);
+
+                }
+            );
+
+
+            dots.appendChild(dot);
+
+        }
+
+    );
+
+
+    document
+        .getElementById("prevBtn")
+        .addEventListener(
+            "click",
+            () => {
+
+                goToSlide(
+                    currentSlide - 1
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById("nextBtn")
+        .addEventListener(
+            "click",
+            () => {
+
+                goToSlide(
+                    currentSlide + 1
+                );
+
+            }
+        );
+
+
+    startAutoPlay();
+
+}
+
+
+function goToSlide(index) {
+
+
+    const total =
+        carouselImages.length;
+
+
+    if (index < 0) {
+
+        index = total - 1;
+
+    }
+
+
+    if (index >= total) {
+
+        index = 0;
+
+    }
+
+
+    currentSlide = index;
+
+
+    const track =
+        document.getElementById(
+            "carouselTrack"
+        );
+
+
+    track.style.transform =
+        `translateX(-${index * 100}%)`;
+
+
+    document
+        .querySelectorAll(".dot")
+        .forEach(
+            (dot, i) => {
+
+                dot.classList.toggle(
+                    "active",
+                    i === index
+                );
+
+            }
+        );
+
+
+    resetAutoPlay();
+
+}
+
+
+function startAutoPlay() {
+
+
+    if (carouselInterval) {
+
+        clearInterval(
+            carouselInterval
+        );
+
+    }
+
+
+    carouselInterval =
+        setInterval(() => {
+
+
+            goToSlide(
+                currentSlide + 1
+            );
+
+
+        }, 4500);
+
+}
+
+
+function resetAutoPlay() {
+
+
+    startAutoPlay();
+
+}
+
+
+
+/* ========================================= */
+/* CORAZONES FLOTANTES */
+/* ========================================= */
+
+
+let heartsInterval = null;
+
+
+function createFloatingHearts() {
+
+
+    const container =
+        document.getElementById(
+            "floatingHearts"
+        );
+
+
+    const hearts = [
+
+        "❤️",
+        "💕",
+        "💖",
+        "💗",
+        "🌸",
+        "💝"
+
+    ];
+
+
+    if (heartsInterval) {
+
+        clearInterval(
+            heartsInterval
+        );
+
+    }
+
+
+    heartsInterval =
+        setInterval(() => {
+
+
+            const heart =
+                document.createElement("div");
+
+
+            heart.className =
+                "floating-heart";
+
+
+            heart.textContent =
+                hearts[
+                    Math.floor(
+                        Math.random() *
+                        hearts.length
+                    )
                 ];
 
-                leafPositions.forEach(leaf => {
-                    drawLeaf(
-                        ctx,
-                        w * leaf.x,
-                        h * leaf.y,
-                        leaf.angle,
-                        Math.min(w, h) * 0.035,
-                        leaf.color
-                    );
-                });
 
-                ctx.restore();
-            }
+            heart.style.left =
+                Math.random() *
+                100 + "%";
 
-            // Dibujar lirios
-            for (let i = 0; i < numLilies && i < positions.length; i++) {
-                const pos = positions[i];
-                const color = colors[i % colors.length];
-                const alpha = Math.min(1, Math.max(0, (progress - i * 0.08) * 4));
-                const bloom = Math.min(0.5, Math.max(0, (progress - 0.5) * 0.8));
 
-                drawRealisticLily(
-                    ctx,
-                    w * pos.x,
-                    h * pos.y,
-                    Math.min(w, h) * pos.size,
-                    color[0],
-                    color[1],
-                    pos.rot + Math.sin(Date.now() / 10000 + i) * 0.02,
-                    alpha,
-                    bloom
-                );
-            }
+            heart.style.fontSize =
+                (
+                    1 +
+                    Math.random() * 1.8
+                ) + "rem";
 
-            // Partículas brillantes (polen mágico)
-            if (progress > 0.15) {
-                const time = Date.now() / 1000;
-                const particleCount = Math.floor(20 + progress * 20);
 
-                for (let i = 0; i < particleCount; i++) {
-                    const seed = i * 127.1 + 311.7;
-                    const px = (Math.sin(seed + time * 0.3) * 0.5 + 0.5) * w;
-                    const py = (Math.cos(seed * 1.3 + time * 0.2) * 0.5 + 0.5) * h;
-                    const size = 1 + Math.sin(i * 3.7 + time) * 1.5;
-                    const brightness = 0.3 + 0.3 * Math.sin(time * 0.5 + i * 0.7);
+            heart.style.animationDuration =
+                (
+                    8 +
+                    Math.random() * 7
+                ) + "s";
 
-                    ctx.beginPath();
-                    ctx.arc(px, py, size, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(255, 230, 210, ${brightness * 0.25 * progress})`;
-                    ctx.fill();
 
-                    // Brillo alrededor de la partícula
-                    if (size > 1.5) {
-                        ctx.shadowColor = 'rgba(255,200,180,0.1)';
-                        ctx.shadowBlur = 10;
-                        ctx.beginPath();
-                        ctx.arc(px, py, size * 2, 0, Math.PI * 2);
-                        ctx.fillStyle = `rgba(255,200,180,${brightness * 0.05})`;
-                        ctx.fill();
-                        ctx.shadowBlur = 0;
-                    }
-                }
-            }
+            container.appendChild(heart);
 
-            // Brillo final (aura mágica)
-            if (progress > 0.85) {
-                ctx.save();
-                ctx.globalAlpha = (progress - 0.85) * 4;
-                const finalGlow = ctx.createRadialGradient(w * 0.5, h * 0.4, 0, w * 0.5, h * 0.4, w * 0.6);
-                finalGlow.addColorStop(0, 'rgba(255,200,210,0.12)');
-                finalGlow.addColorStop(0.5, 'rgba(255,180,200,0.06)');
-                finalGlow.addColorStop(1, 'rgba(255,180,200,0)');
-                ctx.fillStyle = finalGlow;
-                ctx.fillRect(0, 0, w, h);
-                ctx.restore();
-            }
-        }
 
-        // ============================================
-        // ANIMACIÓN PRINCIPAL
-        // ============================================
-        let lastFrameTime = 0;
+            setTimeout(() => {
 
-        function resizeCanvas() {
-            const rect = canvas.parentElement.getBoundingClientRect();
-            canvas.width = rect.width;
-            canvas.height = rect.height;
-        }
+                heart.remove();
 
-        function animate(time) {
-            const delta = lastFrameTime ? (time - lastFrameTime) / 1000 : 0.016;
-            lastFrameTime = time;
+            }, 15000);
 
-            if (!isComplete && progress < 1) {
-                progress += delta * 0.03;
-                if (progress > 1) {
-                    progress = 1;
-                    isComplete = true;
-                    setTimeout(showFinalMessage, 1500);
-                }
-                document.getElementById('progressFill').style.width = (progress * 100) + '%';
-                document.getElementById('progressPercent').textContent = Math.round(progress * 100) + '%';
-            }
 
-            drawScene(progress);
-            animationFrame = requestAnimationFrame(animate);
-        }
+        }, 700);
 
-        // ============================================
-        // SISTEMA DE POEMAS (MEJORADO)
-        // ============================================
-        let currentPoemTimeout = null;
+}
 
-        function showNextPoem() {
-            if (poemIndex >= poems.length || isComplete) {
-                // Si se acabaron los poemas pero no ha terminado, repetir el último
-                if (!isComplete && poemIndex >= poems.length) {
-                    poemIndex = poems.length - 1;
-                }
-                return;
-            }
 
-            const poem = poems[poemIndex];
-            const poemText = document.getElementById('poemText');
 
-            // Usar innerHTML para soportar etiquetas HTML en los poemas
-            poemText.innerHTML = poem.text;
-            poemText.classList.add('show');
+/* ========================================= */
+/* MOSTRAR MENSAJE FINAL */
+/* ========================================= */
 
-            const nextDelay = poem.delay * 1000 + 2500;
-            currentPoemTimeout = setTimeout(() => {
-                poemText.classList.remove('show');
-                poemIndex++;
-                setTimeout(showNextPoem, 800);
-            }, nextDelay);
-        }
 
-        // ============================================
-        // CARRUSEL CON TUS IMÁGENES
-        // ============================================
-        let currentSlide = 0;
-        let totalSlides = 0;
-        let carouselInterval = null;
-        let isDragging = false;
-        let startX = 0;
-        let startY = 0;
-        let carouselInitialized = false;
+function showFinalMessage() {
 
-        function initCarousel() {
-            const track = document.getElementById('carouselTrack');
-            const dotsContainer = document.getElementById('dotsContainer');
 
-            track.innerHTML = '';
-            carouselImages.forEach((img, index) => {
-                const slide = document.createElement('div');
-                slide.className = 'carousel-slide';
-                slide.innerHTML = `
-                    <img src="${img.src}" alt="Recuerdo ${index + 1}" loading="lazy" />
-                    <div class="image-caption">${img.caption}</div>
-                `;
-                track.appendChild(slide);
-            });
+    const section =
+        document.getElementById(
+            "messageSection"
+        );
 
-            totalSlides = carouselImages.length;
 
-            dotsContainer.innerHTML = '';
-            for (let i = 0; i < totalSlides; i++) {
-                const dot = document.createElement('button');
-                dot.className = 'dot' + (i === 0 ? ' active' : '');
-                dot.dataset.index = i;
-                dot.addEventListener('click', function() {
-                    goToSlide(parseInt(this.dataset.index));
-                });
-                dotsContainer.appendChild(dot);
-            }
+    section.classList.add(
+        "visible"
+    );
 
-            // Botones
-            document.getElementById('prevBtn').addEventListener('click', function(e) {
-                e.stopPropagation();
-                goToSlide(currentSlide - 1);
-            });
-            document.getElementById('nextBtn').addEventListener('click', function(e) {
-                e.stopPropagation();
-                goToSlide(currentSlide + 1);
-            });
 
-            // Touch y drag
-            track.addEventListener('mousedown', startDrag);
-            track.addEventListener('touchstart', startDragTouch, { passive: true });
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('touchmove', dragTouch, { passive: true });
-            document.addEventListener('mouseup', endDrag);
-            document.addEventListener('touchend', endDrag);
+    initCarousel();
 
-            startAutoPlay();
-            updateCarousel();
-            carouselInitialized = true;
-        }
+    createFloatingHearts();
 
-        function goToSlide(index) {
-            if (totalSlides === 0) return;
-            if (index < 0) index = totalSlides - 1;
-            if (index >= totalSlides) index = 0;
-            currentSlide = index;
-            updateCarousel();
-            resetAutoPlay();
-        }
+}
 
-        function updateCarousel() {
-            const track = document.getElementById('carouselTrack');
-            track.style.transform = `translateX(-${currentSlide * 100}%)`;
 
-            document.querySelectorAll('.dot').forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentSlide);
-            });
-        }
 
-        function startAutoPlay() {
-            if (carouselInterval) clearInterval(carouselInterval);
-            carouselInterval = setInterval(() => {
-                goToSlide(currentSlide + 1);
-            }, 4000);
-        }
+/* ========================================= */
+/* REINICIAR */
+/* ========================================= */
 
-        function resetAutoPlay() {
-            if (carouselInterval) {
-                clearInterval(carouselInterval);
-                carouselInterval = setInterval(() => {
-                    goToSlide(currentSlide + 1);
-                }, 4000);
-            }
-        }
 
-        function stopAutoPlay() {
-            if (carouselInterval) {
-                clearInterval(carouselInterval);
-                carouselInterval = null;
-            }
-        }
+function cleanScreen() {
 
-        function startDrag(e) {
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            stopAutoPlay();
-        }
 
-        function startDragTouch(e) {
-            isDragging = true;
-            const touch = e.touches[0];
-            startX = touch.clientX;
-            startY = touch.clientY;
-            stopAutoPlay();
-        }
+    progress = 0;
 
-        function drag(e) {
-            if (!isDragging) return;
-            const diffX = e.clientX - startX;
-            const diffY = e.clientY - startY;
-            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
-                goToSlide(diffX > 0 ? currentSlide - 1 : currentSlide + 1);
-                isDragging = false;
-            }
-        }
+    isComplete = false;
 
-        function dragTouch(e) {
-            if (!isDragging) return;
-            const touch = e.touches[0];
-            const diffX = touch.clientX - startX;
-            const diffY = touch.clientY - startY;
-            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 30) {
-                goToSlide(diffX > 0 ? currentSlide - 1 : currentSlide + 1);
-                isDragging = false;
-            }
-        }
+    poemIndex = 0;
 
-        function endDrag() {
-            isDragging = false;
-            if (!carouselInterval) {
-                startAutoPlay();
-            }
-        }
+    lastFrameTime = 0;
 
-        // ============================================
-        // CORAZONES FLOTANTES
-        // ============================================
-        let heartsInterval = null;
 
-        function createFloatingHearts() {
-            const container = document.getElementById('floatingHearts');
-            const emojis = ['❤️', '💕', '💗', '💖', '💝', '💘'];
 
-            if (heartsInterval) clearInterval(heartsInterval);
+    document
+        .getElementById("messageSection")
+        .classList.remove(
+            "visible"
+        );
 
-            heartsInterval = setInterval(() => {
-                if (!document.getElementById('messageSection').classList.contains('visible')) return;
 
-                const heart = document.createElement('div');
-                heart.className = 'floating-heart';
-                heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.fontSize = (1 + Math.random() * 1.8) + 'rem';
-                heart.style.animationDuration = (8 + Math.random() * 14) + 's';
-                heart.style.animationDelay = (Math.random() * 4) + 's';
+    document
+        .getElementById("poemText")
+        .classList.remove(
+            "show"
+        );
 
-                container.appendChild(heart);
-                setTimeout(() => heart.remove(), 16000);
-            }, 900);
-        }
 
-        // ============================================
-        // MENSAJE FINAL
-        // ============================================
-        function showFinalMessage() {
-            const section = document.getElementById('messageSection');
-            section.classList.add('visible');
+    document
+        .getElementById("progressFill")
+        .style.width = "0%";
 
-            if (!carouselInitialized) {
-                setTimeout(initCarousel, 600);
-            }
-            createFloatingHearts();
-        }
 
-        // ============================================
-        // REINICIAR
-        // ============================================
-        function cleanScreen() {
-            if (isComplete) {
-                progress = 0;
-                isComplete = false;
-                startTime = Date.now();
-                poemIndex = 0;
-                carouselInitialized = false;
-                currentSlide = 0;
+    document
+        .getElementById("progressPercent")
+        .textContent = "0%";
 
-                document.getElementById('messageSection').classList.remove('visible');
-                document.getElementById('poemText').classList.remove('show');
 
-                if (currentPoemTimeout) {
-                    clearTimeout(currentPoemTimeout);
-                    currentPoemTimeout = null;
-                }
+    if (currentPoemTimeout) {
 
-                if (carouselInterval) {
-                    clearInterval(carouselInterval);
-                    carouselInterval = null;
-                }
+        clearTimeout(
+            currentPoemTimeout
+        );
 
-                if (heartsInterval) {
-                    clearInterval(heartsInterval);
-                    heartsInterval = null;
-                }
+    }
 
-                document.getElementById('floatingHearts').innerHTML = '';
-                document.getElementById('progressFill').style.width = '0%';
-                document.getElementById('progressPercent').textContent = '0%';
 
-                setTimeout(showNextPoem, 1000);
-            }
-        }
+    if (carouselInterval) {
 
-        // ============================================
-        // INICIO
-        // ============================================
-        function init() {
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-            document.getElementById('cleanBtn').addEventListener('click', cleanScreen);
+        clearInterval(
+            carouselInterval
+        );
 
-            animate(0);
-            setTimeout(showNextPoem, 1200);
-        }
+        carouselInterval = null;
 
-        window.addEventListener('load', init);
-    </script>
+    }
+
+
+    if (heartsInterval) {
+
+        clearInterval(
+            heartsInterval
+        );
+
+        heartsInterval = null;
+
+    }
+
+
+    document
+        .getElementById("floatingHearts")
+        .innerHTML = "";
+
+
+    currentSlide = 0;
+
+
+    setTimeout(
+        showNextPoem,
+        1000
+    );
+
+}
+
+
+
+/* ========================================= */
+/* INICIAR */
+/* ========================================= */
+
+
+function init() {
+
+
+    resizeCanvas();
+
+
+    window.addEventListener(
+        "resize",
+        resizeCanvas
+    );
+
+
+    document
+        .getElementById("cleanBtn")
+        .addEventListener(
+            "click",
+            cleanScreen
+        );
+
+
+    if (!animationStarted) {
+
+        animationStarted = true;
+
+        requestAnimationFrame(
+            animate
+        );
+
+    }
+
+
+    setTimeout(
+        showNextPoem,
+        1200
+    );
+
+}
+
+
+window.addEventListener(
+    "load",
+    init
+);
+
+
+</script>
+
+
 </body>
 </html>
